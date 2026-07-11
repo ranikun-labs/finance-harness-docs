@@ -61,8 +61,7 @@ redirect_to       : {이 렌즈가 redirect 대상이 되는 RISK_* intent 목�
 related_lenses    : {함께 참조되거나 병행 적용되는 lens key 목록 (없으면 빈 목록)}
 fixture_refs      : {이 렌즈를 참조하는 fixture id 목록}
 output_style      : 공통 5단 구조 내 사용 (templates §3)
-activation_gate   : {active 전환에 요구되는 검증 게이트 — 기본: §13 등록 체크리스트
-                     + fixture regression 전체 통과}
+activation_gate   : {active 전환에 요구되는 machine-readable gate id}
 ```
 
 위 10개가 Lens extension의 canonical 필드명이다 (`redirect`와 `redirect_to`를 혼용하지 않는다 — canonical은 `redirect_to`). 필드의 **형식·필수 여부**는 metadata-standard §13.2가, **의미와 작성 규칙**은 본 문서가 소유한다.
@@ -76,6 +75,64 @@ activation_gate   : {active 전환에 요구되는 검증 게이트 — 기본: 
 - **trigger의 예시 질문**: 안전 질문만 쓴다. 위험 질문("지금 사도 돼?")을 trigger 예시로 쓰면 렌즈가 위험 intent를 직접 처리하는 것처럼 읽히므로, 위험 질문은 반드시 `forbidden_intents` 항목에 배치한다.
 - **forbidden_intents**: "이 렌즈가 처리한다"는 뜻이 아니라 "**Input Guard가 렌즈보다 먼저 잡아야 한다**"는 선언이다. 이 구분을 문서 안에서 흐리지 않는다.
 - **fixture_refs**: 존재하지 않는 fixture id를 적지 않는다. 신규 fixture가 필요하면 "fixture 추가 필요(§13)"로 표기한다.
+
+### 3.1 필드별 canonical 경계
+
+본 절은 Lens extension 필드의 작성 경계를 고정한다. 공통 Metadata envelope의 필수 여부·형식·validation contract는 `finance-knowledge-artifact-metadata-standard.md`가 소유하며, 본 문서는 이를 재정의하지 않는다.
+
+**redirect_to**
+
+- `redirect_to`는 다른 Lens key를 가리키는 관계 필드가 아니다.
+- 값은 이 Lens가 redirect 결과로 연결되는 canonical `RISK_*` intent 목록이다.
+- 각 값은 `finance-policyguard-rules.md` §3의 canonical intent여야 하며, `finance-routing-contract.md`의 redirect 결과와 일치해야 한다.
+- `SAFE_LEARNING`, `SAFE_CHECKLIST`, `SAFE_JOURNAL_REVIEW` 등 `SAFE_*` intent는 `redirect_to`에 넣지 않는다.
+- SAFE intent와 관련된 의미는 `trigger`, 본문 설명, 또는 `fixture_refs`에서 보존할 수 있다.
+- `redirect`는 legacy 입력 이름이며 신규 authoring에서 사용하지 않는다. migration 시 의미를 바꾸지 않고 `redirect_to`로 정규화한다.
+
+**related_lenses**
+
+- `related_lenses`는 Lens extension 필수 필드다.
+- formal 관계가 확정되지 않은 경우 빈 배열 `[]`을 허용한다.
+- 필드 누락과 빈 배열은 다르다. 누락은 validation error이고, 빈 배열은 "확정된 formal relation 없음"을 의미한다.
+- Lens 본문의 병행·참고·예시 언급만으로 `related_lenses` 값을 자동 생성하지 않는다.
+- 값이 존재할 경우 실제 canonical `lens_key`만 허용한다.
+- 자기 자신 참조는 금지한다.
+- 순환 관계는 warning 또는 review 대상으로 취급한다.
+- 기존 Lens 본문의 관계 표현은 별도 semantic review 없이 이번 규칙만으로 formal 관계로 확정하지 않는다.
+
+**fixture_refs**
+
+- `fixture_refs`는 해당 Lens와 관련된 canonical fixture ID 목록이다.
+- 참조 ID는 실제 fixture 문서에 존재해야 한다.
+- fixture에 `expected_lenses` 열이 없다는 이유만으로 `fixture_refs` 참조를 금지하지 않는다.
+- AM fixture처럼 cross-cutting 성격의 fixture도 해당 Lens와 관련된 근거가 있으면 참조할 수 있다.
+- `fixture_refs`는 fixture expected behavior를 새로 정의하지 않는다.
+- AM fixture schema 또는 expected result 변경은 본 필드 작성만으로 발생하지 않으며, 필요 시 별도 fixture 작업으로 다룬다.
+
+**activation_gate**
+
+- `activation_gate`는 실제 배포·통과 상태가 아니라 machine-readable gate identifier를 기록하는 필드다.
+- MVP 공통 gate ID는 `lens-registration-v1`이다.
+- `lens-registration-v1`의 의미는 다음 두 조건의 결합이다.
+  - §13 신규 렌즈 등록 전 체크리스트 완료
+  - `finance-routing-fixtures.md` 전체 regression 통과
+- 기존 Lens 10종은 migration 시 공통 gate ID `lens-registration-v1`을 사용할 수 있다.
+- 실제 gate 통과 여부, `routing_enabled`, pass/fail, active 여부, 실행 시각은 Runtime/verification 소유이며 Lens metadata에 기록하지 않는다.
+- `fixture_refs` 목록 자체는 `activation_gate`가 아니다.
+- `activation_gate`에 긴 prose 문장을 직접 저장하지 않는다.
+- 향후 Lens별 추가 gate가 필요하면 별도 gate ID 또는 gate registry 확장으로 처리한다. 이때도 새로운 Runtime 상태 enum을 만들지 않는다.
+
+### 3.2 기존 Lens 10종 metadata migration 규칙
+
+기존 1차 Lens 10종의 canonical metadata migration은 부분적으로 수행하지 않는다.
+
+- 일부 Lens만 canonical schema로 전환하지 않는다.
+- 필드명만 먼저 바꾼 혼합 schema를 만들지 않는다.
+- 공통 Metadata envelope와 Lens extension 10필드를 하나의 완결된 migration PR에서 함께 적용한다.
+- legacy metadata block과 YAML Front Matter가 공존하는 전환 단계에서는 값이 동일해야 하며, 불일치는 validation error다.
+- 최종 migration에서는 legacy metadata block을 제거하거나 사람용 비권위 요약으로만 유지한다.
+- metadata migration에서 Lens 본문 의미, PolicyGuard action, fixture expected result, Routing Contract 의미를 변경하지 않는다.
+- event-calendar와 macro-rate-fx를 포함한 기존 Lens 10종의 실제 field 값은 별도 semantic decision 없이 본 규칙 개정에서 직접 수정하지 않는다.
 
 ---
 
