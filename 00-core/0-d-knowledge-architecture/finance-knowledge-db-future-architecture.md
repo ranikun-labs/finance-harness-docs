@@ -87,15 +87,26 @@ PostgreSQL Knowledge DB는 MVP에 도입하지 않는다.
 
 ### 2.2 계승하는 노출 정책 (decided / inherited contract)
 
-노출 등급 5종과 경계는 이미 확정되어 있다.
+노출 축은 exposure policy §4의 구조를 그대로 계승한다. 본 문서는 이를 재정의하지 않고, PostgreSQL projection에서도 같은 축 분리를 유지한다.
 
 ```text
+document exposure_class:
 - raw-restricted
 - internal-controlled
 - public-safe
+
+distribution_boundary:
+- repo-only
+- private-resource
+
+Runtime output_class:
 - sanitized-runtime-output
-- operational-metadata
+
+operational-metadata:
+- 문서 exposure_class가 아닌 별도 운영 정보
 ```
+
+`sanitized-runtime-output`, `operational-metadata`, `repo-only`, `private-resource`는 문서 `exposure_class` 값이 아니다. PostgreSQL projection은 문서 `exposure_class` 3종과 `distribution_boundary`를 분리해 저장·검증하며, Runtime 응답 분류와 운영 metadata를 문서 등급으로 승격하지 않는다. `distribution_boundary` 참조는 Exposure Policy §4.3을 따른다. 문서별 기본 분류와 migration 기준은 Exposure Policy §4 및 §6을 따른다. raw-restricted 원문을 포함한 report는 Exposure Policy §5.1의 최고 제한 우선 원칙에 따라 파일 전체를 raw-restricted로 취급하며, 파일 전체 internal-controlled + 일부 문장 raw-restricted라는 이중 취급은 금지한다.
 
 PostgreSQL이 도입되더라도 다음 원칙은 그대로 유지된다(MUST).
 
@@ -431,47 +442,59 @@ sanitized-runtime-output
 
 ---
 
-## 7. Artifact Lifecycle
+## 7. Artifact 상태 축
 
-본 lifecycle 전체는 `proposed / future architecture`이며 **현재 구현되지 않았다**.
+본 절 전체는 `proposed / future architecture`이며 **현재 구현되지 않았다**. 상태는 하나의 흐름이나 단일 상태 머신으로 합치지 않고 다음 세 축으로 분리한다.
 
-### 7.1 기본 전이 흐름
+### 7.1 `lifecycle_status` — Markdown authoring document lifecycle
+
+소유 문서: `finance-knowledge-artifact-metadata-standard.md`
 
 ```text
 draft
-  → validated
-  → projected
-  → candidate
-  → canary
-  → active
-  → deprecated
-  → archived
-
-(분기 상태: rejected / disabled / rollback-ready)
+candidate
+active
+deprecated
+retired
 ```
 
-### 7.2 상태 정의
+이 값은 Markdown 문서의 작성·검수·폐기 상태를 나타낸다. PostgreSQL projection build 상태나 Runtime 배포 상태를 표현하지 않는다.
 
-| 상태 | 의미 | Runtime 사용 | 다음 상태 전이 조건 | 변경 주체 |
-|---|---|---|---|---|
-| `draft` | 작성·수정 중인 Markdown | ❌ 불가 | Git 리뷰 승인 + §8 Validation Pipeline 전체 통과 → `validated` | 작성자(사람) + 리뷰 절차 |
-| `validated` | 검증을 통과한 source revision | ❌ 불가 (아직 projection 아님) | §9 Projection Build 성공 → `projected` | Validation Pipeline (자동) |
-| `projected` | immutable projection 생성 완료 | ❌ 불가 (배포 상태 아님) | 운영자 배포 후보 등록 → `candidate` | Build Pipeline (자동 생성) + 운영자(등록) |
-| `candidate` | 배포 후보로 등록된 버전 | ❌ 불가 (일반 트래픽 미노출) | 운영자 승인 → `canary`. 검증 문제 발견 → `rejected` | 운영자 (Control Plane) |
-| `canary` | 일부 환경·일부 트래픽만 사용 | ⚠️ 제한적 사용 | canary 기준 통과 → `active`. failure threshold 초과 → `rejected` 또는 이전 `active` 유지 | 운영자 또는 자동 중단 프로세스 |
-| `active` | 정식 서빙 버전 | ✅ 사용 | 새 버전 `active` 전환 시 → `deprecated`. 운영 차단 필요 시 → `disabled` | Control Plane pointer 전환 |
-| `deprecated` | 직전 활성 버전 (rollback target 유지) | ❌ 기본 미사용 (rollback 시 재활성 가능) | rollback window 경과 → `archived`. rollback 실행 → `active` 복귀 | 운영 정책 (자동) + 운영자(rollback) |
-| `archived` | 계보 보존용 종단 상태 | ❌ 불가 | 종단 (전이 없음) | 운영 정책 (자동) |
-| `rejected` | validation 또는 canary 실패로 폐기 | ❌ 불가 | 종단. 재시도는 Markdown 수정 → 새 `draft`부터 | Pipeline (자동) 또는 운영자 |
-| `disabled` | 원칙상 routable하지만 운영상 차단 | ❌ 불가 (라우팅 제외) | 운영자 해제 → `active` 복귀 | 운영자 (Control Plane) |
-| `rollback-ready` | `deprecated` 중 즉시 전환 가능함을 표시하는 부가 상태 | ❌ 기본 미사용 | rollback 실행 시 pointer 전환 대상 | 운영 정책 |
+### 7.2 `projection_status` — Validation / Projection Build 상태
 
-### 7.3 lifecycle 공통 원칙
+```text
+validated   = 문서 및 metadata validation 통과
+projected   = 검증된 문서가 PostgreSQL projection으로 생성됨
+rejected    = validation 또는 projection build 실패
+```
 
-- Runtime이 사용할 수 있는 상태는 `active`와 (제한 범위의) `canary`뿐이다(MUST). `draft`/`candidate` 원문을 요청 처리에 사용하는 구현은 계약 위반이다.
-- 상태 전이는 **한 방향으로만 승격**한다. 실패는 항상 `rejected` 또는 기존 `active` 유지로 귀결되며, 실패한 버전을 부분 수정해 그대로 승격하지 않는다(MUST NOT).
-- `disabled`는 Markdown의 `routable` 선언을 바꾸지 않는다. 의미(routable)와 운영 상태(enabled)는 §5.3의 분리 원칙을 따른다.
-- 구체적인 승인 시스템·RBAC는 본 문서의 범위가 아니다(not implemented).
+`rejected`는 validation 또는 projection build 실패에만 사용한다. Canary나 운영 rollout 실패는 projection 자체의 유효성을 취소하지 않으므로 `projection_status`를 `rejected`로 바꾸지 않는다.
+
+### 7.3 `deployment_status` — Runtime / Control Plane 배포 상태
+
+```text
+candidate
+canary
+active
+disabled
+deprecated
+archived
+```
+
+같은 단어(`candidate`, `active`, `deprecated`)가 `lifecycle_status`와 `deployment_status` 양쪽에 존재할 수 있지만, 서로 다른 축의 값이다. `deployment_status=disabled`는 Markdown의 `routable` 선언을 바꾸지 않는다. 의미(routable)와 운영 상태(enabled)는 §5.3의 분리 원칙을 따른다.
+
+### 7.4 Rollback capability
+
+`rollback-ready`는 독립 status enum이 아니다. 다음 조건으로 계산되는 derived capability 또는 flag다.
+
+```text
+- 이전 active projection 존재
+- 이전 projection hash 확인 가능
+- 이전 deployment가 복구 가능
+- 필요한 dependency가 보존됨
+```
+
+구체적인 승인 시스템·RBAC는 본 문서의 범위가 아니다(not implemented).
 
 ---
 
@@ -573,7 +596,7 @@ Projection은 다음 중 **필요한 항목만** 포함한다(MUST).
 ```
 
 - 구체적인 트래픽 비율·중단 알고리즘은 본 문서에서 정하지 않는다(not implemented).
-- canary 중 실패한 버전은 `rejected`로 종료하며, 부분 수정 후 재승격하지 않는다 (§7.3).
+- canary 실패 시 트래픽은 직전 active deployment로 복귀한다. 실패한 projection의 `deployment_status`는 `disabled`가 되며, `projection_status`는 `projected`를 유지한다 (§7.2).
 
 ### 10.3 Rollback
 
@@ -750,7 +773,7 @@ fail-closed (안전 우선)
 | active pointer 없음 | fail-closed | 안전한 오류 + 운영 경보. 임의 버전 추정 선택 금지 |
 | version/hash 불일치 | fail-closed (해당 artifact) | 불일치 artifact 사용 중단. 일치하는 last-known-good 있으면 사용, 없으면 안전한 오류 |
 | 다중 WAS cache 불일치 | 서빙: fail-open + 교정 | 각 인스턴스는 자신이 가진 검증본으로 서빙 지속. hash 기준 탐지 → cache refresh → 미교정 인스턴스 경보 |
-| canary 실패 | fail-closed (신규 버전) | canary 중단, 트래픽을 기존 active로 복귀. 실패 버전은 `rejected` |
+| canary 실패 | fail-closed (신규 deployment) | canary 중단, 트래픽을 직전 active deployment로 복귀. 실패한 deployment_status는 `disabled`, projection_status는 `projected` 유지 |
 | rollback 실패 | fail-closed (상태 변경) | 부분 전환 상태로 방치 금지. 전환 전 상태로 복원 시도 + 최고 수준 경보. pointer가 미검증 상태를 가리키게 두지 않음 |
 | audit 기록 실패 | 이원화 | **서빙 경로**: 응답 반환은 지속(fail-open) + 경보 (감사 실패가 사용자 장애로 전이되지 않게). **Control Plane 상태 변경**: audit 기록 불가 시 변경 자체를 중단(fail-closed — 감사 없는 배포 상태 변경 금지) |
 
