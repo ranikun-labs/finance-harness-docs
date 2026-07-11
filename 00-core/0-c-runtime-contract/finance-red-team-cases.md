@@ -1,4 +1,4 @@
-# finance-red-team-cases-v1.md
+# finance-red-team-cases.md
 
 ## 0. Metadata
 
@@ -9,10 +9,10 @@ scope             : 정책 우회·오분류·위험 생성을 유도하는 입�
                     Lens/Redirect → Template → Validator 전 구간을
                     공격 관점에서 검증한다.
 source documents  :
-  [0-C] finance-routing-contract-v1.md, finance-output-examples-v1.md
+  [0-C] finance-routing-contract.md, finance-output-examples.md
   [0-A] 00-service-policy.md, finance-policyguard-rules.md,
         finance-output-validator.md, finance-market-data-grounding.md,
-        finance-prompt-templates-v2.1.md, finance-routing-fixtures-v2.md
+        finance-prompt-templates.md, finance-routing-fixtures.md
   [0-B] finance-analysis-lens-pack-overview.md,
         finance-lens-authoring-standard.md, finance-lens-catalog.md
   [렌즈] 01-core-analysis-lenses/finance-lens-*.md (1차 10종)
@@ -562,9 +562,9 @@ Red Team case(candidate / red-team-only)를 정식 fixture로 승격하려면 �
 | 책임 | 담당 |
 |---|---|
 | intent/guard 규칙 원문 | `finance-policyguard-rules.md` |
-| 정식 fixture 정의 | `finance-routing-fixtures-v2.md` |
-| 라우팅 분기 계약 | `finance-routing-contract-v1.md` |
-| 정상 응답 표준형 | `finance-output-examples-v1.md` |
+| 정식 fixture 정의 | `finance-routing-fixtures.md` |
+| 라우팅 분기 계약 | `finance-routing-contract.md` |
+| 정상 응답 표준형 | `finance-output-examples.md` |
 | validator 검사 규칙 원문 | `finance-output-validator.md` |
 | 렌즈 콘텐츠 | `01-core-analysis-lenses/finance-lens-*.md` |
 | 테스트 코드 구현 | 별도 backend/test 작업 |

@@ -1,4 +1,4 @@
-# finance-output-examples-v1.md
+# finance-output-examples.md
 
 ## 0. Metadata
 
@@ -6,16 +6,16 @@
 status            : 초안 v1.0 — 0-C Runtime Contract 두 번째 문서
 internal-only     : 본 문서는 내부 구현·검증 전용이다. 사용자 대면
                     정적 리소스나 공개 문서로 노출하지 않는다.
-scope             : finance-routing-contract-v1.md의 intent/action/lens/
+scope             : finance-routing-contract.md의 intent/action/lens/
                     template 흐름에 따른 "실제 사용자 응답"의 기준 예시를
                     고정한다. 좋은 예시(§3~§10), 나쁜 예시(§11),
                     rewrite 전/후(§12), 수동 검수 체크리스트(§13)를
                     포함한다.
 source documents  :
-  - finance-routing-contract-v1.md (라우팅 계약)
+  - finance-routing-contract.md (라우팅 계약)
   - 00-service-policy.md / finance-policyguard-rules.md /
     finance-output-validator.md / finance-market-data-grounding.md /
-    finance-prompt-templates-v2.1.md / finance-routing-fixtures-v2.md
+    finance-prompt-templates.md / finance-routing-fixtures.md
   - finance-lens-catalog.md + 01-core-analysis-lenses/finance-lens-*.md (1차 10종)
 non-goals         :
   - 신규 정책·intent·lens key·템플릿의 신설 (기존 등록 이름만 사용)
@@ -1293,10 +1293,10 @@ pass_reason       : 콘텐츠는 유지하되 선언 서두·reason·고지·CTA
 
 | 책임 | 담당 |
 |---|---|
-| 라우팅 분기 규칙 | `finance-routing-contract-v1.md` |
-| 템플릿 원문·블록 정의 | `finance-prompt-templates-v2.1.md` |
+| 라우팅 분기 규칙 | `finance-routing-contract.md` |
+| 템플릿 원문·블록 정의 | `finance-prompt-templates.md` |
 | validator 검사 규칙·severity 정의 | `finance-output-validator.md` |
 | 금지 표현의 전체 목록 | `finance-policyguard-rules.md` §5 + 각 lens 문서 §9 |
-| fixture 정의·정식 등록 | `finance-routing-fixtures-v2.md` (본 문서의 "후보"는 미확정) |
+| fixture 정의·정식 등록 | `finance-routing-fixtures.md` (본 문서의 "후보"는 미확정) |
 | 렌즈 체크리스트 원문 | `01-core-analysis-lenses/finance-lens-*.md` |
 | 백엔드 구현 | 별도 작업 |

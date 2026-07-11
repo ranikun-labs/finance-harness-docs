@@ -3,7 +3,7 @@
 > **상태**: 초안 v0.1
 > **internal-only**: 본 문서는 내부 구현·검증 전용이다. 사용자 대면 정적 리소스나 공개 문서로 노출하지 않는다.
 > **상위 문서**: `finance-policyguard-rules.md` §9 (Output Guard), `00-service-policy.md`
-> **인접 문서**: `finance-prompt-templates-v2.1.md` (output shape 기준), `finance-routing-fixtures-v2.md` (assertion/regression), `finance-market-data-grounding.md` (데이터 단정 금지)
+> **인접 문서**: `finance-prompt-templates.md` (output shape 기준), `finance-routing-fixtures.md` (assertion/regression), `finance-market-data-grounding.md` (데이터 단정 금지)
 > **범위**: 검사 항목, 위반 유형, severity, 처리 방식, rewrite 정책, 로그 필드만 정의한다. validator 코드/정규식 구현은 포함하지 않는다.
 
 ---
@@ -360,8 +360,8 @@ created_at
 |---|---|
 | intent 분류 / Input·Generation Guard | `finance-policyguard-rules.md` |
 | 렌즈 정의 | `finance-lens-catalog.md` |
-| fixture 정의 | `finance-routing-fixtures-v2.md` |
-| 응답 템플릿 원문 | `finance-prompt-templates-v2.1.md` |
+| fixture 정의 | `finance-routing-fixtures.md` |
+| 응답 템플릿 원문 | `finance-prompt-templates.md` |
 | 시장 데이터 정책 | `finance-market-data-grounding.md` |
 | 구현 인계 | `finance-harness-mvp-implementation-handoff-v1.1.md` |
 | validator 코드/정규식 구현 | 별도 backend 작업 |

@@ -14,7 +14,7 @@
 - 렌즈는 **답을 주지 않는다.** 확인할 항목을 준다.
 - 렌즈는 **사실을 단정하지 않는다.** Phase 1에는 실시간 데이터가 없으므로 "확인하는 방법"만 안내한다.
 - 렌즈의 출력은 항상 **기록/복기 CTA**로 끝난다 (질문 → 체크리스트 → 기록 → 복기 루프).
-- 하나의 질문에 **복수 렌즈가 적용**될 수 있다 (routing은 `00-core/0-c-runtime-contract/finance-routing-contract-v1.md` 책임).
+- 하나의 질문에 **복수 렌즈가 적용**될 수 있다 (routing은 `00-core/0-c-runtime-contract/finance-routing-contract.md` 책임).
 
 렌즈 공통 출력 구조:
 
