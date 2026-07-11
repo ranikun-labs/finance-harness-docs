@@ -12,7 +12,7 @@ decision owner        : Finance Harness Knowledge Architecture
 parent decisions      :
   - 00-core/0-d-knowledge-architecture/finance-knowledge-storage-decision.md
   - 00-core/0-d-knowledge-architecture/finance-document-exposure-policy.md
-visibility            : internal-only — 본 문서는 exposure policy §4의 보수
+visibility            : internal-only — 본 문서는 exposure policy §5.4의 보수
                         분류 원칙에 따라 internal-controlled로 취급한다.
 implementation status : contract only / repository migration not performed
 non-goals             :
@@ -34,7 +34,7 @@ non-goals             :
 
 ```text
 - 파일명 버전과 내용 버전 혼용
-  (예: finance-routing-contract-v1.md 파일명 vs "> 상태: 초안 v0.1" 본문 표기)
+  (예: version suffix가 붙은 구 파일명 표기 vs "> 상태: 초안 v0.1" 본문 표기)
 - 파일 rename 시 문서 참조 연쇄 파손
   (예: -v1/-v2 suffix 제거 후에도 타 문서가 versioned 파일명을 계속 인용)
 - draft와 active 혼용 ("초안"이면서 실제로는 canonical로 사용되는 문서)
@@ -156,8 +156,8 @@ finance-lens-market-context.md
 금지 예:
 
 ```text
-finance-routing-contract-v1.md
-finance-prompt-templates-v2.1.md
+finance-{name}-v1.md 형태
+finance-{name}-v2.1.md 형태
 finance_harness_document_report.md
 finance-routing-contract-final-final.md
 ```
@@ -291,16 +291,16 @@ Git tag는 version과 대응시킬 수 있으나(예: tag `finance.contract.rout
 
 문서 분류용 표준 enum을 다음 12종으로 정의한다. 이 enum은 문서 분류용이며, Runtime의 intent/action enum이 아니고 그것을 대체하지도 않는다.
 
-기본 exposure class는 exposure policy §4의 문서 유형별 기본 등급표를 따른 제안값이다. **개별 문서의 등급은 exposure policy가 소유**하며, 아래 기본값과 exposure policy §4가 다르면 exposure policy가 이긴다.
+아래 표의 exposure_class 열은 본 표준이 정하는 독립 기본값이 **아니다**. **개별 문서의 분류는 `finance-document-exposure-policy.md`(§5 등급 결정 규칙, §6 문서별 기본 분류)가 canonical owner로 소유**하며, 본 표준은 허용 enum(§10.3)과 표기·검증 규칙만 소유한다. 아래 열은 Exposure Policy §6 분류의 참조 기재이고, 본 표와 Exposure Policy가 다르면 항상 Exposure Policy가 이긴다.
 
-| artifact_type | segment | 의미 | runtime_loadable 기본 | routable 가능 | 기본 exposure_class | 필수 추가 필드 | 예시 |
+| artifact_type | segment | 의미 | runtime_loadable 기본 | routable 가능 | exposure_class (Exposure Policy §6 참조) | 필수 추가 필드 | 예시 |
 |---|---|---|---|---|---|---|---|
-| policy | policy | 서비스·안전 정책 원문 (0-A) | true | 불가 | raw-restricted | authority_level, governed_artifacts, breaking_change_policy | 00-service-policy.md, finance-policyguard-rules.md |
-| contract | contract | 실행·작성 계약 (routing, catalog, 표준) | true | 불가 | raw-restricted (0-C) / internal-controlled (0-B lens infra) | authority_level, governed_artifacts, breaking_change_policy | finance-routing-contract.md, finance-lens-catalog.md |
-| lens | lens | 질문을 확인 관점 체크리스트로 구조화하는 단위 문서 | true | **가능** (active 시) | internal-controlled | lens_key, trigger, forbidden_intents, redirect_to, fixture_refs, activation_gate | finance-lens-market-context.md |
-| fixture | fixture | routing/guard 회귀 기준 케이스 집합 | false (regression 목적 한정 true 가능) | 불가 (항상 false) | raw-restricted | fixture_set, fixture_count, validates | finance-routing-fixtures.md, finance-red-team-cases.md |
-| template | template | intent/action별 응답 구조 원문 | true | 불가 | raw-restricted | (없음 — governed_artifacts 선택) | finance-prompt-templates.md |
-| validator | validator | 출력 최종 검사 규칙 | true | 불가 | raw-restricted | (없음 — governed_artifacts 선택) | finance-output-validator.md |
+| policy | policy | 서비스·안전 정책 원문 (0-A) | true | 불가 | internal-controlled (Exposure Policy §6) | authority_level, governed_artifacts, breaking_change_policy | 00-service-policy.md, finance-policyguard-rules.md |
+| contract | contract | 실행·작성 계약 (routing, catalog, 표준) | true | 불가 | internal-controlled (Exposure Policy §6) | authority_level, governed_artifacts, breaking_change_policy | finance-routing-contract.md, finance-lens-catalog.md |
+| lens | lens | 질문을 확인 관점 체크리스트로 구조화하는 단위 문서 | true | **가능** (active 시) | internal-controlled (Exposure Policy §6) | lens_key, category, lens_tier, trigger, forbidden_intents, redirect_to, related_lenses, fixture_refs, output_style, activation_gate (§13.2) | finance-lens-market-context.md |
+| fixture | fixture | routing/guard 회귀 기준 케이스 집합 | false (regression 목적 한정 true 가능) | 불가 (항상 false) | raw-restricted (Exposure Policy §6 — 파일 전체) | fixture_set, fixture_count, validates | finance-routing-fixtures.md, finance-red-team-cases.md |
+| template | template | intent/action별 응답 구조 원문 | true | 불가 | internal-controlled (Exposure Policy §6) | (없음 — governed_artifacts 선택) | finance-prompt-templates.md |
+| validator | validator | 출력 최종 검사 규칙 | true | 불가 | raw-restricted (Exposure Policy §6 — 파일 전체) | (없음 — governed_artifacts 선택) | finance-output-validator.md |
 | architecture-decision | adr | 아키텍처 결정 기록 (ADR) | false | 불가 | internal-controlled | (없음 — supersedes 선택) | finance-knowledge-storage-decision.md |
 | security-policy | security | 노출·보안 계약 | false | 불가 | internal-controlled | authority_level, governed_artifacts | finance-document-exposure-policy.md |
 | report | report | 검토·정합성 보고서 (비권위 스냅샷) | false | 불가 | internal-controlled | reviewed_sources, as_of, non_authoritative | finance-policyguard-alignment.md |
@@ -310,7 +310,7 @@ Git tag는 version과 대응시킬 수 있으나(예: tag `finance.contract.rout
 
 비고:
 
-- fixture의 "regression 목적 한정 true"는 exposure policy §4 주석 4와 동일한 의미다: 저장·검증 목적의 접근이며, 사용자 응답 생성 경로 유입이나 user routing 대상을 의미하지 않는다.
+- fixture의 "regression 목적 한정 true"는 exposure policy §4.1 허용 목록(내부 테스트 — fixture/regression 실행 환경)과 동일한 의미다: 저장·검증 목적의 접근이며, 사용자 응답 생성 경로 유입이나 user routing 대상을 의미하지 않는다.
 - `sanitized-runtime-output`은 artifact_type이 아니다. Runtime 산출물의 분류이며 원본 문서 유형으로 사용하지 않는다 (§10, §11).
 
 ---
@@ -334,6 +334,20 @@ Git tag는 version과 대응시킬 수 있으나(예: tag `finance.contract.rout
 - retired 문서는 일반 Runtime package에서 제외한다.
 - deprecated는 신규 routing 대상이 아니다.
 - 과거 문서의 보존(Git/archive)과 현재 Runtime 사용 여부는 별개다.
+
+**축 구분 — lifecycle_status ≠ projection_status ≠ deployment_status**
+
+```text
+lifecycle_status   = Markdown Authoring Document Lifecycle (본 절 — 5종)
+projection_status  = Validation / Projection Build 상태
+                     (validated, projected, rejected 등 —
+                      finance-knowledge-db-future-architecture.md 소유)
+deployment_status  = candidate / canary / active / disabled /
+                     deprecated / archived 등 운영 배포 상태
+                     (Runtime / 미래 Control Plane 소유)
+```
+
+- 세 축을 하나의 상태 머신으로 합치지 않는다. `candidate`·`active`·`deprecated`처럼 **같은 단어가 두 축에 존재하더라도 서로 다른 축의 값**이며, 문서 front matter에는 lifecycle_status만 기록한다 (projection_status·deployment_status는 §11.3의 운영 상태 필드 금지 대상).
 
 ---
 
@@ -369,20 +383,24 @@ implementation_status: contract-only
 
 ### 10.1 등급의 소유권
 
-노출 등급의 정의는 `finance-document-exposure-policy.md`가 소유한다. 본 표준은 등급을 재정의하지 않고 **참조·표기 방법만** 정의한다. 해당 정책의 canonical 등급은 다음 5종이다.
+노출 분류의 정의는 `finance-document-exposure-policy.md`가 소유한다. 본 표준은 분류를 재정의하지 않고 **참조·표기 방법만** 정의한다. 해당 정책의 canonical 구조는 하나의 등급 enum이 아니라 다음 축의 조합이다 (exposure policy §4).
 
 ```text
-raw-restricted            (원문 자체가 내부 규칙·공격·Prompt·평가 데이터)
-internal-controlled       (내부 운영·검수용, 사용자 직접 제공 불가)
-public-safe               (검토를 통과한 공개 가능 "콘텐츠 단위")
-sanitized-runtime-output  (Validator 통과 후 정제된 Runtime 산출물)
-operational-metadata      (문서 의미가 아닌 운영 상태 정보)
+문서 exposure_class (3종 — 문서에 부여 가능한 유일한 민감도 축):
+  raw-restricted            (원문 자체가 내부 규칙·공격·Prompt·평가 데이터)
+  internal-controlled       (내부 운영·검수용, 사용자 직접 제공 불가)
+  public-safe               (검토를 통과한 공개 가능 "콘텐츠 단위")
+
+별도 축 (문서 exposure_class가 아님):
+  distribution_boundary     (repo-only / private-resource — 배포·접근 경계, §10.3)
+  sanitized-runtime-output  (Runtime output_class — Validator 통과 후 정제 산출물)
+  operational-metadata      (운영 상태 정보 분류 — §11.3)
 ```
 
 ### 10.2 어휘 고정 (혼선 차단)
 
 - 노출 등급명은 위 canonical 명칭만 사용한다. `internal-contract` 등 유사 명칭을 등급명으로 사용하지 않는다 (기존 논의·타 문서 초안에서 쓰인 유사 표기는 migration 시 canonical 명칭으로 정정한다 — patch).
-- **`private-resource`는 노출 등급이 아니다.** storage decision §7과 exposure policy §5가 정의하는 배포·접근 경계이며, 콘텐츠 민감도 축과 분리해 표기한다 (§10.3).
+- **`private-resource`는 노출 등급이 아니다.** storage decision §7과 exposure policy §4.3이 정의하는 배포·접근 경계이며, 콘텐츠 민감도 축과 분리해 표기한다 (§10.3).
 - 기존 문서의 `internal-only` 자유 서술 표기는 등급이 아니다. migration 시 exposure_class 필드로 정규화한다.
 
 ### 10.3 두 축 분리: exposure_class와 distribution_boundary
@@ -401,7 +419,7 @@ raw-restricted | internal-controlled | public-safe
 ```
 
 - `sanitized-runtime-output`과 `operational-metadata`는 문서의 exposure_class 값으로 사용할 수 없다 (validation error). 전자는 Runtime 산출물의 분류이고, 후자는 상태 정보의 분류다.
-- `public-safe`는 exposure policy §3.3에 따라 **콘텐츠 단위** 등급이다. public-safe 콘텐츠를 담은 원본 파일·metadata·경로는 internal-controlled 이상으로 유지되므로, repo 내 원본 문서의 exposure_class가 public-safe인 경우는 "별도 분리된 public artifact"에 한정된다.
+- `public-safe`는 exposure policy §4.4에 따라 **콘텐츠 단위** 등급이다. public-safe 콘텐츠를 담은 원본 파일·metadata·경로는 internal-controlled 이상으로 유지되므로, repo 내 원본 문서의 exposure_class가 public-safe인 경우는 "별도 분리된 public artifact"에 한정된다.
 
 **distribution_boundary** — MVP 값:
 
@@ -415,7 +433,7 @@ private-resource  (WAS private resource로 패키징되어 Finance Runtime이 �
 
 ### 10.4 등급 변경
 
-exposure_class의 하향(제한 완화)은 exposure policy §12의 승인 절차를 따르며, Metadata 편집만으로 수행할 수 없다. 상향(보수화)은 문서 소유자가 즉시 할 수 있다.
+exposure_class의 하향(제한 완화)은 exposure policy §5.2에 따라 해당 정책의 개정 없이는 불가능하며, Metadata 편집만으로 수행할 수 없다. 상향(보수화)은 문서 소유자가 즉시 할 수 있다 (§5.2와 동일).
 
 ---
 
@@ -455,7 +473,7 @@ routing_enabled = 운영 중 실제 활성 상태 (operational-metadata —
                   Runtime/미래 Control Plane 소유, 문서 Metadata 아님)
 ```
 
-storage decision §12와 exposure policy §3.5의 소유권 분리를 그대로 승계한다. 따라서 `routing_enabled`, `deployment_status`, `content_hash`, `loaded_at` 같은 운영 상태 필드는 **문서 Metadata에 기록하지 않는다** (validation error, §16). 문서는 routable을 선언할 수 있지만, 운영에서 아직 활성화하지 않을 수 있다.
+storage decision §12의 소유권 분리, exposure policy §4.6(operational-metadata 분류), 그리고 future-architecture §5의 의미/운영 상태 소유권 경계를 그대로 승계한다. 따라서 `routing_enabled`, `projection_status`, `deployment_status`, `content_hash`, `loaded_at` 같은 운영 상태 필드는 **문서 Metadata에 기록하지 않는다** (validation error, §16). 문서는 routable을 선언할 수 있지만, 운영에서 아직 활성화하지 않을 수 있다.
 
 ---
 
@@ -537,20 +555,26 @@ related_documents:
 | public_exposable | 선택 | 생략 시 false |
 | validates / validated_by / supersedes / related_documents | 선택 (§12의 강제성 규칙 적용) | fixture는 validates 필수 |
 | description | 선택 | 없으면 info |
-| 운영 상태 필드 (routing_enabled, deployment_status, content_hash, loaded_at 등) | **금지** | §11.3 — operational-metadata는 문서 Metadata가 아님 |
+| 운영 상태 필드 (routing_enabled, projection_status, deployment_status, content_hash, loaded_at 등) | **금지** | §11.3 — operational-metadata는 문서 Metadata가 아님 |
 
 ### 13.2 Lens 추가 필드 (전부 필수)
+
+**Lens 전용 필드(lens_key, category, lens_tier, trigger, forbidden_intents, redirect_to, related_lenses, fixture_refs, output_style, activation_gate)의 의미와 작성 규칙은 `finance-lens-authoring-standard.md`가 canonical owner다.** 본 표준은 front matter 필수 필드 목록과 형식만 소유하며, 아래 "의미" 열은 요약 참조다.
 
 | 필드 | 의미 |
 |---|---|
 | lens_key | catalog 등록 이름 (catalog가 소유하는 값의 기재) |
+| category | 렌즈 분류 (공통 시장 / 주식 / 환율·금리·매크로 / 자산군 확장 / 투자 일지·행동 분석 — 의미는 authoring standard §3) |
+| lens_tier | canonical 값: existing-mvp / existing-extension / new (구 status 필드의 개명 — 값 의미 동일. legacy 대응: 기존-MVP→existing-mvp, 기존-확장→existing-extension, 신규→new. 기존 Lens 10종의 실제 값은 migration 시 변환하는 legacy 값으로 유지. 의미는 authoring standard §3) |
 | trigger | 사용 조건 요약 (canonical 상세는 lens 본문 §0) |
 | forbidden_intents | 이 렌즈로 자주 유입되는 위험 intent 목록 (policyguard §3의 값만 사용) |
-| redirect_to | redirect 관계 요약 |
+| redirect_to | redirect 관계 요약 (canonical 필드명 — `redirect`와 혼용 금지) |
+| related_lenses | 함께 참조·병행 적용되는 lens key 목록 (없으면 빈 목록) |
 | fixture_refs | 관련 fixture ID 목록 (예: SF-01, RF-01) |
+| output_style | 공통 5단 구조 내 사용 (templates §3 참조) |
 | activation_gate | active 전환에 요구되는 검증 게이트 식별 (예: routing-fixture regression 통과) |
 
-- 현행 lens 문서의 `## 0. Metadata` 코드블록(lens key, category, status, trigger, forbidden intent, redirect 관계, 관련 fixture, output style)과 의미가 겹치는 필드는 migration 시 front matter로 이관하며, 값의 의미는 변경하지 않는다. `finance-lens-authoring-standard.md` §3의 렌즈 공통 Metadata 형식과의 정합은 migration Phase에서 해당 표준의 개정(별도 작업)으로 맞춘다.
+- 현행 lens 문서의 `## 0. Metadata` 코드블록(lens key, category, lens_tier(구 status), trigger, forbidden intent, redirect 관계, 관련 fixture, output style)과 의미가 겹치는 필드는 migration 시 front matter로 이관하며, 값의 의미는 변경하지 않는다. `finance-lens-authoring-standard.md` §3은 공통 envelope를 본 표준에서 상속하고 Lens 전용 extension만 정의하도록 정합이 완료되었다 (구 `status` 필드는 `lens_tier`로 개명, canonical 값은 existing-mvp/existing-extension/new — legacy 한국어 값과 의미 동일). 기존 Lens 10종의 실제 metadata migration은 별도 작업이다.
 
 ### 13.3 Policy / Contract / Security-policy 추가 필드 (필수)
 
@@ -593,7 +617,7 @@ version: 1.0.0
 lifecycle_status: active
 implementation_status: contract-only
 owner: finance-harness
-exposure_class: raw-restricted
+exposure_class: internal-controlled
 distribution_boundary: private-resource
 runtime_loadable: true
 routable: false
@@ -641,7 +665,7 @@ version: 0.1.0
 lifecycle_status: active
 implementation_status: contract-only
 owner: finance-harness
-exposure_class: raw-restricted
+exposure_class: internal-controlled
 distribution_boundary: private-resource
 runtime_loadable: true
 routable: false
@@ -672,7 +696,7 @@ version: 1.0.0
 lifecycle_status: candidate
 implementation_status: contract-only
 owner: finance-harness
-exposure_class: raw-restricted
+exposure_class: internal-controlled
 distribution_boundary: private-resource
 runtime_loadable: true
 routable: false
@@ -710,13 +734,17 @@ runtime_loadable: true
 routable: true
 last_updated: 2026-07-10
 lens_key: market-context
+category: 공통 시장
+lens_tier: existing-mvp
 trigger: 종목/시장에 대한 포괄적 질문. 다른 렌즈 선택이 애매할 때의 기본 진입점
 forbidden_intents:
   - RISK_BUY_SELL
   - RISK_RECOMMENDATION
   - RISK_DATA_GROUNDING
 redirect_to: RISK_BUY_SELL·RISK_RECOMMENDATION의 redirect 대상, UNKNOWN 기본 렌즈
+related_lenses: []
 fixture_refs: [SF-01, SF-06, RF-01, RF-02, RF-03, RF-08, DG-05, AM-04]
+output_style: 공통 5단 구조 내 사용 (templates §3)
 activation_gate: routing-fixture regression 통과 (finance.fixture.routing)
 depends_on:
   - document_id: finance.contract.lens-catalog
@@ -744,6 +772,8 @@ runtime_loadable: false
 routable: false
 last_updated: 2026-07-10
 lens_key: risk-checklist
+category: 투자 일지·행동 분석
+lens_tier: existing-mvp
 trigger: 리스크 점검·기준 수립·기록 방법에 대한 질문
 forbidden_intents:
   - RISK_STOP_LOSS
@@ -752,7 +782,9 @@ forbidden_intents:
   - RISK_BUY_SELL
   - RISK_ACCOUNT_BASED_ADVICE
 redirect_to: RISK_BUY_SELL(RF-01~03)·RISK_STOP_LOSS(RF-05)·RISK_POSITION_SIZE(RF-06~07)의 redirect 대상
+related_lenses: []
 fixture_refs: [SF-05, SF-06, RF-01, RF-02, RF-03, RF-05, RF-06, RF-07]
+output_style: 공통 5단 구조 내 사용 (templates §3)
 activation_gate: routing-fixture regression 통과 후 active 전환
 depends_on:
   - document_id: finance.contract.lens-catalog
@@ -845,7 +877,7 @@ non_authoritative: true
 ---
 ```
 
-(report의 exposure는 internal-controlled이되, 보고서에 인용된 policy·red-team 원문 부분은 exposure policy §3.2에 따라 raw-restricted에 준해 취급한다.)
+(raw-restricted 원문이 포함되지 않은 보고서는 `internal-controlled`다. 보고서가 raw-restricted 원문·공격 입력·unsafe output을 직접 포함하면 exposure policy §5.1의 최고 제한 우선 원칙에 따라 **파일 전체**를 `raw-restricted`로 재분류한다. 파일 전체 internal-controlled + 일부 문장만 raw-restricted라는 이중 취급은 금지한다.)
 
 ---
 
@@ -871,12 +903,12 @@ non_authoritative: true
 | E-12 | 파일명에 version suffix 포함 | authoring merge |
 | E-13 | 파일명에 underscore 사용 | authoring merge |
 | E-14 | dependency version constraint 불일치 (참조 대상 현행 version이 범위 밖) | activation |
-| E-15 | 운영 상태 필드(routing_enabled, deployment_status, content_hash, loaded_at 등)가 front matter에 존재 | authoring merge |
+| E-15 | 운영 상태 필드(routing_enabled, projection_status, deployment_status, content_hash, loaded_at 등)가 front matter에 존재 | authoring merge |
 | E-16 | 순환 dependency | build |
 | E-17 | retired/deprecated document_id의 재사용 | authoring merge |
 | E-18 | Front Matter와 legacy Metadata 블록의 값 불일치 (공존 기간) | authoring merge |
 | E-19 | fixture인데 validates 누락 또는 routable=true | build |
-| E-20 | raw-restricted 문서가 §7·exposure policy §4 기본과 달리 완화 방향으로 재분류 (승인 기록 없음) | packaging |
+| E-20 | raw-restricted 문서가 exposure policy §5.2·§6 분류와 달리 완화 방향으로 재분류 (승인 기록 없음) | packaging |
 
 ### 16.2 Warning
 
@@ -910,7 +942,7 @@ non_authoritative: true
   routing-fixtures, lens-authoring-standard, lens 문서 서두 등)
 - "## 0. Metadata" text 코드블록 (routing-contract, lens 본문,
   alignment report, 0-D 문서)
-- H1 또는 참조에 version 포함 (finance-routing-contract-v1.md 류의
+- H1 또는 참조에 version 포함 (version suffix가 붙은 구 파일명 류의
   versioned 파일명 인용이 fact-base 목록 등에 잔존)
 - Metadata version 없음 / document_id 없음 (전 문서 공통)
 ```
@@ -926,7 +958,8 @@ non_authoritative: true
 4.  version 정규화       — "초안 v0.1" 류 표기를 semver로 매핑
 5.  lifecycle/implementation status 분리 — "초안"을 draft/candidate로,
                            구현 상태를 별도 필드로 분리
-6.  exposure metadata 적용 — exposure policy §4 기본 등급표 기준으로
+6.  exposure metadata 적용 — exposure policy §4 노출 축 구조와
+                           §6 문서별 기본 분류 기준으로
                            exposure_class/distribution_boundary 기재
 7.  dependency 등록      — 파일명 참조를 document_id 참조로 등록
 8.  validation dry-run   — §16 규칙 시험 실행 (차단 없음)
@@ -992,6 +1025,8 @@ decided / MVP target contract
 - version rule (§6)
 - lifecycle model (§8) / implementation status model (§9)
 - exposure 표기 모델 (§10 — 등급 정의는 exposure policy 소유)
+- lens-authoring-standard §3(Lens Metadata Extension)과의 정합
+  (본 개정으로 완료 — envelope 상속 + extension 10필드 + lens_tier)
 - runtime eligibility (§11)
 - dependency 표기 (§12)
 - validation requirements (§16)
@@ -1001,7 +1036,7 @@ proposed / migration required
 - document_id 일괄 할당
 - dependency graph 구축
 - validation CLI 또는 build step
-- lens-authoring-standard §3 Metadata 형식과의 정합 개정
+- 기존 Lens 10종 metadata migration (legacy lens_tier 값 변환 포함)
 
 not implemented / repo verification required
 - Metadata parser

@@ -2,7 +2,7 @@
 
 > **상태**: 초안 v0.1
 > **상위 문서**: `finance-analysis-lens-pack-overview.md` §7~§10, §12 (본 문서는 그 작성 기준을 실무 표준으로 분리한 것)
-> **Safety Core 참조**: `00-service-policy.md`, `finance-policyguard-rules.md`, `finance-output-validator.md`, `finance-market-data-grounding.md`, `finance-routing-fixtures-v2.md`
+> **Safety Core 참조**: `00-service-policy.md`, `finance-policyguard-rules.md`, `finance-output-validator.md`, `finance-market-data-grounding.md`, `finance-routing-fixtures.md`
 > **범위**: per-lens 문서의 **작성 표준**(구조, 문체, 금지/허용 표현, 셀프 체크)만 정의한다. 개별 렌즈 본문, 렌즈 목록, guard/validator 규칙 자체는 정의하지 않는다.
 > **불변 원칙**: **렌즈는 "무엇을 보는가"만 정의한다. "그래서 무엇을 해야 하는가"는 정의하지 않는다.**
 
@@ -15,7 +15,10 @@
 - 목적은 두 가지다.
 
 ```text
-1. 일관성 — 모든 렌즈 문서가 같은 구조·문체·metadata를 갖게 한다.
+1. 일관성 — 모든 Lens 문서는 Metadata Standard
+   (finance-knowledge-artifact-metadata-standard.md)의 공통 envelope와
+   본 문서의 Lens extension(§3) 및 본문 구조·문체 규칙을
+   일관되게 사용한다.
 2. 안전성 — 렌즈 문서가 투자 조언(매수/매도 판단, 목표가/손절가,
    수량/비중, 종목/업종 추천, 확정 예측)으로 새는 것을
    작성 단계에서 차단한다.
@@ -40,27 +43,39 @@
 
 ---
 
-## 3. 렌즈 문서 공통 Metadata 형식
+## 3. Lens Metadata Extension
 
-모든 렌즈 문서는 서두에 아래 metadata 블록을 **이 순서대로** 포함한다.
+**공통 envelope의 상속.** 모든 Knowledge Artifact 공통 metadata envelope(document_id, artifact_type, version, lifecycle_status, implementation_status, exposure_class, distribution_boundary, runtime_loadable, routable, 공통 dependency/provenance 필드와 형식·validation contract)는 `finance-knowledge-artifact-metadata-standard.md`가 소유한다. 본 문서는 그 envelope를 **상속하며 재정의하지 않는다.** 렌즈 문서의 공통 envelope 필드 작성은 해당 표준(§13.1, §14)을 따른다.
+
+본 절이 소유하는 것은 **Lens 전용 metadata extension**의 의미와 작성 규칙뿐이다 (metadata-standard §13.2가 canonical owner로 본 문서를 참조한다).
+
+모든 렌즈 문서는 서두에 아래 Lens 전용 metadata 블록을 **이 순서대로** 포함한다.
 
 ```text
-lens key          : {kebab-case 영문. catalog 등록 key와 문자 단위로 동일}
+lens_key          : {kebab-case 영문. catalog 등록 key와 문자 단위로 동일}
 category          : {공통 시장 / 주식 / 환율·금리·매크로 / 자산군 확장 / 투자 일지·행동 분석}
-status            : {기존-MVP / 기존-확장 / 신규}
+lens_tier         : {existing-mvp / existing-extension / new}
 trigger           : {이 렌즈가 선택되는 질문 신호. 예시 질문 1~3개 포함}
-forbidden intent  : {이 렌즈로 자주 유입되는 RISK_* intent 목록}
-redirect 관계     : {이 렌즈가 redirect 대상이 되는 RISK_* intent 목록}
-관련 fixture      : {이 렌즈를 참조하는 fixture id 목록}
-output style      : 공통 5단 구조 내 사용 (templates §3)
+forbidden_intents : {이 렌즈로 자주 유입되는 RISK_* intent 목록}
+redirect_to       : {이 렌즈가 redirect 대상이 되는 RISK_* intent 목록}
+related_lenses    : {함께 참조되거나 병행 적용되는 lens key 목록 (없으면 빈 목록)}
+fixture_refs      : {이 렌즈를 참조하는 fixture id 목록}
+output_style      : 공통 5단 구조 내 사용 (templates §3)
+activation_gate   : {active 전환에 요구되는 검증 게이트 — 기본: §13 등록 체크리스트
+                     + fixture regression 전체 통과}
 ```
+
+위 10개가 Lens extension의 canonical 필드명이다 (`redirect`와 `redirect_to`를 혼용하지 않는다 — canonical은 `redirect_to`). 필드의 **형식·필수 여부**는 metadata-standard §13.2가, **의미와 작성 규칙**은 본 문서가 소유한다.
+
+- `lens_tier`는 구 `status` 필드의 개명이다. canonical 값은 lowercase kebab-case로 `existing-mvp / existing-extension / new`이며(metadata-standard §14.2 표기 규칙), **의미는 변경하지 않는다.** legacy 값 대응: `기존-MVP → existing-mvp`, `기존-확장 → existing-extension`, `신규 → new`. 기존 Lens 10종의 실제 값은 이번 개정에서 수정하지 않으며 migration 시 위 대응으로 변환한다. 개명 이유: 공통 envelope의 `lifecycle_status`(metadata-standard §8)와의 축 혼동 방지. `category`는 Lens 전용 필드이며 기존 의미를 유지한다.
+- 기존 Lens 10종의 실제 metadata migration은 본 개정에서 수행하지 않는다 (별도 작업).
 
 작성 규칙:
 
-- **lens key**: `finance-lens-catalog.md`에 없는 key를 새로 만들 수 없다. 신규 key는 §13 등록 절차를 먼저 완료한다.
-- **trigger의 예시 질문**: 안전 질문만 쓴다. 위험 질문("지금 사도 돼?")을 trigger 예시로 쓰면 렌즈가 위험 intent를 직접 처리하는 것처럼 읽히므로, 위험 질문은 반드시 `forbidden intent` 항목에 배치한다.
-- **forbidden intent**: "이 렌즈가 처리한다"는 뜻이 아니라 "**Input Guard가 렌즈보다 먼저 잡아야 한다**"는 선언이다. 이 구분을 문서 안에서 흐리지 않는다.
-- **관련 fixture**: 존재하지 않는 fixture id를 적지 않는다. 신규 fixture가 필요하면 "fixture 추가 필요(§13)"로 표기한다.
+- **lens_key**: `finance-lens-catalog.md`에 없는 key를 새로 만들 수 없다. 신규 key는 §13 등록 절차를 먼저 완료한다.
+- **trigger의 예시 질문**: 안전 질문만 쓴다. 위험 질문("지금 사도 돼?")을 trigger 예시로 쓰면 렌즈가 위험 intent를 직접 처리하는 것처럼 읽히므로, 위험 질문은 반드시 `forbidden_intents` 항목에 배치한다.
+- **forbidden_intents**: "이 렌즈가 처리한다"는 뜻이 아니라 "**Input Guard가 렌즈보다 먼저 잡아야 한다**"는 선언이다. 이 구분을 문서 안에서 흐리지 않는다.
+- **fixture_refs**: 존재하지 않는 fixture id를 적지 않는다. 신규 fixture가 필요하면 "fixture 추가 필요(§13)"로 표기한다.
 
 ---
 
@@ -269,7 +284,10 @@ overview §9.4의 게이트를 작성자용 체크리스트로 옮긴 것이다.
 
 **구조**
 
-- [ ] metadata 8개 필드가 §3 순서대로 존재하고, lens key가 catalog와 문자 단위로 일치한다
+- [ ] 공통 metadata envelope가 Metadata Standard(finance-knowledge-artifact-metadata-standard.md §13.1)를 준수한다
+- [ ] Lens extension 10개 필드(§3)가 전부 존재한다
+- [ ] lens_key가 catalog와 문자 단위로 일치한다
+- [ ] 각 Lens 전용 필드가 본 문서 §3의 의미 규칙을 준수한다
 - [ ] 본문 4블록(체크리스트/확인할 데이터/오해 패턴/일지 질문)이 순서대로 모두 존재한다
 - [ ] 오해 패턴이 모두 4부 구조(§8.1)를 따른다
 - [ ] 예시 응답을 넣었다면 5단 구조와 고지를 포함한다
@@ -340,6 +358,6 @@ overview §9.4의 게이트를 작성자용 체크리스트로 옮긴 것이다.
 | intent/guard 규칙 원문 | `finance-policyguard-rules.md` |
 | 출력 검사/rewrite 규칙 원문 | `finance-output-validator.md` |
 | 데이터 정책 원문 | `finance-market-data-grounding.md` |
-| fixture 정의 | `finance-routing-fixtures-v2.md` |
+| fixture 정의 | `finance-routing-fixtures.md` |
 | 개별 렌즈 문서 본문 | 후속 작업 (본 표준 적용 대상) |
 | Advisory Mode | future regulated product track (본 표준 범위 외) |
