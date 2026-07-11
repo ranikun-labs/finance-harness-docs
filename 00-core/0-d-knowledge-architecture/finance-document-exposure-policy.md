@@ -3,787 +3,689 @@
 ## 0. Metadata
 
 ```text
-status            : decided v1.0 — 0-D Knowledge Architecture 두 번째 문서
-document type     : Exposure Policy (정책 계약 문서)
-path              : 00-core/0-d-knowledge-architecture/finance-document-exposure-policy.md
-scope             : Finance Harness Knowledge Artifact의 노출 등급 분류와
-                    Packaging, Public API, Frontend, Admin/Debug, 로그·오류,
-                    외부 모델 전송, 사용자 데이터 결합, Sanitization 경계 정의.
-parent decision   : finance-knowledge-storage-decision.md (decided v1.0)
-                    — 본 문서는 해당 ADR의 §8.3에서 예고된 후속 문서이며,
-                      상위 저장 결정을 변경하지 않는다.
-fact-base documents :
-  - finance-knowledge-storage-decision.md          (상위 ADR — 저장 결정)
-  - finance-policyguard-alignment.md               (internal alignment report v1.1)
-  - finance-routing-contract-v1.md                 (0-C Runtime Contract)
-  - finance-output-examples-v1.md                  (internal-only 응답 예시)
-  - finance-red-team-cases-v1.md                   (internal-only 공격 검증 corpus)
-non-goals         :
-  - 저장 위치·Source of Truth 재결정 (상위 ADR 소유)
-  - lens key / trigger / intent / action / redirect / PolicyGuard /
-    fixture expected behavior / Output Validator 의미의 수정
-  - PostgreSQL schema, API endpoint, RBAC, 로그 시스템의 구현
+status                : decided v1.0 — MVP target contract
+document type         : Exposure Policy / Security Contract
+scope                 : Finance Harness Knowledge Artifact가 다음 경계를
+                        통과할 때의 노출 축(문서 exposure_class ·
+                        distribution_boundary · Runtime output_class ·
+                        operational-metadata), 분류별 허용·금지 경로,
+                        sanitization·logging·debug·packaging·API 노출 규칙.
+                        - authoring repository
+                        - build/package
+                        - WAS private resource
+                        - Finance Runtime
+                        - logs/metrics/traces
+                        - debug/admin endpoint
+                        - public API
+                        - Frontend
+                        - 사용자 다운로드 artifact
+                        - future PostgreSQL projection
+decision owner        : Finance Harness Knowledge Architecture
+parent decision       : 00-core/0-d-knowledge-architecture/finance-knowledge-storage-decision.md
+visibility            : internal-only — 본 문서 자체도 internal-controlled 등급이며
+                        사용자 대면 리소스로 노출하지 않는다.
+implementation status : contract only / repo verification required
+non-goals             :
+  - Finance Lens 의미·PolicyGuard intent/action·Routing Contract·Fixture 기대값 변경
+  - PostgreSQL schema 설계, DB migration, 실제 코드 구현
+  - Auth/Billing 전체 설계, Frontend 화면 설계
+  - 새로운 Runtime action enum 추가
 ```
 
-- 충돌 시 우선순위: 저장 위치·Runtime 로딩 경계·"sanitized output만 나간다"는 상위 결정은 `finance-knowledge-storage-decision.md`가 소유한다. intent/action/lens/redirect/validator의 의미 정의는 각 canonical 문서(`00-service-policy.md`, `finance-policyguard-rules.md`, `finance-routing-contract-v1.md` 등)가 소유한다. 본 문서는 **노출 등급과 노출 경계만** 소유하며, 상위 결정과 canonical 의미를 재정의하거나 완화하지 않는다.
+- 파일명에는 버전을 포함하지 않는다. 내용 버전은 본 Metadata의 status로만 관리한다.
+- 충돌 시 우선순위: `00-service-policy.md` > `finance-policyguard-rules.md` > 기타 0-A Safety Core > 상위 결정 문서(`finance-knowledge-storage-decision.md`) 및 본 문서 > 개별 lens/예시 문서. 본 문서는 상위 문서의 규칙을 노출 관점에서 구체화할 뿐 완화하지 않는다.
 
 ---
 
 ## 1. 문서 목적
 
-본 문서는 Finance Harness의 문서와 Runtime 산출물을 **누구에게, 어디까지, 어떤 형태로 보여줄 수 있는가**를 잠그는 Exposure Policy다.
+본 문서는 Finance Harness의 Knowledge Artifact가 각 시스템 경계를 통과할 때 **무엇을 노출할 수 있고 무엇을 절대 노출하면 안 되는지**를 정의하는 노출 정책이자 보안 계약이다.
 
-핵심 질문은 다음 네 가지다.
-
-```text
-1. 어떤 원문과 metadata는 서버 내부에만 남겨야 하는가?
-2. 어떤 정보는 운영자나 내부 도구만 볼 수 있는가?
-3. 어떤 내용은 사용자에게 안전하게 제공할 수 있는가?
-4. Finance Runtime은 어떤 형태로 정제한 뒤
-   Frontend와 Public API에 반환해야 하는가?
-```
-
-본 문서는 저장 위치를 다시 결정하는 문서가 아니다. 두 문서의 역할 분담은 다음과 같다.
+이 문서는 저장 위치를 다시 결정하는 문서가 아니다. 저장 결정은 상위 문서 `finance-knowledge-storage-decision.md`가 이미 소유한다. 본 문서는 다음만 소유한다.
 
 ```text
-finance-knowledge-storage-decision.md
-= 어디에 저장하는가 (Authoring Source, Runtime 로딩, DB 유예)
-
-finance-document-exposure-policy.md
-= 무엇을 누구에게 어디까지 보여주는가 (노출 등급, 금지 경계)
-```
-
-상위 ADR §10.3이 정의한 노출 통제의 다섯 축 — `packaging boundary`, `access control`, `API response contract`, `logging/redaction`, `debug/admin exposure` — 의 상세 규칙을 본 문서가 소유한다.
-
----
-
-## 2. 상위 결정과 적용 범위
-
-### 2.1 변경 불가한 상위 결정
-
-다음 상위 결정은 이미 확정되었으며, 본 문서는 이를 전제로만 사용한다.
-
-```text
-Finance Harness MVP
-= Markdown Authoring Source of Truth
-+ WAS private resource
-+ Finance Runtime 내부 로딩
-+ Sanitized API Response
-```
-
-- 본 문서는 이 결정을 재검토하지 **MUST NOT** 한다.
-- 본 문서의 어떤 규칙도 위 결정을 완화하는 방향으로 해석해서는 **MUST NOT** 된다.
-
-### 2.2 적용 범위
-
-본 정책은 다음 전부에 적용된다.
-
-- Finance Harness의 모든 Knowledge Artifact (Lens, PolicyGuard, Routing Contract, Runtime Contract, Fixture, Red-team Case, Output Examples, Output Validator, Prompt Template, Catalog, Authoring Standard, Metadata/Dependency 정의, 공개 학습 콘텐츠, 일지 질문 템플릿)
-- Finance Runtime이 생성하는 모든 사용자 응답과 중간 산출물
-- 배포 산출물(Frontend bundle, static resource, CDN), Public API 응답, 오류 응답, 로그, 관측 데이터, Admin/Debug 접근 경로, 외부 모델 전송 payload
-
-### 2.3 준수해야 하는 canonical 의미
-
-본 정책은 다음의 의미를 인용만 하며 수정하지 **MUST NOT** 한다.
-
-```text
-- lens key           (finance-lens-catalog.md 소유)
-- trigger            (lens-catalog + per-lens §0 소유)
-- intent             (finance-policyguard-rules.md §3 소유, 12종)
-- guard action       (fixtures §3 enum + policyguard §6 소유, 7종)
-- redirect           (policyguard §6 소유)
-- PolicyGuard 의미   (finance-policyguard-rules.md 소유)
-- fixture expected behavior (finance-routing-fixtures-v2.md 소유)
-- Output Validator 의미     (finance-output-validator.md 소유)
+- 문서 exposure_class (raw-restricted / internal-controlled / public-safe)
+- 노출 축 구조 (exposure_class · distribution_boundary · output_class · operational-metadata)
+- 분류별 허용·금지 경로
+- sanitization 경계
+- logging/redaction 규칙
+- debug/admin 노출 규칙
+- packaging 검증 규칙
+- API response 노출 규칙
+- future runtime projection의 노출 제한
+- 검증 체크리스트 (Validation Gate / Test Cases)
 ```
 
 ---
 
-## 3. 노출 등급
+## 2. 상위 결정과 범위
 
-노출 관련 개념은 하나의 등급 체계(단일 enum)가 아니라, 서로 다른 축으로 분리해 정의한다. 아래 다섯 개념의 정책 의미는 §3.1~§3.5에서 그대로 유지하되, 같은 계층의 단일 "등급" 목록으로 표현하지 않는다.
+### 2.1 전제로 사용하는 상위 결정
 
-```text
-exposure_class (문서 원문의 민감도)
-= raw-restricted | internal-controlled | public-safe
-
-distribution_boundary (문서의 배포·접근 경계) — MVP 값
-= private-resource
-
-output_class (Runtime 산출물의 노출 분류)
-= sanitized-runtime-output
-
-운영 상태 분류 (문서 exposure_class 아님)
-= operational-metadata
-```
-
-모든 문서(Artifact)는 exposure_class를 반드시 하나 가져야 하며(MUST), 분류가 불명확한 경우 **더 제한적인 exposure_class로 보수 분류**해야 한다(MUST). Runtime 산출물은 output_class 계약(§3.4, §11)을 충족해야 한다(MUST).
-
-### 3.1 exposure_class: `raw-restricted`
-
-**정의**
+본 문서는 `finance-knowledge-storage-decision.md`(decided / MVP target contract)의 다음 결정을 그대로 전제로 사용하며, 재검토하지 않는다.
 
 ```text
-원문 자체가 내부 실행 규칙, 공격 사례, Prompt,
-정책 우회 정보 또는 독점 Knowledge를 포함해
-일반 사용자에게 노출하면 안 되는 자료
+- Markdown = Authoring Source of Truth
+- MVP = WAS private resource
+- Finance Runtime 내부 로딩
+- Frontend에는 Sanitized API Response만 전달
+- PostgreSQL Knowledge DB는 MVP에서 미도입
+- DB 저장 여부와 노출 통제는 별개의 문제
+- 결정 완료와 구현 완료를 동일하게 취급하지 않음
 ```
 
-**대표 대상**
+### 2.2 본 문서의 위치
 
-- PolicyGuard 원문 (`finance-policyguard-rules.md`)
-- Red-team case 원문 — `user_input`, `unsafe_draft`, `forbidden_output` 포함 (`finance-red-team-cases-v1.md` — 문서 자체가 internal-only 명시)
-- unsafe draft / forbidden output 예시 (`finance-output-examples-v1.md` §11~§12 — 실패 예시의 인용)
-- 내부 Prompt Template (`finance-prompt-templates-v2.1.md`)
-- Output Validator 내부 규칙 (`finance-output-validator.md`)
-- 내부 Routing Contract 원문 (`finance-routing-contract-v1.md`)
-- 비공개 평가 corpus (`finance-routing-fixtures-v2.md` 정식 fixture 포함)
-- secret 또는 credential (API key, token, 개인 키 등)
+상위 결정 문서 §10.3은 노출 통제의 실질이 packaging boundary, access control, API response contract, logging/redaction, debug/admin exposure에 있다고 정의하고, 그 상세를 본 문서에 위임했다. 본 문서는 그 위임 범위를 채우는 후속 계약이다.
 
-**원칙**
+### 2.3 의미 계약과의 관계
 
-| 규칙 | 수준 |
-|---|---|
-| WAS 내부 Finance Runtime만 접근한다 | MUST |
-| Frontend에 전달하지 않는다 | MUST NOT |
-| Public API로 반환하지 않는다 | MUST NOT |
-| 일반 로그에 기록하지 않는다 | MUST NOT |
-| 오류 응답에 포함하지 않는다 | MUST NOT |
-| 다운로드로 제공하지 않는다 | MUST NOT |
-| 원문 열람이 필요한 경우 break-glass 절차(§7)만 사용한다 | MUST |
+intent, guard action, lens key, fixture, PolicyGuard 처리 의미는 각 canonical 문서(`finance-policyguard-rules.md`, `finance-routing-contract.md`, `finance-routing-fixtures.md` 등)가 소유한다. 본 문서는 이를 **참조만** 하며, 새로 정의하거나 변경하지 않는다.
 
-### 3.2 exposure_class: `internal-controlled`
-
-**정의**
+특히 다음 두 가지는 본 문서가 재정의하지 않는다.
 
 ```text
-운영·검수·개발 목적으로 내부에서 사용할 수 있지만
-일반 사용자에게 직접 제공하지 않는 자료
+- intent → Lens → PolicyGuard → Output Validator 실행 순서
+  = finance-routing-contract.md 소유
+- Output Validator의 pass / rewrite / fail 의미
+  = finance-output-validator.md 소유
 ```
 
-**대표 대상**
-
-- Lens 원문 (1차 Core Analysis Lens 10종 및 향후 Asset/Long-term Lens)
-- 문서 metadata 전체 (status, scope, source documents 등)
-- dependency graph
-- fixture 연결 정보 (어떤 lens/intent가 어떤 fixture에 연결되는지)
-- document version / content hash
-- validation result (정합성 검토 보고서 `finance-policyguard-alignment.md` 포함 — 단, 보고서에 인용된 policy·red-team 원문 부분은 `raw-restricted`에 준해 취급)
-- internal catalog (`finance-lens-catalog.md`)
-- rollout 상태
-
-**원칙**
-
-| 규칙 | 수준 |
-|---|---|
-| 내부 Runtime 또는 승인된 운영 도구만 접근한다 | MUST |
-| 일반 사용자 API에 노출하지 않는다 | MUST NOT |
-| 운영 화면에는 필요한 최소 필드만 노출한다 | SHOULD |
-| 원문 전체 다운로드는 기본 금지하며, 예외는 승인·감사를 거친다 | MUST |
-
-### 3.3 exposure_class: `public-safe`
-
-**정의**
-
-```text
-내용 자체가 사용자에게 제공 가능하도록
-검토·작성된 공개 안전 콘텐츠
-```
-
-**대표 대상 후보**
-
-- 사용자용 학습 개념 설명 (Public Learning Content)
-- 일반적인 체크리스트 항목 (공개용으로 검토된 것)
-- 투자 일지 질문 (Journal Question Template의 사용자 제공분)
-- 공개 가능한 고지 문구 (notices)
-- 공개 Help 문서
-
-**주의 — 등급의 범위는 콘텐츠이지 파일이 아니다**
-
-```text
-문서가 public-safe 등급이라고 해서
-내부 metadata나 원본 파일 전체가 자동 공개되는 것은 아니다.
-```
-
-- `public-safe`는 **검토를 통과한 콘텐츠 단위**에만 적용되며, 해당 콘텐츠를 담은 원본 Markdown 파일·내부 metadata·서버 경로는 여전히 `internal-controlled` 이상으로 취급해야 한다(MUST).
-- 공개가 필요한 경우 내부 원문에서 분리한 **별도 public artifact**로 제공해야 한다(MUST, §12).
-
-### 3.4 output_class: `sanitized-runtime-output`
-
-**정의**
-
-```text
-Finance Runtime이 내부 Knowledge를 사용해 생성한 뒤
-PolicyGuard와 Output Validator를 통과하고
-내부 규칙·Prompt·평가 데이터를 제거한 사용자 응답
-```
-
-**대표 필드**
-
-- answer (최종 답변)
-- applied lens keys (적용 Lens key — catalog 등록 이름 한정, §6.3)
-- sanitized checklist (정제된 체크리스트)
-- journal questions (투자 일지 질문)
-- notices (사용자 고지)
-- 사용자에게 필요한 제한적 출처·기준 정보
-
-**원칙**
-
-| 규칙 | 수준 |
-|---|---|
-| Frontend와 Public API의 기본 반환 등급이다 | MUST |
-| Output Validator를 통과하지 않은 응답은 이 등급이 될 수 없다 | MUST NOT |
-| §11의 Sanitization 계약을 전부 충족해야 한다 | MUST |
-
-- `sanitized-runtime-output`은 원본 문서의 exposure_class가 아니다. Runtime 산출물에만 부여되는 output_class이며, 어떤 원본 문서도 이 값을 exposure_class로 가질 수 없다(MUST NOT).
-
-### 3.5 운영 상태 분류: `operational-metadata`
-
-**정의**
-
-```text
-문서 의미가 아니라 운영 상태를 나타내는 정보
-```
-
-**대표 대상**
-
-- artifact version
-- content hash
-- active / candidate / canary 상태
-- routing enabled 여부
-- validation status (pass/fail 상태값)
-- access audit 기록
-- rollout environment
-
-**원칙**
-
-| 규칙 | 수준 |
-|---|---|
-| 사용자 응답에 기본적으로 포함하지 않는다 | MUST NOT |
-| 운영자도 필요한 최소 범위만 접근한다 | MUST |
-| 내부 문서 본문과 분리하여 관리한다 | MUST |
-
-- `operational-metadata`는 문서 원문의 exposure_class가 아니라 **운영 상태 정보의 분류**다. 문서의 exposure_class 값으로 사용하지 않는다(MUST NOT).
-
-### 3.6 distribution_boundary: `private-resource`
-
-**정의**
-
-```text
-문서 원문의 민감도가 아니라,
-문서가 어디에 배포되어 누가 접근할 수 있는지를 정하는 배포·접근 경계
-```
-
-**원칙**
-
-| 규칙 | 수준 |
-|---|---|
-| `private-resource`는 exposure_class가 아니며, 노출 등급 목록에 포함하지 않는다 | MUST (구분 유지) |
-| MVP의 distribution_boundary 값은 `private-resource` 하나다 — Knowledge 문서를 WAS private resource로 패키징해 서버 Runtime만 읽게 하는 경계 (§5) | MUST |
-| `raw-restricted` 또는 `internal-controlled` 문서에 **함께 적용될 수 있다** (예: PolicyGuard 원문 = exposure_class `raw-restricted` + distribution_boundary `private-resource`) | MUST (허용) |
-| private-resource로 패키징되어도 exposure_class의 금지 규칙(§3.1, §3.2)은 그대로 유지된다 — 배포 경계가 민감도 통제를 대체하지 않는다 | MUST |
-| WAS 침해까지 방어하는 독립 보안 경계로 과장하지 않는다 (상위 ADR §10.1) | MUST NOT (과장) |
-
-### 3.7 분류 간 경계 요약
-
-```text
-[exposure_class — 문서 원문의 민감도]
-raw-restricted        정책·공격·Prompt·평가 원문
-                      서버 Runtime 전용, break-glass 외 열람 불가
-internal-controlled   Lens 원문·metadata·catalog·검증 결과
-                      내부 운영 도구까지, 사용자 API 불가
-public-safe           검토 완료 공개 콘텐츠
-                      승인된 콘텐츠 단위만, 별도 artifact로 분리 공개
-
-[distribution_boundary — 배포·접근 경계 (exposure_class 아님)]
-private-resource      WAS private resource 패키징 경계 (§3.6, §5)
-                      raw-restricted / internal-controlled 문서에 함께 적용 가능
-
-[output_class — Runtime 산출물 (문서 exposure_class 아님)]
-sanitized-runtime-output
-                      Validator 통과 후 정제된 사용자 응답
-                      Frontend / Public API 기본 반환
-
-[운영 상태 분류 (문서 exposure_class 아님)]
-operational-metadata  version·hash·rollout·audit
-                      본문과 분리, 최소 접근
-```
+본 문서가 소유하는 것은 그 실행 결과에 대한 노출 규칙뿐이다: Validator 통과 전 사용자 노출 금지, 내부 원문·Prompt·rule·fixture 정보 제거, 사용자 반환 허용·금지 필드, Public API / Frontend 노출 경계.
 
 ---
 
-## 4. 문서 유형별 기본 등급
+## 3. 핵심 원칙
 
-아래 표가 Finance Harness 문서 유형의 **기본(default) exposure_class 분류표**다. 분류 근거는 첨부 문서에 명시된 internal-only 표시와 각 문서의 실제 역할이며, 문서 의미를 추측해 재분류하지 않았다.
-
-범례: ✅ 허용 / ❌ 금지 / ⚠️ 조건부(주석 참조)
-
-| 문서 유형 | 기본 exposure_class | WAS 내부 접근 | 내부 운영 도구 노출 | Public API 노출 | Frontend 노출 | 원문 다운로드 | 예외 승인 필요 |
-|---|---|---|---|---|---|---|---|
-| Safety Core (`00-service-policy.md` 등 0-A 전체) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| PolicyGuard (`finance-policyguard-rules.md`) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Routing Contract (`finance-routing-contract-v1.md`) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Runtime Contract (0-C 계약 문서 전체) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Lens Infrastructure (overview, authoring-standard, catalog) | `internal-controlled` | ✅ | ⚠️² | ❌ | ❌ | ❌³ | 원문 열람 시 필요 |
-| Core Analysis Lens (1차 10종 원문) | `internal-controlled` | ✅ | ⚠️² | ❌ | ❌ | ❌³ | 원문 열람 시 필요 |
-| Asset / Long-term Lens (2차 이후 원문) | `internal-controlled` | ✅ | ⚠️² | ❌ | ❌ | ❌³ | 원문 열람 시 필요 |
-| Fixture (`finance-routing-fixtures.md` — 비공개 평가 corpus. 원문 확인: PI-01~05 정책 우회 입력 원문, 케이스별 forbidden_outputs와 §9 금지 표현 assertion, 입력→expected_intent/expected_action 전체 매핑(§4~§8)과 §10 regression 실패 기준 등 정책 경계 탐색에 직접 활용 가능한 실패 기대값 포함 — 파일 전체 `raw-restricted` 확정) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Red-team Case (`finance-red-team-cases-v1.md` — internal-only 명시) | `raw-restricted` | ✅⁴ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Output Examples (`finance-output-examples-v1.md` — internal-only 명시, §11~§12 unsafe 포함) | `raw-restricted` | ✅⁴ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Output Validator (`finance-output-validator.md` — 원문 확인: §5 "차단해야 하는 출력 예시"에 구체 수치·행동 지시를 포함한 unsafe 문장 원문이 CRITICAL 실패 예시로 인용되고, §6 오탐 방지 예외의 허용/차단 판정 기준 등 validator 우회에 활용 가능한 상세 포함 — 최고 제한 우선 원칙에 따라 파일 전체 분류이며 일부 문장 단위 예외 없음) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Internal Prompt Template (`finance-prompt-templates-v2.1.md`) | `raw-restricted` | ✅ | ❌¹ | ❌ | ❌ | ❌ | break-glass 필수 |
-| Document Catalog (`finance-lens-catalog.md`) | `internal-controlled` | ✅ | ✅ (최소 필드) | ❌ | ❌⁵ | ❌³ | 원문 열람 시 필요 |
-| Authoring Standard (`finance-lens-authoring-standard.md`) | `internal-controlled` | ✅ | ✅ (최소 필드) | ❌ | ❌ | ❌³ | 원문 열람 시 필요 |
-| Metadata / Dependency Definition (문서 metadata, dependency graph, 정합성 보고서) | `internal-controlled` | ✅ | ✅ (최소 필드) | ❌ | ❌ | ❌³ | 원문 열람 시 필요 |
-| Public Learning Content (사용자용 학습 콘텐츠) | `public-safe` | ✅ | ✅ | ⚠️⁶ | ⚠️⁶ | ⚠️⁶ | 공개 승격 리뷰 필요 |
-| Journal Question Template (일지 질문 — 사용자 제공분) | `public-safe` | ✅ | ✅ | ⚠️⁶ | ⚠️⁶ | ⚠️⁶ | 공개 승격 리뷰 필요 |
-
-**주석**
-
-1. `raw-restricted` 문서는 일반 운영 화면에 원문을 노출하지 **MUST NOT** 한다. 운영 도구에는 `operational-metadata`(document key, version, hash, validation pass/fail)만 노출할 수 있다. 원문 열람은 §7의 break-glass 절차만 허용한다.
-2. `internal-controlled` 문서는 승인된 운영 도구에 한해 **필요 최소 필드**를 노출할 수 있다(SHOULD). 원문 전체 표시는 별도 권한과 감사를 요구한다(MUST).
-3. 원문 전체 다운로드는 기본 금지(MUST NOT)이며, 예외는 §12의 승인 기록을 남긴 경우만 허용한다.
-4. Red-team Case와 Output Examples의 unsafe 부분은 WAS가 파일로 보유하더라도 **production Prompt 조립에서 기본 제외**해야 한다(§9). "WAS 내부 접근 가능"은 저장·검증 목적의 접근을 의미하며, 사용자 응답 생성 경로에 원문이 유입될 수 있다는 의미가 아니다.
-5. lens key(catalog 등록 이름)는 `sanitized-runtime-output`의 `applied lens keys` 필드로 노출 가능하다. 그러나 catalog **문서 원문**(trigger 조건, 병행 lens, 금지 우회 경로 서술)은 Frontend에 노출하지 **MUST NOT** 한다.
-6. `public-safe` 콘텐츠도 원본 파일 그대로가 아니라, 승인 리뷰를 거쳐 내부 원문에서 분리된 **별도 public artifact** 형태로만 Public API·Frontend·다운로드에 제공해야 한다(MUST, §3.3·§12).
-
-**보수 분류 원칙**
-
-- 위 표에 없는 신규 문서 유형은 역할이 확정되기 전까지 `internal-controlled` 이상의 exposure_class로 분류해야 한다(MUST).
-- 하나의 문서에 여러 민감도의 콘텐츠가 섞여 있으면 **문서 전체는 가장 제한적인 exposure_class**를 따른다(MUST). 예: 좋은 예시와 unsafe draft가 공존하는 `finance-output-examples-v1.md`는 문서 전체가 `raw-restricted`다.
-
-**분류 요약 (문서 유형 단위)**: `raw-restricted` 9종 / `internal-controlled` 6종 / `public-safe`(콘텐츠 단위) 2종. Output Validator와 Fixture는 첨부 원문을 직접 확인해 재검증한 분류다.
+1. **저장 매체는 보안이 아니다.** 파일이든 DB든, 노출 통제는 경계마다 별도로 정의하고 별도로 검증한다 (상위 결정 §10.2).
+2. **가장 높은 제한 등급이 파일 전체의 기본값이다.** 하나의 문서에 여러 등급의 내용이 섞이면 문서 전체를 가장 제한적인 등급으로 취급한다 (§5).
+3. **부분 공개는 원문 절단이 아니라 projection이다.** 원문 일부를 잘라 반환하는 방식은 금지하며, 공개가 필요한 내용은 Finance Runtime이 별도 sanitized projection으로 생성한다 (§5.3).
+4. **원문은 서버 밖으로 나가지 않는다.** raw-restricted와 internal-controlled 원문은 어떤 경로(응답, 로그, 오류, 디버그, 다운로드)로도 사용자 측에 도달하지 않는다.
+5. **WAS private resource는 배포·접근 경계이지 침해 방어 경계가 아니다.** WAS 자체가 침해된 상황까지 방어하는 독립 보안 경계로 과장하지 않는다 (상위 결정 §10.1).
+6. **결정 완료 ≠ 구현 완료.** 본 문서의 모든 규칙은 target contract이며, 실제 구현 여부는 Finance Harness repo 검증 대상이다 (§16).
+7. **Prompt Injection 대응은 기존 계약에 위임한다.** 사용자 입력이 원문·프롬프트·규칙 공개를 요구하는 경우의 intent 분류와 처리는 기존 PolicyGuard 계약(`RISK_PROMPT_INJECTION` → `BLOCK_PROMPT_INJECTION`)을 따르며, 본 문서는 "반환하지 않는다"는 노출 결과만 계약한다.
 
 ---
 
-## 5. Packaging 경계
+## 4. 노출 축과 분류
 
-### 5.1 금지 규칙
-
-다음 규칙을 위반하는 빌드·배포 산출물은 그 자체로 정책 위반이다.
+노출 통제는 하나의 등급 enum이 아니라 **서로 다른 축의 조합**으로 정의한다. 아래 네 축·분류를 하나의 "노출 등급 N종"으로 묶어 표현하지 않는다.
 
 ```text
-raw-restricted 또는 internal-controlled 문서를
+문서 exposure_class        = 콘텐츠 민감도 (본 문서 소유)
+  raw-restricted (§4.1) / internal-controlled (§4.2) / public-safe (§4.4)
 
-- Frontend source tree
-- Frontend bundle
-- static/public directory
+MVP distribution_boundary  = 배포·접근 경계 (packaging 축, §4.3)
+  repo-only / private-resource
+
+Runtime output_class       = Runtime 산출물 분류 (§4.5)
+  sanitized-runtime-output
+
+operational-metadata       = 운영 상태 정보 분류 (§4.6)
+  — 문서 exposure_class가 아님
+```
+
+각 분류는 문서(또는 산출물)가 어디까지 이동할 수 있는지에 대한 계약이다. 필드 표기 형식은 `finance-knowledge-artifact-metadata-standard.md` §10이 소유한다.
+
+### 4.1 raw-restricted (document exposure_class)
+
+가장 제한적인 원문. 공격·실패 데이터와 우회에 직접 참고될 수 있는 상세를 포함한다.
+
+포함 예시:
+
+```text
+- Red-team user_input
+- unsafe_draft
+- forbidden_output
+- 공격 패턴 (우회 프레이밍, multi-turn 공격 시나리오)
+- Prompt Injection 우회 예시
+- 내부 실패 예시 (bad answer 인용, rewrite 전 unsafe 문장)
+- validator 우회 가능성이 있는 상세 규칙
+```
+
+허용:
+
+```text
+- 승인된 내부 authoring/review
+- 내부 테스트 (fixture/regression 실행 환경)
+- 제한된 Runtime 검증
+```
+
+금지:
+
+```text
+- Frontend
+- public API
+- static resource
 - CDN
-- browser cache
-- service worker cache
-- source map
-- downloadable artifact
-- client-side configuration
-- npm package의 공개 배포물
-
-에 포함하지 않는다. (MUST NOT)
+- 사용자 다운로드
+- 일반 로그
+- 일반 debug endpoint
 ```
 
-- 원문 전체뿐 아니라 **부분 발췌, 주석, 테스트 fixture, 예시 문자열** 형태의 혼입도 동일하게 금지한다(MUST NOT).
-- 빌드 도구의 자동 포함(예: glob 패턴에 의한 우발적 번들링)도 위반이며, "의도하지 않았다"는 예외 사유가 되지 않는다.
+### 4.2 internal-controlled (document exposure_class)
 
-### 5.2 서버 패키징 원칙
+내부 실행 계약. 시스템의 분류·분기·검사·생성 규칙의 원문이다.
 
-| 원칙 | 수준 |
-|---|---|
-| Knowledge 문서는 WAS private resource 또는 서버 전용 저장소에만 포함한다 | MUST |
-| 서버 Runtime만 읽을 수 있게 구성한다 | MUST |
-| Public static handler가 접근할 수 없는 경로를 사용한다 | MUST |
-| build 단계에서 Frontend 산출물에 내부 문서가 혼입되지 않았는지 검증한다 | MUST (§13 — future implementation requirement) |
-
-- 본 절은 경계 원칙만 정의하며, 특정 framework의 구현 방식을 규정하지 않는다.
-
----
-
-## 6. Public API와 Frontend 경계
-
-### 6.1 원문 조회 API 금지
-
-Public API는 원문 문서 조회 기능을 제공하지 **MUST NOT** 한다. 다음과 같은 endpoint는 어떤 형태로도 존재해서는 안 된다.
+포함 예시:
 
 ```text
-GET /documents/{id}/raw
-GET /policyguard/rules
-GET /red-team/cases
-GET /prompts/{id}
-GET /routing-contract
+- PolicyGuard Rules
+- Routing Contract
+- Prompt Template
+- Lens Catalog
+- Knowledge Architecture 문서 (storage decision, 본 문서 포함)
+- Implementation Handoff
 ```
 
-- 경로·이름을 바꾼 동등 기능(예: `GET /internal/knowledge`, query parameter로 원문을 우회 반환)도 동일하게 금지한다(MUST NOT).
+(Output Validator와 Routing Fixture는 unsafe 차단 출력 예시·정책 우회 입력·forbidden output을 포함하므로 §5.1 최고 제한 우선 원칙에 따라 파일 전체가 raw-restricted다 — §4.1, §6.)
 
-### 6.2 반환 가능 등급
-
-Public API가 반환할 수 있는 것은 다음 두 가지뿐이다.
+허용:
 
 ```text
-1. sanitized-runtime-output  (§11 계약 충족분)
-2. 명시적으로 승인된 public-safe 항목 (§12 승인 기록 존재분)
+- 내부 repo
+- WAS private resource
+- Finance Runtime
 ```
 
-### 6.3 Public API 응답 금지 항목
-
-다음은 Public API 응답의 어떤 필드에도 포함하지 **MUST NOT** 한다.
-
-- raw Markdown (전체·부분 불문)
-- 전체 Prompt
-- PolicyGuard 내부 판단 규칙
-- forbidden expression 목록 전체
-- unsafe draft
-- red-team input
-- validator 내부 체크리스트
-- 서버 파일 경로
-- 내부 document id 또는 storage key
-- dependency graph 전체
-- 내부 confidence / debug trace
-- stack trace
-
-**`applied lens keys`의 제한**
-
-- `applied lens keys`는 **사용자에게 설명 가능한 식별자**(catalog 등록 lens key)로 제한한다(MUST).
-- lens key를 통해 내부 파일 경로, 문서 저장 위치, 문서 버전 체계를 유추할 수 있는 값을 사용하지 **MUST NOT** 한다. 예: `01-core-analysis-lenses/finance-lens-valuation.md` 같은 경로형 값은 금지, `valuation` 같은 등록 key는 허용.
-
-### 6.4 Frontend 경계
-
-- Frontend는 §6.2의 반환 가능 등급 외의 어떤 데이터도 수신·보관·캐싱하지 **MUST NOT** 한다.
-- Frontend 코드, 환경 변수, client-side configuration에 내부 문서 내용·경로·식별자를 하드코딩하지 **MUST NOT** 한다.
-
----
-
-## 7. Admin·Debug 접근 경계
-
-### 7.1 기본 원칙
-
-`admin`이나 `debug`라는 이유만으로 원문 전체를 자동 노출해서는 **MUST NOT** 된다.
-
-| 원칙 | 수준 |
-|---|---|
-| 일반 운영 화면은 `operational-metadata` 중심으로 구성한다 | MUST |
-| raw document 열람은 별도 권한과 감사를 요구한다 | MUST |
-| debug endpoint는 production에서 기본 비활성화한다 | MUST |
-| 전체 Prompt, raw Markdown, red-team corpus를 admin/debug 응답으로 반환하지 않는다 | MUST NOT |
-| 운영 화면에서 문서 참조가 필요하면 document id / version / hash만 제공한다 | SHOULD |
-| 원문 열람이 불가피한 경우 명시적 break-glass 절차를 사용한다 | MUST |
-
-### 7.2 break-glass 절차 원칙
-
-break-glass는 예외 절차이며, 다음 요건을 전부 갖춰야 한다.
+금지:
 
 ```text
-- 별도 고권한        (일반 admin 권한과 분리, MUST)
-- 사유 입력          (열람 목적 기록, MUST)
-- 시간 제한          (세션 만료, MUST)
-- 접근 로그          (누가·언제·무엇을, MUST)
-- 다운로드 기본 금지  (열람과 반출의 분리, MUST)
-- 민감 필드 masking  (secret·사용자 데이터 등, MUST)
+- 원문 API 반환
+- Frontend bundle
+- 일반 사용자 다운로드
+- 클라이언트 로그
 ```
 
-- 본 절은 절차 요건만 정의하며, 구체적인 RBAC 모델·권한 시스템 설계는 본 문서의 범위가 아니다(§16).
+### 4.3 distribution_boundary — repo-only / private-resource (배포·접근 경계 축)
 
----
+**이 축의 값은 exposure_class가 아니다.** 콘텐츠 민감도(§4.1·§4.2·§4.4)와 분리된 packaging 축이며, MVP 값은 다음 두 가지다.
 
-## 8. 로그·오류·관측성 경계
+```text
+repo-only         : repo에만 존재. Runtime package에 포함하지 않음
+                    (예: ADR, 검토 보고서, handoff 문서)
+private-resource  : WAS private resource로 패키징되어
+                    Finance Runtime이 로딩하는 내부 배포물
+```
 
-### 8.1 일반 로그 기록 금지 항목
+private-resource에 대해 다음을 명시한다.
 
-다음은 일반 로그(application log, access log, 관측 pipeline)에 기록하지 **MUST NOT** 한다.
+- raw-restricted 또는 internal-controlled 문서가 private-resource로 **패키징될 수 있다**. 패키징되어도 원문 등급(raw-restricted / internal-controlled)의 금지 규칙은 그대로 유지된다.
+- private-resource라고 해서 **자동으로 안전한 것은 아니다**. 로딩 이후의 응답·로그·디버그 경로에서 별도 통제가 없으면 원문은 그대로 노출될 수 있다.
+- `static/`, `public/` 등 static/public resource와 **명확히 분리**된 경로여야 한다.
+- **서버 침해 시 독립 보호 경계가 아니다** (상위 결정 §10.1).
+
+### 4.4 public-safe (document exposure_class)
+
+사용자에게 공개 가능한 일반 설명·정책·교육 콘텐츠.
+
+public-safe로 분류되기 위한 조건 (전부 충족):
+
+```text
+- 내부 라우팅 규칙 없음
+- Prompt/Validator 원문 없음
+- 공격 입력 예시 없음
+- 내부 파일 경로 없음
+- 금지 표현 탐지 상세 없음
+- 시스템 운영 상태 없음
+```
+
+허용: Frontend, 공개 문서, 마케팅·고지 영역. 단 문구는 `00-service-policy.md` §12의 마케팅 문구 정책을 따른다.
+
+주의: 현재 첨부·확인된 Knowledge Artifact 중 파일 단위로 public-safe에 해당하는 문서는 없다 (§6). public-safe 콘텐츠가 필요하면 원문 승격이 아니라 별도 작성 또는 sanitized projection으로 만든다.
+
+### 4.5 Runtime output_class — sanitized-runtime-output
+
+Finance Runtime이 내부 Knowledge를 사용한 뒤 생성한 정제 결과. **문서 exposure_class가 아니라 Runtime 산출물의 분류(output_class)** 이며, Frontend에 도달할 수 있는 유일한 분류다. 문서의 exposure_class 필드 값으로 사용할 수 없다 (metadata-standard §10.3).
+
+포함 가능:
+
+```text
+- 최종 답변
+- applied lens key
+- 정제된 checklist
+- journal question
+- 사용자 고지
+- 일반적인 데이터 기준시각
+```
+
+포함 금지:
 
 ```text
 - raw Markdown
-- full Prompt
-- user secret
-- private key / token
-- red-team case 원문
+- 내부 Prompt Template
+- PolicyGuard 원문
+- validator rule
+- fixture ID 전체
+- red-team input
 - unsafe draft
-- 내부 Policy 전체
-- 전체 프로젝트 context
-- 사용자 투자 일지 원문 전체
-```
-
-### 8.2 로그 허용 항목
-
-다음은 로그에 기록할 수 있다(허용 예시이며, 이 범위에서도 최소화가 원칙이다 — SHOULD).
-
-```text
-- document key
-- artifact version
-- content hash 일부 또는 식별용 hash
-- applied lens key
-- PolicyGuard action code
-- validator pass / fail
-- latency
-- token usage
-- sanitized error code
-```
-
-### 8.3 오류 응답 경계
-
-오류 응답에 다음을 포함하지 **MUST NOT** 한다.
-
-```text
+- 내부 파일 경로
 - stack trace
-- server file path
-- SQL / DB query
-- raw document fragment
-- Prompt fragment
-- 내부 rule id 설명 전체
+- content hash
+- 내부 version graph
+- hidden system instruction
 ```
 
-- 오류 응답은 **사용자용 error code와 안전한 설명만** 반환해야 한다(MUST).
-- Output Validator 실패·재작성 실패를 포함한 어떤 오류 경로에서도, 실패한 원 응답(unsafe draft)이나 내부 문서 fragment를 폴백으로 노출하지 **MUST NOT** 한다.
+### 4.6 operational-metadata (운영 상태 정보 분류)
+
+버전, content hash, deployment 상태(candidate/canary/active 등), routing_enabled, audit 기록처럼 **문서 의미가 아니라 운영 상태를 나타내는 정보**의 분류다.
+
+- **문서 exposure_class가 아니다.** 문서 front matter에 운영 상태 필드를 기록하는 것 자체가 금지다 (metadata-standard §11.3).
+- 사용자 응답(sanitized-runtime-output)에 기본적으로 포함될 수 없다 (§4.5 포함 금지 목록의 content_hash·내부 version graph와 동일 원칙).
+- 운영자도 필요한 최소 범위만 접근하며, 내부 문서 본문과 분리해 관리한다.
 
 ---
 
-## 9. Prompt와 외부 모델 전송 경계
+## 5. 등급 결정 규칙
 
-Finance Runtime이 외부 LLM API를 사용하더라도, 모든 내부 문서를 무조건 전체 전송해서는 **MUST NOT** 된다. **외부 모델 전송은 Frontend 노출과 다른 경계이지만, 동일하게 최소화와 통제가 필요하다.**
+본 절의 "등급"은 문서 exposure_class(§4.1·§4.2·§4.4)를 의미한다.
 
-| 원칙 | 수준 |
-|---|---|
-| 해당 요청에 필요한 최소 Knowledge block만 조립해 전송한다 | MUST |
-| 적용되지 않는 Lens / Policy 문서는 Prompt에서 제외한다 | MUST |
-| Red-team corpus 원문은 production prompt에 기본 포함하지 않는다 | MUST NOT (포함) |
-| Output Examples의 unsafe example이 모델 출력으로 복제되지 않도록 Prompt 조립에서 분리한다 | MUST |
-| Prompt 전문의 logging은 기본 금지한다 | MUST NOT (기록) |
-| 모델 제공자의 retention / no-training 조건을 별도로 확인한다 | MUST |
+### 5.1 최고 제한 등급 우선
 
-- 본 문서는 특정 LLM provider를 선택하지 않는다. provider 선택·계약 조건은 별도 결정 범위다.
-- Generation Guard 주입 등 Prompt 구성의 의미 규칙은 canonical 문서(policyguard §8, templates v2.1)가 소유하며, 본 절은 **전송 범위의 최소화 경계만** 정의한다.
+하나의 문서에 여러 등급의 내용이 섞여 있다면 **가장 높은 제한 등급을 문서 전체의 기본값으로 적용**한다.
 
----
+예:
 
-## 10. 사용자 데이터와의 결합 경계
+- 좋은 응답 예시 + unsafe output이 함께 있으면 → **raw-restricted** (실제 사례: `finance-output-examples.md`, §6 참조)
+- 일반 Lens 설명 + 내부 forbidden output이 함께 있으면 → **internal-controlled 이상**
+- 일부 문단만 공개 가능하더라도 원문 파일 전체를 public-safe로 승격하지 않는다.
 
-Knowledge Artifact 노출 정책과 사용자 데이터 정책은 별개 축이다. 다만 Runtime에서 두 데이터가 결합될 수 있으므로 최소 경계를 기록한다.
+### 5.2 등급의 방향
 
-**사용자 입력 후보**
+등급 조정은 제한 강화(상향)만 문서 소유자의 판단으로 가능하며, 제한 완화(하향)는 본 문서의 개정 없이 할 수 없다.
 
-```text
-- 투자 질문
-- 관심 종목
-- 체크리스트 답변
-- 투자 일지
-- 첨부 이미지 / OCR 결과
-```
+### 5.3 부분 공개 규칙
 
-**최소 경계**
+부분 공개가 필요한 경우 Finance Runtime이 **별도 sanitized projection을 생성**해야 하며, 원문 일부를 직접 잘라서 반환하지 않는다. 예를 들어 lens 체크리스트가 사용자에게 전달되는 것은 lens 문서 원문의 인용이 아니라, Runtime이 생성한 sanitized-runtime-output(§4.5)으로서다.
 
-| 원칙 | 수준 |
-|---|---|
-| 내부 Knowledge 원문과 사용자 데이터를 함께 로그에 남기지 않는다 | MUST NOT |
-| 사용자 일지 원문을 debug payload로 반환하지 않는다 | MUST NOT |
-| 사용자 데이터로 Prompt를 구성할 때 필요한 범위만 사용한다 | MUST |
-| 사용자 응답에 다른 사용자의 데이터가 혼입되지 않는다 | MUST NOT |
+### 5.4 미분류 문서의 기본값
 
-- 상세 개인정보 처리·보존 기간·파기 정책은 **별도 문서의 범위**이며, 본 문서는 확정하지 않는다.
+exposure class가 지정되지 않은 신규 문서는 분류 확정 전까지 **internal-controlled로 보수 취급**하며, unsafe 예시·공격 입력 포함이 확인되면 raw-restricted로 상향한다.
 
 ---
 
-## 11. Sanitized Runtime Output 계약
+## 6. 문서별 기본 분류
 
-응답이 `sanitized-runtime-output` 등급이 되기 위한 최소 조건을 정의한다. 아래 단계를 전부 거치지 않은 산출물은 이 등급을 주장할 수 **MUST NOT** 없다.
+첨부 문서는 실제 내용을 확인하고 분류했다. 미첨부 문서(※ 표기)는 canonical 참조 문서(`finance-policyguard-alignment.md`, `finance-harness-mvp-implementation-handoff.md`, `finance-routing-contract.md`)에 기록된 내용 근거로 분류했으며, repo 검증 시 원문 확인으로 확정한다.
 
-### 11.1 최소 단계
+| document | default exposure class | allowed locations | forbidden exposure | reason |
+|---|---|---|---|---|
+| 00-service-policy.md | internal-controlled | 내부 repo, WAS private resource, Finance Runtime | 원문 API 반환, Frontend bundle, 사용자 다운로드, 클라이언트 로그 | 최상위 서비스 정책. 다만 §9 Output Guard 검사 대상 표현 목록, §10 우회 대응 정책 등 탐지 상세를 포함하므로 파일 원문은 내부 한정. 서비스 정체성·고지 문구 등 공개 가능한 내용은 별도 public-safe 콘텐츠로 재작성해 사용한다. |
+| finance-policyguard-rules.md | internal-controlled | 상동 | 상동 | intent 12종 정의, §5 금지 표현군, §7.1 Input Guard 키워드/패턴 표 등 분류·탐지 상세를 포함. 원문 노출은 우회 시도의 직접 참고 자료가 된다. |
+| finance-output-validator.md | **raw-restricted** | 승인된 내부 authoring/review, 내부 테스트, 제한된 Runtime 검증 | Frontend, public API, static resource, CDN, 사용자 다운로드, 일반 로그, 일반 debug endpoint | internal-only 명시 확인. §5 unsafe 차단 출력 예시와 validator 우회에 활용 가능한 상세 실패 판정 규칙을 포함한다. "파일 전체 internal-controlled + 일부 문장만 raw-restricted"의 이중 취급은 금지 구조이므로, §5.1 최고 제한 우선 원칙에 따라 파일 전체를 raw-restricted로 확정한다. |
+| finance-prompt-templates.md | internal-controlled | 상동 | 상동 | internal-only 명시 확인. LLM 프롬프트에 주입되는 생성 제한과 intent/action→템플릿 매핑 원문. 노출 시 Generation Guard 우회에 직접 참고된다. |
+| finance-routing-fixtures.md ※ | **raw-restricted** | 승인된 내부 authoring/review, 내부 테스트, 제한된 Runtime 검증 | Frontend, public API, static resource, CDN, 사용자 다운로드, 일반 로그, 일반 debug endpoint | 미첨부. 참조 근거(handoff §1: 32개 fixture, alignment §2: guard action enum 소유)상 정책 우회 입력, forbidden output, expected intent/action, 정책 경계 탐색이 가능한 regression 기대값을 포함하는 실행 계약이다. §5.1 최고 제한 우선 원칙에 따라 파일 전체를 raw-restricted로 확정한다 (repo 검증은 분류 확인용이며, 하향 근거가 아니다). |
+| finance-market-data-grounding.md ※ | internal-controlled | 상동 | 상동 | 미첨부. 참조 근거(validator §10, routing-contract §10 연동)상 데이터 단정 금지의 판정 규칙을 소유하는 0-A Safety Core 계약. |
+| finance-lens-catalog.md ※ | internal-controlled | 상동 | 상동 | 미첨부. 참조 근거(alignment §2: lens key·trigger 의미의 canonical)상 lens 등록 원본. lens key 자체는 응답에 노출 가능하나(§9), catalog 원문(trigger·금지 표현 연결 포함)은 내부 한정. |
+| finance-lens-authoring-standard.md ※ | internal-controlled | 상동 | 상동 | 미첨부. 렌즈 작성 표준 = 내부 authoring 계약. 사용자 가치가 없고 내부 구조만 드러낸다. |
+| finance-routing-contract.md | internal-controlled | 상동 | 상동 | 질문 입력부터 노출까지의 전체 분기 규칙, intent priority, fallback 동작을 포함한 실행 파이프라인 계약. 분기 조건의 노출은 경계 탐색(우회 지점 찾기)에 직접 참고된다. |
+| finance-output-examples.md | **raw-restricted** | 승인된 내부 authoring/review, 내부 테스트, 제한된 Runtime 검증 | Frontend, public API, static resource, CDN, 사용자 다운로드, 일반 로그, 일반 debug endpoint | internal-only 명시 + §11 Bad Example Catalog(금지 인용, CRITICAL 위반 문장), §12 Rewrite Before/After(unsafe draft) 포함 확인. 좋은 예시가 함께 있으나 §5.1 최고 등급 우선 원칙으로 파일 전체를 raw-restricted로 취급한다. |
+| finance-red-team-cases.md | **raw-restricted** | 상동 | 상동 | user_input / unsafe_draft / forbidden_output 필드와 RT-D~RT-V 공격 시나리오(완곡어법, 역할극, prompt injection, multi-turn 공격) 포함 확인. 공격·실패 데이터의 대표 문서. |
+| finance-policyguard-alignment.md | internal-controlled | 내부 repo (검토 전용) | 원문 API 반환, Frontend, 사용자 다운로드, 클라이언트 로그, 사용자 대면 콘텐츠 재사용 | internal-only(내부 검토 전용) 명시 확인. 문서 간 충돌 기록과 canonical 우선순위 등 내부 정합성 정보. 검토 보고서이므로 runtime 로딩 대상도 아니다. |
+| finance-knowledge-storage-decision.md | internal-controlled | 내부 repo, WAS private resource(포함될 경우), Finance Runtime | 원문 API 반환, Frontend bundle, 사용자 다운로드, 클라이언트 로그 | Knowledge Architecture 결정 문서. 내부 저장 구조·경계 설계를 기술하므로 내부 한정. |
+| finance-harness-mvp-implementation-handoff.md | internal-controlled | 내부 repo | 상동 | internal-only 명시 확인. 구현 계획, API 후보, 도메인 모델 등 내부 구조 정보. |
+| 01-core-analysis-lenses/finance-lens-*.md (10종) ※ | internal-controlled | 내부 repo, WAS private resource, Finance Runtime | 원문 API 반환, Frontend bundle, 사용자 다운로드, 클라이언트 로그 | 미첨부. 참조 근거(routing-contract §7, red-team 소스 목록)상 lens 본문은 체크리스트 외에 trigger, forbidden intent, redirect, fixture 연결을 포함한다. 체크리스트 내용은 §5.3에 따라 sanitized projection으로만 사용자에게 전달한다. |
+
+분류 요약: raw-restricted 4건(output-examples, red-team-cases, output-validator, routing-fixtures), internal-controlled 11건(렌즈 10종 1개 항목 포함), public-safe 해당 파일 없음.
+
+---
+
+## 7. Packaging Boundary
+
+다음을 build/package 단계의 계약으로 정의한다.
+
+- Knowledge Markdown은 **Frontend build 대상에 포함하지 않는다**.
+- `static/`, `public/`, CDN, downloadable artifact에 Knowledge 문서를 포함하는 것을 금지한다.
+- Knowledge 문서는 **WAS private resource 경로에서만 로딩**한다.
+- private resource 목록을 반환하는 **resource listing endpoint를 두지 않는다**.
+- 리소스 로딩 경로에 대한 **directory traversal을 방지**한다 (사용자 입력이 리소스 경로 구성에 관여하지 않도록).
+- 응답에 Knowledge 문서의 **파일명·절대경로를 포함하지 않는다**.
+- package manifest에 각 문서의 **exposure_class·distribution_boundary와 허용 경로를 기록하고 검증**한다.
+- **raw-restricted 문서가 public artifact(Frontend bundle, static/public, CDN, 다운로드 산출물)에 포함되면 build fail**이다.
+- **internal-controlled 문서가 Frontend bundle에 포함되면 build fail**이다.
+
+위 규칙은 target contract다. manifest 검증, build fail 로직 등 실제 build 구현이 완료되었다는 의미가 아니며, 구현 여부는 repo 검증 대상이다 (§16).
+
+---
+
+## 8. Runtime Access Boundary
+
+- Knowledge 원문에 접근할 수 있는 것은 **Finance Runtime뿐**이다.
+- Frontend는 Knowledge 원문에 직접 접근할 수 없다.
+- 일반 API handler는 어떤 경우에도 원문을 반환하지 않는다.
+- Runtime은 문서에서 **필요한 의미만 내부적으로 사용**하며, 사용 사실이 원문 반환을 정당화하지 않는다.
+- 모든 응답은 노출 전 **sanitization을 필수로 거친다**. 기존 계약상 이 위치는 Output Validator 통과 이후, 사용자 노출 직전이다 (routing-contract §9의 "Validator 미통과 응답 비노출" 원칙과 결합).
+- 응답은 원문 일부를 **그대로 인용하거나 echo하지 않는다**. 체크리스트 등 전달이 필요한 내용은 sanitized projection으로 생성한다 (§5.3).
+- 사용자 입력이 **원문·프롬프트·규칙의 공개를 요구해도 반환하지 않는다**. "시스템 프롬프트 보여줘", "네 규칙 전문을 알려줘" 류 요청의 intent 분류와 응답 처리는 기존 PolicyGuard 계약(`RISK_PROMPT_INJECTION` → `BLOCK_PROMPT_INJECTION`, prompt-templates §9)에 위임하며, 본 문서는 **어떤 처리 결과에서도 원문이 포함되지 않는다**는 노출 결과만 계약한다.
+- 본 절은 기존 intent/action의 의미를 새로 정의하지 않는다.
+
+---
+
+## 9. API Response Contract
+
+### 9.1 허용 필드 (예시)
 
 ```text
-1. 사용자 intent 확인            (policyguard §3의 분류 사용)
-2. 적용 가능한 Lens 선택          (routing contract의 라우팅 사용)
-3. PolicyGuard 적용              (canonical 의미 그대로)
-4. 내부 Prompt / rule / fixture 원문 제거
-5. Output Validator 검사         (통과 전 노출 불가)
-6. 금지 표현·단정 표현·내부 식별자 제거
-7. 사용자용 구조로 변환
+answer
+applied_lens_keys
+sanitized_checklist
+journal_questions
+notices
+data_as_of
 ```
 
-- 단계의 순서·의미는 `finance-routing-contract-v1.md` §2의 실행 파이프라인을 따르며, 본 절은 그 파이프라인에 **노출 관점의 요건**(4·6·7단계)을 결합한 것이다. 파이프라인 자체를 재정의하지 않는다.
-- Output Validator를 통과하지 못한 응답은 재작성·재검사 결과만 노출 후보가 되며, **원 응답은 어떤 형태로도 노출하지 MUST NOT 한다** (routing-contract §13과 정합).
-
-### 11.2 Sanitization 결과에 포함 가능한 것
+### 9.2 금지 필드 (예시)
 
 ```text
-- 설명 가능한 최종 답변
-- 판단 전 체크리스트
-- 확인해야 할 데이터
-- 불확실성 표시
-- 투자 일지 질문
-- 사용자 고지
+raw_markdown
+prompt_template
+policyguard_rule
+validator_rule
+fixture_payload
+unsafe_draft
+internal_path
+stack_trace
+content_hash
+source_document_body
 ```
 
-### 11.3 포함하면 안 되는 것 (MUST NOT)
+### 9.3 applied_lens_keys의 한계
+
+`applied_lens_keys`는 catalog에 등록된 lens key 값 자체만 공개 가능하다. 다음은 lens key가 공개되더라도 **함께 공개하지 않는다**.
 
 ```text
-- 내부 chain-of-thought
-- 전체 정책 규칙
-- raw validator trace
-- red-team 비교 내용
-- 내부 Prompt
-- 문서 저장 위치
+- 내부 routing score
+- fallback reason (분기 실패·폴백 사유)
+- policy trace (intent 판정 근거, guard action 이력)
+```
+
+이 정보는 분기 조건의 역추적을 가능하게 하므로 sanitized-runtime-output에 포함될 수 없다. 필요 시 내부 로그(§10)에만 기록한다.
+
+### 9.4 필드 추가 규칙
+
+응답 schema에 새 필드를 추가할 때는 §4.5의 포함 금지 목록과 대조하고, §14 Gate 4의 검사 대상에 등록한 뒤에만 추가한다.
+
+---
+
+## 10. Logging / Metrics / Tracing
+
+기존 로그 계약(`finance-policyguard-rules.md` §10의 로그 최소화 원칙, `finance-output-validator.md` §14의 로그 필드)을 유지하며, 노출 관점의 허용·금지를 다음과 같이 계약한다.
+
+### 10.1 로그 허용
+
+```text
+- document_id 또는 안정적인 논리 식별자
+- exposure class
+- load success/failure
+- sanitized error code
+- 적용 lens key
+- validation pass/fail
+- latency
+- aggregate count
+```
+
+### 10.2 로그 금지
+
+```text
+- 문서 원문
+- Prompt Template 원문
+- Red-team input
+- unsafe output
+- 사용자의 민감한 투자 일지 원문
+- 파일 절대경로
+- stack trace 내 문서 본문
+- raw LLM prompt 전체
+- API response 전체 덤프
+```
+
+### 10.3 Metrics
+
+- metric label의 cardinality를 제한한다 (label 값은 enum 성격의 안정 식별자만).
+- **문서 본문·사용자 입력을 label로 사용하지 않는다.**
+
+### 10.4 Trace
+
+- span attribute에 **원문, prompt, 사용자 금융정보를 넣지 않는다**.
+- trace에 담을 수 있는 것은 §10.1 허용 목록과 동일한 수준의 식별자·상태 값이다.
+
+---
+
+## 11. Error Handling
+
+에러 메시지에는 다음을 노출하지 않는다.
+
+```text
+- 내부 문서 파일명 전체
+- 파일 절대경로
+- Prompt/Policy 내용
+- fixture ID 세부
+- raw parse error body
+- stack trace
+```
+
+- 외부 응답은 **안정적인 error code와 일반 메시지**만 사용한다.
+- 내부 조사에 필요한 상세 정보는 제한된 내부 로그로 분리하되, **그 로그에도 원문을 기본적으로 남기지 않는다** (§10.2). 원문 없이 재현 가능한 식별자(document_id, 위치 offset, error code)로 기록한다.
+
+---
+
+## 12. Debug / Admin Boundary
+
+### 12.1 MVP 기본 원칙
+
+MVP에는 다음 endpoint·기능을 두지 않는다.
+
+```text
+- raw document 조회 endpoint 없음
+- full prompt 조회 endpoint 없음
+- PolicyGuard 전체 dump 없음
+- validator rule dump 없음
+- red-team case 조회 없음
+- 일반 운영자 UI에서 원문 노출 없음
+```
+
+### 12.2 향후 admin 기능이 필요한 경우
+
+향후 운영상 admin 기능이 필요해지더라도, 다음을 갖추어야 한다.
+
+```text
+- 별도 인증·권한
+- 감사 로그
+- 최소 필드 (원문이 아닌 식별자·상태 중심)
+- 원문 기본 비노출 (명시적·감사되는 예외 절차 없이는 원문 접근 불가)
+- 사용 목적 제한
+- 다운로드 제한
+```
+
+위 요건은 필요 조건의 계약이며, 이러한 admin 기능이 구현되어 있다는 의미가 아니다.
+
+---
+
+## 13. Future PostgreSQL Projection
+
+상위 결정에 따라 PostgreSQL은 MVP에서 미도입이며, 향후 도입 시에도 다음 노출 규칙이 유지된다.
+
+### 13.1 등급 불변 원칙
+
+**PostgreSQL이 도입돼도 문서 exposure_class는 유지된다.** DB에 저장되었다고 public-safe가 되는 것이 아니다. raw-restricted 문서는 DB 안에서도 raw-restricted다. Registry/projection이 저장하는 exposure_class 값은 문서 exposure_class 3종(raw-restricted / internal-controlled / public-safe)으로 제한되며, sanitized-runtime-output·operational-metadata를 문서 등급 값으로 저장하지 않는다.
+
+### 13.2 DB projection이 허용할 수 있는 운영 metadata (예)
+
+```text
+- document_id
+- content_hash
+- version
+- lifecycle_status        (문서 authoring lifecycle — metadata-standard §8)
+- exposure_class          (문서 exposure_class 3종으로 제한)
+- dependency
+- deployment_status       (candidate/canary/active 등 운영 배포 축 —
+                           문서 lifecycle_status와 별개, Control Plane 소유)
+```
+
+이 metadata는 운영 조회용이며, 이 중 content_hash·version graph·상태 정보는 sanitized-runtime-output에 포함될 수 없다 (§4.5).
+
+### 13.3 원문 content를 저장하는 경우의 요건
+
+원문 content를 DB에 저장하는 경우에도 다음을 요구한다.
+
+```text
+- 최소 권한
+- 별도 role (runtime 조회용 role과 원문 접근 role 분리)
+- raw 조회 제한
+- API 직접 노출 금지
+- 감사 로그
+- Runtime projection 전용 (원문 테이블을 일반 서비스 쿼리가 직접 읽지 않음)
+```
+
+### 13.4 이중 Source of Truth 금지 유지
+
+Markdown과 DB를 사람이 각각 수정하는 이중 Source of Truth는 상위 결정과 동일하게 **계속 금지**한다. DB는 검증된 projection의 저장처일 뿐 의미의 수정처가 아니다.
+
+---
+
+## 14. Exposure Validation Gate
+
+노출 정책의 검증 지점을 6개 Gate로 정의한다.
+
+Gate의 "실패 시 action"은 본 문서의 **운영 action 어휘**(build fail / deployment block / runtime load reject / response reject / redaction / alert)로 표현한다. 이는 Runtime의 PolicyGuard guard action enum(pass/block/rewrite/fallback 등)과 **다른 계층의 어휘**이며, 새로운 PolicyGuard action을 신설하는 것이 아니다. 두 어휘를 혼용하지 않는다.
+
+### Gate 1. Authoring Gate
+
+- 검사 대상: 신규·변경 문서의 exposure class 표기, internal-only 표기, §6 기본 분류와의 정합, §5 분류 원칙 준수.
+- 실패 조건: exposure class 누락, §6 분류의 무단 하향, unsafe 예시 포함 문서의 raw-restricted 미지정.
+- 실패 시 action: build fail (리뷰 반려로 병합·빌드 진입 차단).
+- 구현 상태: not implemented / repo verification required.
+
+### Gate 2. Build/Packaging Gate
+
+- 검사 대상: Frontend bundle, `static/`·`public/` 경로, CDN 산출물, 다운로드 artifact의 내용물과 package manifest의 등급-경로 매핑.
+- 실패 조건: raw-restricted 문서가 public artifact에 포함, internal-controlled 문서가 Frontend bundle에 포함, manifest와 실제 패키징 불일치.
+- 실패 시 action: build fail.
+- 구현 상태: not implemented / repo verification required.
+
+### Gate 3. Runtime Load Gate
+
+- 검사 대상: Finance Runtime이 로딩하는 리소스의 경로와 등급 (private resource 경로 준수, 미분류 문서 여부).
+- 실패 조건: private resource 외 경로에서의 로딩 시도, exposure class 미지정 문서의 로딩, 경로 조작(traversal) 흔적.
+- 실패 시 action: runtime load reject + alert.
+- 구현 상태: not implemented / repo verification required.
+
+### Gate 4. Response Sanitization Gate
+
+- 검사 대상: public API 응답의 필드와 값 (§9 허용·금지 필드, §4.5 포함 금지 목록, 원문 인용·echo 여부, 내부 경로·hash 포함 여부).
+- 실패 조건: 금지 필드 존재, 원문·경로·hash·trace성 정보 포함, routing score/fallback reason/policy trace 노출.
+- 실패 시 action: response reject (필드 단위로 안전 제거가 확정적인 경우 redaction) + alert.
+- 구현 상태: not implemented / repo verification required.
+
+### Gate 5. Logging/Tracing Gate
+
+- 검사 대상: 로그 레코드, metric label, trace span attribute (§10 허용·금지 목록).
+- 실패 조건: 문서 원문·prompt 원문·red-team input·unsafe output·사용자 일지 원문·절대경로의 기록, 본문성 label 사용.
+- 실패 시 action: redaction + alert.
+- 구현 상태: not implemented / repo verification required.
+
+### Gate 6. Release Regression Gate
+
+- 검사 대상: §15 테스트 케이스 전체의 통과 여부 (배포 후보 산출물 기준).
+- 실패 조건: §15 케이스 중 1건 이상 실패.
+- 실패 시 action: deployment block.
+- 구현 상태: not implemented / repo verification required.
+
+---
+
+## 15. Test Cases
+
+노출 정책의 최소 검증 케이스를 정의한다. 전 케이스가 Gate 6의 회귀 대상이다.
+
+| ID | 시나리오 | 기대 결과 | 연결 Gate |
+|---|---|---|---|
+| EXP-01 | raw-restricted 문서(예: red-team cases)가 Frontend bundle에 포함됨 | **실패** — build fail | Gate 2 |
+| EXP-02 | internal-controlled 문서가 `public/`·`static/` 경로에 존재 | **실패** — build fail | Gate 2 |
+| EXP-03 | API 응답에 `raw_markdown` 필드가 존재 | **실패** — response reject | Gate 4 |
+| EXP-04 | 응답 본문·필드에 내부 파일 경로 포함 | **실패** — response reject | Gate 4 |
+| EXP-05 | 로그에 Prompt Template 원문이 포함 | **실패** — redaction + alert | Gate 5 |
+| EXP-06 | trace span attribute에 사용자 투자 일지 원문 존재 | **실패** — redaction + alert | Gate 5 |
+| EXP-07 | 응답이 §9.1 허용 필드로만 구성된 sanitized output | **성공** | Gate 4 |
+| EXP-08 | 응답에 applied lens key 포함, routing score·fallback reason·policy trace 미포함 | **성공** (lens key 허용) / trace성 정보가 포함되면 **실패** | Gate 4 |
+| EXP-09 | debug endpoint 호출이 문서 원문을 반환 | **실패** — response reject + alert (해당 endpoint 자체가 MVP 금지, §12.1) | Gate 4 / Gate 6 |
+| EXP-10 | future DB projection에서 일반 runtime role이 raw content 테이블을 직접 조회 가능 | **실패** — deployment block (권한 과다, §13.3) | Gate 6 |
+
+- 테스트의 입력으로 red-team 케이스를 사용할 경우, 해당 입력·기대 출력 데이터 자체가 raw-restricted이므로 테스트 리포트·CI 로그에 원문을 남기지 않는다.
+
+---
+
+## 16. Implementation Status
+
+- 본 문서는 **아키텍처·보안 계약**이다.
+- packaging validator **구현 완료를 의미하지 않는다**.
+- Runtime sanitizer **구현 완료를 의미하지 않는다**.
+- logging redaction **구현 완료를 의미하지 않는다**.
+- API schema **적용 완료를 의미하지 않는다**.
+- 실제 구현 여부는 **Finance Harness repo 검증 대상**이다.
+
+상태 구분:
+
+```text
+decided / MVP target contract
+- 노출 축과 분류 (§4 — 문서 exposure_class 3종 / distribution_boundary / Runtime output_class / operational-metadata)
+- 등급 결정 규칙 (§5)
+- 문서별 기본 분류 (§6 — 미첨부 문서는 repo 검증으로 확정)
+- Packaging / Runtime / API / Logging / Error / Debug 경계 (§7~§12)
+- Future PG projection 노출 제한 (§13)
+- Validation Gate 6종과 테스트 케이스 (§14~§15)
+
+proposed / deferred
+- PostgreSQL projection의 실제 도입 (상위 결정 §11 트리거 발생 시)
+- admin 기능 (§12.2 요건 충족 전제)
+- 미첨부 문서의 repo 원문 확인 (§6 분류의 사실 확인용 — routing-fixtures는 이미 파일 전체 raw-restricted로 확정이며, 확인 결과는 하향·재분류 근거가 아니다)
+
+not implemented / repo verification required
+- package manifest 등급 검증
+- build fail 로직
+- runtime load reject
+- response sanitization 검사
+- logging/trace redaction
+- §15 테스트 케이스의 CI 통합
 ```
 
 ---
 
-## 12. 등급 변경과 예외 승인
+## 17. Non-goals
 
-노출 등급은 임의로 낮출 수 **MUST NOT** 없다.
-
-### 12.1 등급 변경 원칙
-
-| 원칙 | 수준 |
-|---|---|
-| `raw-restricted` → `public-safe` 직접 변경은 금지한다 | MUST NOT |
-| `public-safe` 승격은 별도 리뷰를 거쳐야 한다 | MUST |
-| sanitized output은 Runtime 생성물이며, 원문 문서의 등급 변경이 아니다 | MUST (구분 유지) |
-| 문서 일부를 공개할 경우 별도 public artifact로 분리한다 | MUST |
-| 내부 원문을 조건문으로 필터링해 그대로 공개하는 방식은 금지한다 | MUST NOT |
-
-- 마지막 규칙의 의미: "internal 부분만 if문으로 가리고 나머지를 원문 그대로 서빙"하는 구조는 필터 오류 하나로 전체가 유출되는 구조이므로 채택하지 않는다. 공개는 항상 **분리된 산출물 생성**으로만 한다.
-
-### 12.2 예외 승인 기록 항목
-
-예외를 승인할 경우 다음을 반드시 기록한다(MUST).
-
-```text
-- 대상 artifact
-- 현재 등급
-- 요청 등급
-- 공개 목적
-- 공개 범위
-- 검수자
-- 승인 일시
-- 만료 또는 재검토 일자
-```
-
-- 예외는 기본 규칙보다 **좁고, 시한이 있으며, 감사 가능**해야 한다(MUST).
-- 구체적인 승인 시스템(워크플로 도구, 결재 체계)은 본 문서에서 구현하지 않는다(§16).
-
----
-
-## 13. 검증·테스트 요구사항
-
-아래 항목은 전부 `future implementation requirement`다. **현재 구현 완료 상태가 아니며**, 향후 구현 시 본 정책의 준수를 기계적으로 검증하는 최소 기준이다.
-
-| # | 검증 항목 | 대응 경계 |
-|---|---|---|
-| V-01 | Frontend bundle에 raw Markdown이 없는지 검사 | §5 |
-| V-02 | static / public / CDN 산출물 검사 | §5 |
-| V-03 | Public API 응답 snapshot에 내부 필드(§6.3 금지 항목)가 없는지 검사 | §6 |
-| V-04 | 로그에 Prompt / Markdown / secret이 없는지 검사 | §8 |
-| V-05 | production debug endpoint 비활성화 확인 | §7 |
-| V-06 | Red-team 케이스(user_input / unsafe_draft / forbidden_output)가 사용자 응답에 포함되지 않는지 검사 | §9, §11 |
-| V-07 | Output Validator 실패 시 원문(unsafe draft·문서 fragment)을 반환하지 않는지 검사 | §8.3, §11 |
-| V-08 | source map과 error response에 서버 경로가 없는지 검사 | §5, §8.3 |
-
-- 각 항목은 CI 또는 배포 게이트에 통합하는 것을 목표로 한다(SHOULD — future implementation requirement).
-- 검증 실패는 배포 차단 사유로 취급해야 한다(SHOULD — future implementation requirement).
-
----
-
-## 14. PostgreSQL 도입과의 관계
-
-본 정책은 저장 매체와 무관하게 동일하게 적용된다.
-
-```text
-Markdown in WAS
-또는
-Markdown Projection in PostgreSQL
-```
-
-어느 저장 방식을 사용하더라도 다음은 변하지 않는다.
-
-```text
-- raw document API 금지          (§6)
-- 최소 권한                      (§7)
-- sanitized response             (§11)
-- 로그 redaction                 (§8)
-- debug / admin 통제             (§7)
-- 원문과 public artifact 분리     (§12)
-```
-
-- **PostgreSQL은 이 정책을 대체하지 않는다.** 상위 ADR §10.2가 확정했듯, 저장 매체를 파일에서 DB로 바꾸는 것은 노출 문제를 이동시킬 뿐 해결하지 않는다.
-- 향후 PostgreSQL이 Runtime Projection / Control Plane으로 도입되더라도(상위 ADR §11~§12), projection 데이터·운영 상태 데이터에 본 문서의 등급 분류와 금지 경계를 **동일하게 적용해야 한다**(MUST).
-- DB 도입을 이유로 본 정책의 어떤 규칙도 완화되지 않는다(MUST NOT).
-
----
-
-## 15. 현재 정책과 미래 구현 구분
-
-정책 결정과 구현 완료를 혼동하지 않도록 상태를 명시한다.
-
-```text
-decided / policy contract        (본 문서로 확정된 정책)
-- exposure_class 3종 · distribution_boundary · output_class · 운영 상태 분류와 경계 (§3, §4)
-- Packaging 금지 경계             (§5)
-- Public API 원문 비노출          (§6)
-- 로그·오류 redaction 원칙        (§8)
-- sanitized output 원칙          (§11)
-
-future implementation requirement (정책은 확정, 구현은 미래)
-- bundle leak scan               (V-01, V-02, V-08)
-- API response validation        (V-03)
-- logging filter                 (V-04)
-- debug endpoint control         (V-05)
-- access audit                   (§7)
-- break-glass workflow           (§7.2)
-
-not implemented                  (본 문서가 설계하지 않는 것)
-- RBAC
-- DLP
-- PostgreSQL row-level security
-- automated exposure scanner
-- admin approval system
-```
-
-- `future implementation requirement`와 `not implemented` 항목은 본 문서 어디에서도 완료된 것으로 취급하지 않는다.
-- 정책 위반 판정은 `decided / policy contract` 항목에 대해서만 즉시 유효하며, 검증 자동화의 부재가 정책 위반의 면책 사유가 되지는 않는다.
-
----
-
-## 16. 비목표
-
-본 문서는 다음을 하지 않는다.
+다음은 본 문서의 범위에서 제외한다.
 
 ```text
 - Finance Lens 의미 수정
-- PolicyGuard action 수정
-- Routing Contract 수정
-- Output Validator 의미 수정
+- PolicyGuard intent/action 변경
+- Routing Contract 변경
+- Fixture 기대값 변경
 - PostgreSQL schema 설계
-- API endpoint 구현
-- RBAC 구현
-- 로그 시스템 구현
-- 개인정보 보존 기간 확정
-- 특정 LLM provider 선정
+- Auth/Billing 전체 설계
 - Frontend 화면 설계
+- 실제 코드 구현
+- DB migration
+- 새로운 Runtime action enum 추가
 ```
-
-- 위 항목이 필요한 시점에는 각각 별도 문서·별도 결정이 이 정책을 **전제로** 작성된다. 본 문서를 수정해 위 항목을 흡수하지 않는다.
 
 ---
 
-## 17. 최종 정책
+## 18. 최종 정책
 
 ```text
-Document exposure_class
-= raw-restricted | internal-controlled | public-safe
+Finance Harness의 노출 통제는 하나의 등급 enum이 아니라
+다음 축의 조합으로 관리한다.
 
-MVP distribution_boundary
-= private-resource
+문서 exposure_class : raw-restricted / internal-controlled / public-safe
+distribution_boundary: repo-only / private-resource (배포·접근 경계)
+Runtime output_class : sanitized-runtime-output
+operational-metadata : 운영 상태 정보 분류
 
-Runtime output_class
-= sanitized-runtime-output
-
-운영 상태 분류 (문서 exposure_class 아님)
-= operational-metadata
-
-사용자에게 나가는 것은
-sanitized-runtime-output과
-승인된 public-safe artifact뿐이다.
+원문(raw-restricted, internal-controlled)은 서버 내부에 머물고,
+Frontend와 사용자에게 도달할 수 있는 것은
+sanitized-runtime-output뿐이다.
 ```
 
-1. **원문은 서버 안에 남는다.** `raw-restricted`와 `internal-controlled` 문서는 Frontend bundle, static/public, CDN, source map, 다운로드 artifact, client configuration 어디에도 포함하지 않는다(MUST NOT).
-2. **Public API는 원문 조회 기능을 제공하지 않는다**(MUST NOT). 반환 가능한 것은 Output Validator를 통과하고 §11 계약을 충족한 `sanitized-runtime-output`과, §12 승인 기록이 있는 `public-safe` artifact뿐이다.
-3. **admin / debug는 원문 자동 열람 권한이 아니다.** 일반 운영 화면은 `operational-metadata` 중심이며, 원문 열람은 break-glass(고권한·사유·시간 제한·감사·다운로드 금지·masking)로만 한다(MUST).
-4. **로그와 오류는 redaction이 기본이다.** raw Markdown, Prompt, secret, red-team 원문, 사용자 일지 원문은 일반 로그와 오류 응답에 기록·포함하지 않는다(MUST NOT).
-5. **외부 모델 전송도 최소화 대상이다.** 필요한 최소 Knowledge block만 조립하고, red-team corpus와 unsafe example은 production prompt에서 기본 분리하며, Prompt logging은 기본 금지한다(MUST).
-6. **등급은 임의로 내려가지 않는다.** `raw-restricted → public-safe` 직접 변경 금지, 공개는 별도 리뷰와 별도 public artifact 분리로만 하며, 예외는 좁고 시한이 있고 감사 가능해야 한다(MUST).
-7. **저장 매체는 이 정책을 대체하지 않는다.** 파일이든 PostgreSQL projection이든 동일한 경계가 적용되며, DB 도입은 어떤 규칙도 완화하지 않는다(MUST NOT).
-
-본 정책은 노출 사고 발생, 상위 ADR의 재검토(도입 트리거 발생 포함), 또는 새 노출 표면(신규 배포 채널·신규 API 형태)의 등장 시 재검토하며, 그 전까지 Finance Harness의 유효한 Exposure Policy로 유지된다.
+- 혼합 문서는 가장 높은 제한 등급을 따르고, 부분 공개는 원문 절단이 아니라 Runtime의 sanitized projection으로만 한다.
+- repo-only·private-resource는 exposure_class가 아니라 distribution_boundary(배포·접근 경계)이며, 저장 매체(파일/DB)의 선택은 노출 통제를 대체하지 않는다. WAS 침해까지 방어하는 독립 보안 경계로 과장하지 않는다.
+- packaging, runtime access, API response, logging/metrics/tracing, error, debug/admin의 6개 경계는 각각 §14의 Gate로 검증하며, raw-restricted의 public artifact 포함과 internal-controlled의 Frontend bundle 포함은 build fail이다.
+- future PostgreSQL projection이 도입되어도 문서 exposure_class와 이중 Source of Truth 금지는 그대로 유지된다.
+- 본 문서의 모든 규칙은 decided / MVP target contract이며, 구현 완료를 주장하지 않는다. 구현 여부는 Finance Harness repo 검증으로 확인한다.
