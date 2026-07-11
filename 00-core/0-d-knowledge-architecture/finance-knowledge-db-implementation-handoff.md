@@ -66,10 +66,10 @@ finance-knowledge-storage-decision.md
 = 현재 저장 결정 (Markdown + WAS private resource, DB 미도입)
 
 finance-document-exposure-policy.md
-= 노출 정책 (등급 5종, packaging/API/로그/Admin/LLM 전송 경계)
+= 노출 정책 (exposure_class 3종, distribution_boundary, Runtime output_class, operational-metadata 및 packaging/API/로그/Admin/LLM 전송 경계)
 
 finance-knowledge-db-future-architecture.md
-= 미래 목표 구조 (소유권, Projection, Lifecycle, Rollout)
+= 미래 목표 구조 (소유권, Projection, 상태 축 분리, Rollout)
 
 finance-knowledge-db-implementation-handoff.md   ← 본 문서
 = 실제 구현 조건 충족 후 실행할
@@ -95,10 +95,17 @@ finance-knowledge-db-implementation-handoff.md   ← 본 문서
 ```text
 1. finance-knowledge-storage-decision.md
 2. finance-document-exposure-policy.md
-3. finance-knowledge-db-future-architecture.md
-4. finance-routing-contract.md
-5. 실제 Finance Runtime repository의 현재 코드와 설정
+3. finance-knowledge-artifact-metadata-standard.md
+4. finance-lens-authoring-standard.md
+5. finance-knowledge-db-future-architecture.md
+6. 00-service-policy.md
+7. finance-policyguard-rules.md
+8. finance-output-validator.md
+9. finance-routing-contract.md
+10. finance-routing-fixtures.md
 ```
+
+`finance-lens-authoring-standard.md`는 Lens 의미를 재정의하기 위한 문서가 아니라, Metadata Standard와 Lens extension의 책임 경계를 확인하기 위한 읽기 대상이다. 실제 구현 상태의 증거는 §4 Preflight에서 확인하는 repository와 runtime configuration뿐이다.
 
 ### 2.2 각 Source의 역할
 
@@ -110,10 +117,16 @@ exposure-policy
 = 원문·API·Frontend·로그·Admin·LLM 전송 경계
 
 db-future-architecture
-= 미래 소유권·Projection·Lifecycle·Rollout 구조
+= 미래 소유권·Projection·상태 축 분리·Rollout 구조
 
-routing-contract
-= Runtime 실행 순서와 PolicyGuard/Validator 계약
+metadata-standard
+= 공통 Metadata envelope와 lifecycle_status 소유
+
+lens-authoring-standard
+= 공통 envelope 상속과 Lens extension 책임 경계 확인
+
+policyguard / output-validator / routing-contract / routing-fixtures
+= Finance canonical runtime 의미와 regression 기준. 본 handoff는 이를 재정의하지 않고 호출·검증 결과만 확인한다.
 
 actual repository
 = 실제 구현 상태의 유일한 증거
@@ -256,6 +269,27 @@ Phase 3 PostgreSQL Registry를 먼저 구현하지 않는다.
 Runtime Projection이 아니라 저장소 이동일 뿐이다.
 ```
 
+**Promotion Gate 순서 (상위 Gate 명칭 — 기존 ID 대체 아님)**
+
+```text
+Global Gate
+→ Phase 0
+→ Phase 0 완료
+→ PG-1
+→ Phase 1
+→ Phase 1 완료
+→ PG-2
+→ Phase 2 production deployment
+→ Phase 2 완료
+→ PG-3
+→ Phase 3
+```
+
+- PG-1 통과 전 Phase 1을 시작하지 않는다.
+- PG-2 통과 전 Phase 2 production deployment를 수행하지 않는다.
+- PG-3 통과 전 Phase 3을 시작하지 않는다.
+- Phase 0과 Phase 1은 병행하지 않는다. Phase 0 결과와 PG-1 승인 기록이 Phase 1의 입력이다.
+
 **Phase 공통 기술 형식** — §7~§14의 각 Phase는 다음 11개 항목을 동일한 형식으로 기술한다.
 
 ```text
@@ -321,6 +355,29 @@ C. 상위 계약과 충돌        — 아래 §7.3 적용
 | 종료 조건 | 전체 Knowledge Artifact가 WP-1~WP-12를 통과하거나, 실패 항목이 전부 기록·수정됨. 동일 입력의 hash 재현 확인 |
 | 다음 Phase 진입 조건 | 종료 조건 + §9 Release Unit 결정 Gate 통과 |
 | 중단 조건 | metadata 기준이 검증 도중 흔들려 재정의가 필요해짐 (G-04 재판정), 또는 canonical 문서 의미 수정이 필요해 보이는 경우 (즉시 중단 — 의미 수정은 본 handoff 범위 밖) |
+
+Phase 1 canonical validation source는 다음 세 문서를 명시적으로 포함한다.
+
+```text
+- finance-policyguard-rules.md
+- finance-routing-fixtures.md
+- finance-output-validator.md
+```
+
+책임 경계:
+
+```text
+PolicyGuard intent/action 의미
+= finance-policyguard-rules.md 소유
+
+Routing fixture expected behavior
+= finance-routing-fixtures.md 소유
+
+Output Validator pass/rewrite/fail 의미
+= finance-output-validator.md 소유
+```
+
+0-D Handoff는 위 의미를 재정의하지 않고, 기존 canonical regression을 호출하고 통과 여부만 확인한다.
 
 ### 8.2 Work Package
 
@@ -388,6 +445,29 @@ Projection Release Unit
 
 - **Release Unit 기준이 결정·승인되기 전에는 Phase 2 immutable projection을 운영 배포하지 않는다.** (Phase 2의 build·검증 개발 자체는 가능하나, 운영 활성화는 Gate 통과 후)
 - 결정 결과는 G-07의 증거로 기록한다.
+
+### 9.5 PG-2 — Phase 2 production deployment Promotion Gate
+
+PG-2는 기존 Gate ID를 대체하지 않는 상위 Promotion Gate 명칭이다. PG-2 통과 전에는 Phase 2 production deployment를 수행하지 않는다.
+
+최소 통과 조건:
+
+```text
+- Projection Release Unit 검증 완료
+- metadata validation 완료
+- dependency resolution 완료
+- content hash 검증 완료
+- PolicyGuard regression 완료
+- Routing Fixture regression 완료
+- Output Validator regression 완료
+- fixture regression 미해결 항목 0건
+- rollback target 존재
+- canary 진입 조건 충족
+```
+
+fixture regression이 미완료이거나 실패 항목이 남아 있으면 PG-2를 통과할 수 없다. PG-2는 기존 fixture expected behavior를 새로 정의하지 않고, canonical fixture regression 결과의 closure만 요구한다.
+
+PG-1은 Phase 0 완료 후 Phase 1 착수를 승인하는 상위 Promotion Gate이며, PG-3은 Phase 2 완료 후 Phase 3 착수를 승인하는 상위 Promotion Gate다.
 
 ---
 
@@ -577,20 +657,31 @@ PostgreSQL 구현 전에 **별도의 상세 설계 리뷰**가 필요하다. 본
 | 다음 Phase 진입 조건 | — (최종 단계, §23 DoD로 연결) |
 | 중단 조건 | rollback rehearsal 실패, audit fail-closed 규칙과 충돌하는 운영 요구 발생 |
 
-### 14.2 계승하는 상태 모델 (inherited contract — future-arch §7)
+### 14.2 계승하는 상태 축 모델 (inherited contract — future-arch §7)
 
 ```text
-primary lifecycle:
-draft → validated → projected → candidate
-      → canary → active → deprecated → archived
+lifecycle_status (Markdown authoring document lifecycle):
+- draft
+- candidate
+- active
+- deprecated
+- retired
 
-branch state:
+projection_status (validation / projection build):
+- validated
+- projected
 - rejected
-- disabled
 
-derived operational flag:
-- rollback-ready
-  (deprecated version의 롤백 가능 여부 파생값 — 독립 lifecycle state 아님)
+deployment_status (Runtime / Control Plane):
+- candidate
+- canary
+- active
+- disabled
+- deprecated
+- archived
+
+rollback-ready:
+- 독립 status enum이 아니라 이전 active projection, projection hash, 복구 가능 deployment, dependency 보존 여부로 계산되는 derived capability 또는 flag
 ```
 
 ### 14.3 운영 동작 handoff
@@ -610,7 +701,7 @@ derived operational flag:
 - 일부 환경 또는 제한된 트래픽
 - 기존 active와 명확히 분리
 - 실패 기준과 중단 주체 사전 확정 (구체 비율·알고리즘은 deferred)
-- 실패 시 기존 active 복귀, 실패 버전은 rejected
+- 실패 시 트래픽은 이전 active deployment로 복귀한다. 실패한 deployment_status는 disabled가 되며, projection_status는 projected를 유지한다.
 ```
 
 **Rollback**
@@ -679,7 +770,7 @@ derived operational flag:
 | T-20 | raw Markdown fallback 시도 | I-09 | 해당 경로 부재 — 시도 자체가 실패해야 함 | 예 |
 | T-21 | 다중 WAS version 불일치 | I-14 / §13 | hash 기준 탐지 + refresh + 경보 | 예 |
 | T-22 | cache stale | §13 | version/hash 무효화로 교정 | 예 |
-| T-23 | canary 실패 | §14 | canary 중단, active 복귀, rejected 처리 | 예 |
+| T-23 | canary 실패 | §14 | 트래픽은 이전 active deployment로 복귀, 실패한 deployment_status=disabled, projection_status=projected 유지 | 예 |
 | T-24 | rollback 실패 | §18/§20 | 부분 전환 방치 없음, 복원 + 최고 경보 | 예 |
 | T-25 | audit 기록 실패 (서빙) | §17 | durable buffer 있으면 조건부 지속, 없거나 법적 필수면 fail-closed | 예 |
 | T-26 | audit 기록 실패 (Control Plane) | §17 | 상태 변경 fail-closed | 예 |
@@ -696,6 +787,15 @@ derived operational flag:
 ## 16. Exposure와 보안 검증
 
 `finance-document-exposure-policy.md`를 전 Phase에 그대로 계승한다. (inherited contract)
+
+노출 구조는 다음 네 축으로 사용한다.
+
+```text
+- exposure_class 3종
+- distribution_boundary 별도 축
+- sanitized-runtime-output = Runtime output_class
+- operational-metadata = 별도 운영 정보
+```
 
 필수 검증 (구현·배포 파이프라인 반영은 proposed implementation step):
 
@@ -799,7 +899,7 @@ Control Plane 상태 변경:
 | dependency graph 불완전 | 해당 Unit 승격 중단 | 기존 active 지속 | 부분 closure 승격 |
 | multi-WAS version drift | hash 탐지 + refresh + 경보 | 각 인스턴스의 검증본 유지 | 미검증 강제 동기화 |
 | stale cache | version/hash 무효화 | 재조회 | stale 데이터 무기한 서빙 |
-| canary 실패 | canary 중단, active 복귀 | 기존 active | 실패 버전 부분 수정 재투입 |
+| canary 실패 | canary 중단, 이전 active deployment로 복귀. 실패한 deployment_status=disabled, projection_status=projected 유지 | 기존 active | 실패 버전 부분 수정 재투입 또는 projection_status 변경 |
 | rollback 실패 | 전환 전 상태 복원 시도, 최고 경보 | 없음 (부분 상태 방치 금지) | pointer를 미검증 상태로 방치 |
 | audit 기록 실패 | §17.3 정책 적용 | durable buffer 경유 지속 (조건부) | audit 없는 Control Plane 변경 |
 | exposure leak 탐지 | 해당 경로 즉시 차단 + 경보 | 없음 | "일단 서비스 우선" 방치 |
@@ -856,7 +956,7 @@ rollback은 **내용 수정이 아니라 pointer/state 전환**이다. 실행 �
 [ ] PolicyGuard/Validator 적용 확인 (rollback 후에도 우회 없음)
 [ ] response provenance 확인 (rollback version 기록)
 [ ] rollback audit 기록
-[ ] 새 candidate 격리 또는 rejected 처리
+[ ] 새 candidate 격리 또는 deployment_status=disabled 처리
 ```
 
 - 다시 강조한다: **rollback에서 DB 내용을 수정하지 않는다.** 전환 대상은 이미 존재하는 immutable version이며, "문제 부분만 고쳐서 되돌리기"는 rollback이 아니라 I-02/I-06 위반이다.
@@ -960,19 +1060,21 @@ rollback은 **내용 수정이 아니라 pointer/state 전환**이다. 실행 �
 2.  실제 repo 검증                     (§4 Preflight, §7 Phase 0)
 3.  MVP 계약 위반 우선 수정             (§7.3 — C 항목 0건 될 때까지)
 4.  Phase 1 Validation                 (§8 WP-1~12)
-5.  Release Unit 결정                  (§9 Gate)
-6.  Phase 2 File Projection            (§10)
-7.  File Projection 운영 검증           (§10 종료 조건)
-8.  PostgreSQL 상세 설계 리뷰           (§11 Gate)
-9.  Phase 3 Registry 구현              (§12)
-10. File/DB projection 비교            (§12.2-9)
-11. Phase 4 shadow read                (§13.2-3~5)
-12. 제한 환경 전환                     (§13.2-6)
-13. Phase 5 canary                     (§14)
-14. active 전환                        (§19 배포 순서)
-15. provenance/leak/consistency 검증    (§19 완료 조건)
-16. rollback rehearsal                 (§20)
-17. 운영 인수                          (§18 Runbook 승인, §23 DoD)
+5.  PG-1 승인 후 Phase 1 착수           (§6, §8)
+6.  Release Unit 결정                  (§9 Gate)
+7.  PG-2 승인 후 Phase 2 production deployment (§9.5, §10)
+8.  File Projection 운영 검증           (§10 종료 조건)
+9.  PG-3 승인 후 Phase 3 착수           (§6, §11)
+10. PostgreSQL 상세 설계 리뷰           (§11 Gate)
+11. Phase 3 Registry 구현              (§12)
+12. File/DB projection 비교            (§12.2-9)
+13. Phase 4 shadow read                (§13.2-3~5)
+14. 제한 환경 전환                     (§13.2-6)
+15. Phase 5 canary                     (§14)
+16. active 전환                        (§19 배포 순서)
+17. provenance/leak/consistency 검증    (§19 완료 조건)
+18. rollback rehearsal                 (§20)
+19. 운영 인수                          (§18 Runbook 승인, §23 DoD)
 ```
 
 ---
@@ -990,7 +1092,9 @@ rollback은 **내용 수정이 아니라 pointer/state 전환**이다. 실행 �
    확인 전 모든 판정은 verification required다.
 
 3. 순서를 지켜라.
-   Phase 0 → 1 → 2 → 3 → 4 → 5. 건너뛰기는 없다.
+   Global Gate → Phase 0 → Phase 0 완료 → PG-1 → Phase 1
+   → Phase 1 완료 → PG-2 → Phase 2 production deployment
+   → Phase 2 완료 → PG-3 → Phase 3. 건너뛰기는 없다.
    검증 없는 DB 적재는 Projection이 아니라 저장소 이동이다.
 
 4. 불변식은 협상 대상이 아니다.
