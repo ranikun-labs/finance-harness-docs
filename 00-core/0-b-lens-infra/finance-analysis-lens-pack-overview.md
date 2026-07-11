@@ -1,7 +1,7 @@
 # finance-analysis-lens-pack-overview.md
 
 > **상태**: 초안 v0.1
-> **상위 문서(Safety Core)**: `00-service-policy.md`(서비스 정책 v0.1), `finance-policyguard-rules.md`, `finance-output-validator.md`, `finance-market-data-grounding.md`, `finance-routing-fixtures-v2.md`, `finance-prompt-templates-v2.1.md`
+> **상위 문서(Safety Core)**: `00-service-policy.md`(서비스 정책 v0.1), `finance-policyguard-rules.md`, `finance-output-validator.md`, `finance-market-data-grounding.md`, `finance-routing-fixtures.md`, `finance-prompt-templates.md`
 > **인접 문서**: `finance-lens-catalog.md`(렌즈 등록부), `finance-harness-reuse-map.md`, `finance-harness-mvp-implementation-handoff-v1_2.md`
 > **범위**: Finance Analysis Lens Pack의 분류 체계, 문서화 순서, 공통 템플릿, 금지선, Safety Core 연결 방식만 정의한다. **개별 렌즈 문서의 본문은 작성하지 않는다.**
 > **불변 원칙**: **판단하지 않고, 기록하게 한다.** 어떤 렌즈도 매수/매도/보유 판단, 목표가/손절가, 수량/비중, 종목 추천, 확정적 예측을 출력하지 않는다.
@@ -39,8 +39,8 @@
 | `finance-output-validator.md` | ✅ | 검사 카테고리/severity/rewrite |
 | `finance-market-data-grounding.md` | ✅ | 데이터 단정 금지, 출처/기준시각 |
 | `finance-lens-catalog.md` | ✅ | 렌즈 10종 등록부 (MVP 5 + 확장 5) |
-| `finance-prompt-templates-v2.1.md` | ✅ | intent/action → 응답 구조 |
-| `finance-routing-fixtures-v2.md` | ✅ | 32개 fixture, A안 반영 |
+| `finance-prompt-templates.md` | ✅ | intent/action → 응답 구조 |
+| `finance-routing-fixtures.md` | ✅ | 32개 fixture, A안 반영 |
 | `finance-harness-reuse-map.md` | ✅ | 패턴 매핑 |
 | `finance-harness-mvp-implementation-handoff-v1_2.md` | ✅ | 구현 인계, PR 순서 |
 
@@ -53,8 +53,8 @@
 finance-policyguard-rules.md    ← intent 분류 / 3단 Guard
 finance-output-validator.md     ← 노출 전 최종 검사
 finance-market-data-grounding.md← 데이터 단정 금지
-finance-prompt-templates-v2.1.md← 응답 구조 계약
-finance-routing-fixtures-v2.md  ← regression 기준선
+finance-prompt-templates.md← 응답 구조 계약
+finance-routing-fixtures.md  ← regression 기준선
         ↓ (렌즈는 이 규칙 안에서만 동작)
 [Analysis Layer — 콘텐츠 계층 (본 Pack의 책임)]
 
@@ -393,7 +393,7 @@ Safe Answer + Journal/Review CTA
 | intent/guard 규칙 | `finance-policyguard-rules.md` |
 | 최종 출력 검사/rewrite | `finance-output-validator.md` |
 | 데이터 단정 금지/출처 규칙 | `finance-market-data-grounding.md` |
-| 응답 템플릿 원문 | `finance-prompt-templates-v2.1.md` |
-| fixture 정의와 regression 기준 | `finance-routing-fixtures-v2.md` |
+| 응답 템플릿 원문 | `finance-prompt-templates.md` |
+| fixture 정의와 regression 기준 | `finance-routing-fixtures.md` |
 | 개별 렌즈 문서 본문 | 후속 작업 (§5, §11) |
 | Advisory Mode 검토 | future regulated product track (본 Pack 범위 외) |

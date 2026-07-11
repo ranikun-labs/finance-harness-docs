@@ -19,7 +19,7 @@ non-goals         :
   - Auth/Billing, Frontend, Hosted Control Plane 설계
 ```
 
-- 충돌 시 우선순위: 본 문서는 저장 위치와 노출 경계만 결정한다. intent/action/lens/redirect/validator의 의미 정의는 각 canonical 문서(`00-service-policy.md`, `finance-policyguard-rules.md`, `finance-routing-contract-v1.md` 등)가 소유하며, 본 문서는 그 의미를 재정의하거나 완화하지 않는다.
+- 충돌 시 우선순위: 본 문서는 저장 위치와 노출 경계만 결정한다. intent/action/lens/redirect/validator의 의미 정의는 각 canonical 문서(`00-service-policy.md`, `finance-policyguard-rules.md`, `finance-routing-contract.md` 등)가 소유하며, 본 문서는 그 의미를 재정의하거나 완화하지 않는다.
 
 ---
 
