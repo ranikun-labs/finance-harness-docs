@@ -1,0 +1,15 @@
+.DS_Store
+*.tmp
+*.bak
+*~
+files/
+files2/
+canonical/
+fable-staging/
+fable-approved/
+approved-inbox/
+_approved/
+_backup-before-replace/
+archive/
+backup/
+backups/
