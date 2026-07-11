@@ -15,12 +15,12 @@ internal-only     : 본 문서는 내부 검토 전용이다. 사용자 대면 �
 reviewed source documents :
   [0-A] 00-service-policy.md (정상 존재 확인),
         finance-policyguard-rules.md, finance-output-validator.md,
-        finance-market-data-grounding.md, finance-prompt-templates-v2.1.md,
-        finance-routing-fixtures-v2.md
+        finance-market-data-grounding.md, finance-prompt-templates.md,
+        finance-routing-fixtures.md
   [0-B] finance-analysis-lens-pack-overview.md,
         finance-lens-authoring-standard.md, finance-lens-catalog.md
-  [0-C] finance-routing-contract-v1.md, finance-output-examples-v1.md,
-        finance-red-team-cases-v1.md
+  [0-C] finance-routing-contract.md, finance-output-examples.md,
+        finance-red-team-cases.md
   [렌즈] 01-core-analysis-lenses/finance-lens-{market-context, supply-demand, event-calendar,
         earnings, valuation, sector-cycle, macro-rate-fx, risk-checklist,
         journal-review, emotion-check}.md

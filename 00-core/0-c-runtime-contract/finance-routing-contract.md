@@ -1,4 +1,4 @@
-# finance-routing-contract-v1.md
+# finance-routing-contract.md
 
 ## 0. Metadata
 
@@ -14,8 +14,8 @@ source documents  :
   - finance-policyguard-rules.md
   - finance-output-validator.md
   - finance-market-data-grounding.md
-  - finance-prompt-templates-v2.1.md
-  - finance-routing-fixtures-v2.md
+  - finance-prompt-templates.md
+  - finance-routing-fixtures.md
   [0-B Lens Infra]
   - finance-analysis-lens-pack-overview.md
   - finance-lens-authoring-standard.md
@@ -426,9 +426,9 @@ journal-review 렌즈와 SAFE_JOURNAL_REVIEW/RISK_ACCOUNT_BASED_ADVICE 경로의
 | 책임 | 담당 |
 |---|---|
 | intent/guard 규칙 원문 | `finance-policyguard-rules.md` |
-| 템플릿 원문 | `finance-prompt-templates-v2.1.md` |
+| 템플릿 원문 | `finance-prompt-templates.md` |
 | validator 검사 규칙 원문 | `finance-output-validator.md` |
 | 데이터 정책 원문 | `finance-market-data-grounding.md` |
-| fixture 정의·정식 등록 | `finance-routing-fixtures-v2.md` (후보의 확정은 별도 개정) |
+| fixture 정의·정식 등록 | `finance-routing-fixtures.md` (후보의 확정은 별도 개정) |
 | 렌즈 콘텐츠 | `01-core-analysis-lenses/finance-lens-*.md` (본 계약은 라우팅만) |
 | 백엔드 구현 | 별도 작업 |
