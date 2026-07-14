@@ -9,14 +9,6 @@ This layer turns reviewed candidate material into implementation and operations
 controls for a small side-project service. It is an internal operational
 baseline only.
 
-It is not:
-
-- legal advice
-- legal approval
-- an externally reviewed legal opinion
-- public-launch approval
-- paid-launch approval
-
 It is not legal advice, not legal approval, not externally reviewed, not
 public-launch approval, and not paid-launch approval. External legal review
 remains unassigned and is a future launch gate.
