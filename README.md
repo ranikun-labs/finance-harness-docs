@@ -4,7 +4,7 @@ Finance Harness의 정책, Lens, Runtime Contract,
 Knowledge Architecture 및 관련 내부 문서를 관리하는
 private Git repository.
 
-## Canonical active scope
+## Canonical repository scope
 
 - 00-core/0-a-safety-core
 - 00-core/0-b-lens-infra
@@ -12,18 +12,23 @@ private Git repository.
 - 00-core/0-d-knowledge-architecture
 - 01-core-analysis-lenses
 - 02-asset-class-long-term
+- 03-domain-deep-dive
 
-위 canonical 경로만 현행 Source of Truth로 취급한다.
+위 canonical 경로만 현행 repository Source of Truth로 취급한다.
+
+`02-asset-class-long-term`와 `03-domain-deep-dive`의 신규 Product-MVP
+Lens 문서는 canonical repository placement 상태이지만, Lens Catalog 등록,
+fixture regression, Runtime activation을 완료했다는 의미가 아니다.
+해당 문서는 현재 draft / non-routable / non-runtime-loadable 상태를 유지한다.
 
 ## Review-pending legacy scope
 
-- legacy-review-pending/03-domain-deep-dive
 - legacy-review-pending/05-product-legal-ops
 - legacy-review-pending/06-professional-standards
 - legacy-review-pending/90-meta-handoff
 
 legacy-review-pending 문서는 보존 자료이며,
-canonical active 문서나 Runtime loading 대상으로 간주하지 않는다.
+canonical repository 문서나 Runtime loading 대상으로 간주하지 않는다.
 
 ## Source of Truth
 
