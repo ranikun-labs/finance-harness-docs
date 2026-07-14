@@ -10,27 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : event-calendar
-category          : 공통 시장
-status            : 기존-MVP
-trigger           : 시점성 이벤트 언급 — FOMC, CPI 등 지표 발표, 금통위,
-                    옵션/선물 만기, 월말/분기말 리밸런싱, MSCI/FTSE 등
-                    지수 편출입, 실적 시즌, 배당락.
-                    예시(안전 질문): "월말 리밸런싱이 뭐야?" /
-                    "실적 발표 전에 뭘 봐야 해?" /
-                    "이벤트 일정은 어디서 확인해?"
-forbidden intent  : RISK_BUY_SELL ("만기 전에 정리할까?" 등 이벤트-시점
-                    결합 매매 판단 요청),
-                    RISK_DATA_GROUNDING ("리밸런싱 매도 나오고 있지?",
-                    "이번 주 FOMC 언제야?" 등 영향/일정 사실 확인 요구)
-                    — Input Guard가 렌즈보다 먼저 처리.
-redirect 관계     : SAFE_LEARNING(시점성 개념 질문)의 연결 렌즈
-                    (policyguard §3). RISK_DATA_GROUNDING 중 달력/일정
-                    관련 질문의 "확인 방법 안내" 담당.
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절/안내 선언
-                    "이후에" 제공되는 확인 항목으로만 소비된다.
-관련 fixture      : SF-02, SF-03
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : event-calendar
+category             : 공통 시장
+lens_tier            : existing-mvp
+trigger              : 시점성 이벤트 언급 — FOMC, CPI 등 지표 발표, 금통위, 옵션/선물 만기, 월말/분기말 리밸런싱, MSCI/FTSE 등 지수 편출입, 실적 시즌, 배당락.
+                       예시(안전 질문): "월말 리밸런싱이 뭐야?" / "실적 발표 전에 뭘 봐야 해?" / "이벤트 일정은 어디서 확인해?"
+forbidden_intents    : [RISK_BUY_SELL, RISK_DATA_GROUNDING]
+redirect_to          : [RISK_DATA_GROUNDING]
+related_lenses       : [earnings, supply-demand, emotion-check]
+fixture_refs         : [SF-02, SF-03]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

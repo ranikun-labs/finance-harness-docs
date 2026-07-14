@@ -10,24 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : supply-demand
-category          : 공통 시장 (Phase 1 구현은 한국 주식 수급 중심,
-                    관점 자체는 자산군 공통 — overview §4.1)
-status            : 기존-MVP
-trigger           : 수급, 매수세/매도세, 외국인/기관/개인, 프로그램 매매,
-                    리밸런싱 수급 등의 언급.
-                    예시(안전 질문): "외국인 수급은 어떻게 봐야 해?" /
-                    "프로그램 매매는 뭘 확인하면서 보는 거야?" /
-                    "수급과 가격이 엇갈릴 때는 뭘 봐야 해?"
-forbidden intent  : RISK_DATA_GROUNDING ("오늘 외국인 순매수야?",
-                    "지금 수급 좋아?"), RISK_BUY_SELL ("수급 좋으면
-                    사도 돼?") — Input Guard가 렌즈보다 먼저 처리.
-redirect 관계     : RISK_DATA_GROUNDING의 redirect 대상 (policyguard §3 —
-                    "확인 방법만" 제공하는 렌즈로 지정).
-                    redirect 경로에서 이 렌즈의 콘텐츠는 단정 불가 안내
-                    "이후에" 제공되는 확인 항목으로만 소비된다.
-관련 fixture      : SF-01, SF-04, DG-01, DG-02
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : supply-demand
+category             : 공통 시장
+lens_tier            : existing-mvp
+trigger              : 수급, 매수세/매도세, 외국인/기관/개인, 프로그램 매매, 리밸런싱 수급 등의 언급.
+                       예시(안전 질문): "외국인 수급은 어떻게 봐야 해?" / "프로그램 매매는 뭘 확인하면서 보는 거야?" / "수급과 가격이 엇갈릴 때는 뭘 봐야 해?"
+forbidden_intents    : [RISK_DATA_GROUNDING, RISK_BUY_SELL]
+redirect_to          : [RISK_DATA_GROUNDING]
+related_lenses       : [market-context, event-calendar]
+fixture_refs         : [SF-01, SF-04, DG-01, DG-02]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

@@ -10,23 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : market-context
-category          : 공통 시장
-status            : 기존-MVP
-trigger           : 종목/시장에 대한 포괄적 질문. 다른 렌즈 선택이 애매할 때의
-                    기본 진입점.
-                    예시(안전 질문): "하이닉스 요즘 어때?" /
-                    "요즘 시장은 무엇을 확인하며 보는 게 좋아?" /
-                    "너무 오른 것 같은데 어떻게 봐야 해?"
-forbidden intent  : RISK_BUY_SELL, RISK_RECOMMENDATION, RISK_DATA_GROUNDING
-                    — 이 렌즈로 자주 유입되는 위험 의도. Input Guard가
-                    렌즈보다 먼저 처리한다.
-redirect 관계     : RISK_BUY_SELL, RISK_RECOMMENDATION의 redirect 대상.
-                    UNKNOWN의 보수적 기본 렌즈 (policyguard §3).
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절 선언 "이후에"
-                    제공되는 체크리스트로만 소비된다.
-관련 fixture      : SF-01, SF-06, RF-01, RF-02, RF-03, RF-08, DG-05, AM-04
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : market-context
+category             : 공통 시장
+lens_tier            : existing-mvp
+trigger              : 종목/시장에 대한 포괄적 질문. 다른 렌즈 선택이 애매할 때의 기본 진입점.
+                       예시(안전 질문): "하이닉스 요즘 어때?" / "요즘 시장은 무엇을 확인하며 보는 게 좋아?" / "너무 오른 것 같은데 어떻게 봐야 해?"
+forbidden_intents    : [RISK_BUY_SELL, RISK_RECOMMENDATION, RISK_DATA_GROUNDING]
+redirect_to          : [RISK_BUY_SELL, RISK_RECOMMENDATION, RISK_DATA_GROUNDING]
+related_lenses       : [supply-demand, earnings, emotion-check, risk-checklist]
+fixture_refs         : [SF-01, SF-06, RF-01, RF-02, RF-03, RF-08, DG-05, AM-04]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---
