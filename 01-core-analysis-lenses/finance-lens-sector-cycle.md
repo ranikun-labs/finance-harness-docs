@@ -10,25 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : sector-cycle
-category          : 주식
-status            : 기존-확장
-trigger           : 업황, 섹터, 사이클, 로테이션, 산업 공통 요인 언급.
-                    예시(안전 질문): "업황은 뭘 보고 확인해?" /
-                    "섹터 로테이션이 뭐야?" /
-                    "종목 이슈랑 업황 이슈는 어떻게 구분해?"
-forbidden intent  : RISK_RECOMMENDATION ("요즘 어떤 섹터가 좋아?",
-                    "뜨는 업종 알려줘" — 업종 추천도 추천이다),
-                    RISK_BUY_SELL ("업황 도는 것 같은데 들어갈까?"),
-                    RISK_DATA_GROUNDING ("지금 반도체 업황 바닥 맞지?")
-                    — Input Guard가 렌즈보다 먼저 처리한다.
-redirect 관계     : RISK_RECOMMENDATION(RF-08)의 redirect 대상
-                    (policyguard §6 — "종목 선별 기준 체크리스트"
-                    제공까지). redirect 경로에서 이 렌즈의 콘텐츠는
-                    거절 선언 "이후에" 제공되는 확인 관점으로만
-                    소비되며, 종목/업종 이름 제시가 아니다.
-관련 fixture      : RF-08
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : sector-cycle
+category             : 주식
+lens_tier            : existing-extension
+trigger              : 업황, 섹터, 사이클, 로테이션, 산업 공통 요인 언급.
+                       예시(안전 질문): "업황은 뭘 보고 확인해?" / "섹터 로테이션이 뭐야?" / "종목 이슈랑 업황 이슈는 어떻게 구분해?"
+forbidden_intents    : [RISK_RECOMMENDATION, RISK_BUY_SELL, RISK_DATA_GROUNDING]
+redirect_to          : [RISK_RECOMMENDATION, RISK_DATA_GROUNDING]
+related_lenses       : [market-context, earnings, event-calendar]
+fixture_refs         : [RF-08]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

@@ -10,26 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : emotion-check
-category          : 투자 일지/행동 분석
-status            : 기존-MVP
-trigger           : 감정 신호가 섞인 질문 — "너무 오르는데", "무서운데",
-                    "조급한데", "확신이 드는데" 등.
-                    예시(안전 질문): "너무 오른 것 같은데 어떻게 봐야 해?" /
-                    "FOMO가 뭐야?" /
-                    "감정에 관해서는 뭘 기록해두면 좋아?"
-forbidden intent  : RISK_BUY_SELL — 감정 신호는 매매 판단 요청과 결합
-                    되는 빈도가 가장 높다 ("따라가도 돼?", "무서운데
-                    팔까?"). RISK_ACCOUNT_BASED_ADVICE — "물렸는데
-                    어떡해" 등 보유분+감정 결합.
-                    감정 신호가 판단 요청과 결합되면 Input Guard가
-                    렌즈보다 먼저 처리하고, 최위험 intent가 우선한다.
-redirect 관계     : RISK_BUY_SELL(RF-01~02), RISK_ACCOUNT_BASED_ADVICE
-                    (RF-09)의 redirect 대상 (policyguard §6).
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절 선언
-                    "이후에" 제공되는 감정 분리 체크리스트로만 소비된다.
-관련 fixture      : RF-01, RF-02, RF-09, AM-04
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : emotion-check
+category             : 투자 일지/행동 분석
+lens_tier            : existing-mvp
+trigger              : 감정 신호가 섞인 질문 — "너무 오르는데", "무서운데", "조급한데", "확신이 드는데" 등.
+                       예시(안전 질문): "너무 오른 것 같은데 어떻게 봐야 해?" / "FOMO가 뭐야?" / "감정에 관해서는 뭘 기록해두면 좋아?"
+forbidden_intents    : [RISK_BUY_SELL, RISK_ACCOUNT_BASED_ADVICE, RISK_DATA_GROUNDING]
+redirect_to          : [RISK_BUY_SELL, RISK_ACCOUNT_BASED_ADVICE]
+related_lenses       : [market-context, journal-review, risk-checklist]
+fixture_refs         : [RF-01, RF-02, RF-09, AM-04]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

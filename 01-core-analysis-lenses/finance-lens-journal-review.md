@@ -10,26 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : journal-review
-category          : 투자 일지/행동 분석
-status            : 기존-확장
-trigger           : 기록 작성 방법·복기 요청.
-                    예시(안전 질문): "투자 일지를 어떻게 써야 해?" /
-                    "내 기록을 복기해줘" /
-                    "복기할 때는 뭘 중심으로 봐야 해?"
-forbidden intent  : RISK_ACCOUNT_BASED_ADVICE ("내 기록 보고 매도할지
-                    알려줘" — RF-10), RISK_BUY_SELL ("복기해보니
-                    팔아야 할 것 같지?") — 복기 요청에 행동 결정
-                    요청이 결합되는 경우. Input Guard가 렌즈보다
-                    먼저 처리한다.
-redirect 관계     : RISK_ACCOUNT_BASED_ADVICE(RF-09~10),
-                    RISK_STOP_LOSS(RF-05 — 기록 질문 병행),
-                    RISK_BUY_SELL(RF-03)의 redirect 대상 (policyguard §6).
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절 선언
-                    "이후에" 제공되는 복기 질문으로만 소비된다.
-관련 fixture      : SF-07, RF-03, RF-05, RF-09, RF-10, AM-05
-output style      : 공통 5단 구조 내 사용. 복기 응답 자체는
-                    templates §6 (SAFE_JOURNAL_REVIEW) 구조를 따른다.
+lens_key             : journal-review
+category             : 투자 일지/행동 분석
+lens_tier            : existing-extension
+trigger              : 기록 작성 방법·복기 요청.
+                       예시(안전 질문): "투자 일지를 어떻게 써야 해?" / "내 기록을 복기해줘" / "복기할 때는 뭘 중심으로 봐야 해?"
+forbidden_intents    : [RISK_ACCOUNT_BASED_ADVICE, RISK_BUY_SELL]
+redirect_to          : [RISK_ACCOUNT_BASED_ADVICE, RISK_STOP_LOSS, RISK_BUY_SELL]
+related_lenses       : [emotion-check, risk-checklist]
+fixture_refs         : [SF-07, RF-03, RF-05, RF-09, RF-10, AM-05]
+output_style         : 공통 5단 구조 내 사용. 복기 응답 자체는 templates §6 (SAFE_JOURNAL_REVIEW) 구조를 따른다.
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

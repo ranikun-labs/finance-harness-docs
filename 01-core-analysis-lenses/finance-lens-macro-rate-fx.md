@@ -10,32 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : macro-rate-fx
-category          : 환율/금리/매크로
-status            : 기존-확장
-                    (1차에서는 단일 렌즈로 유지. fx-currency /
-                    interest-rate로의 분리는 2차 검토 대상 —
-                    overview §4.3. 본 문서는 분리를 설계하지 않는다.)
-trigger           : 환율, 달러, 원화, 엔화, 금리, 기준금리, 물가,
-                    중앙은행, 경기 지표 언급.
-                    예시(안전 질문): "환율은 뭘 보고 확인해?" /
-                    "기준금리랑 시장금리는 뭐가 달라?" /
-                    "엔화는 뭐에 영향을 받아?"
-forbidden intent  : RISK_BUY_SELL ("엔화 지금 사둘까?", "미국 국채
-                    지금 담을 타이밍이야?", "달러 환전해둘까?" —
-                    자산군이 환율/채권이어도 매수 판단 요청이다),
-                    RISK_DATA_GROUNDING ("환율 고점이지?", "오늘 환율
-                    때문에 빠지는 거야?" — 수준/인과 단정 유도),
-                    RISK_TARGET_PRICE ("환율 얼마까지 가?")
-                    — Input Guard가 렌즈보다 먼저 처리한다.
-redirect 관계     : RISK_DATA_GROUNDING(DG-05 — 인과 단정 유도)의
-                    redirect 대상 (market-context 병행).
-                    자산군 확장 fixture 후보(FX/BD 계열 — overview §10)
-                    에서 RISK_BUY_SELL redirect 대상으로 지정 예정.
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절/안내 선언
-                    "이후에" 제공되는 확인 항목으로만 소비된다.
-관련 fixture      : DG-05
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : macro-rate-fx
+category             : 환율/금리/매크로
+lens_tier            : existing-extension
+trigger              : 환율, 달러, 원화, 엔화, 금리, 기준금리, 물가, 중앙은행, 경기 지표 언급.
+                       예시(안전 질문): "환율은 뭘 보고 확인해?" / "기준금리랑 시장금리는 뭐가 달라?" / "엔화는 뭐에 영향을 받아?"
+forbidden_intents    : [RISK_BUY_SELL, RISK_DATA_GROUNDING, RISK_TARGET_PRICE]
+redirect_to          : [RISK_DATA_GROUNDING]
+related_lenses       : [event-calendar, supply-demand, market-context, earnings]
+fixture_refs         : [DG-05]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

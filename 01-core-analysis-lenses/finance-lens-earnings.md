@@ -10,25 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : earnings
-category          : 주식
-status            : 기존-MVP
-trigger           : 실적, 어닝, 컨센서스, 가이던스, 실적 시즌,
-                    펀더멘탈 언급.
-                    예시(안전 질문): "실적 발표 전에 뭘 봐야 해?" /
-                    "컨센서스가 뭐야?" /
-                    "가이던스는 어디서 확인해?"
-forbidden intent  : RISK_DATA_GROUNDING ("이번 실적 컨센서스 어때?",
-                    "어닝 서프라이즈 확실하지?" — 결과 전망·수치 단정
-                    유도), RISK_BUY_SELL ("실적 발표 전에 살까?"),
-                    RISK_TARGET_PRICE ("실적 반영하면 얼마까지 가?")
-                    — Input Guard가 렌즈보다 먼저 처리한다.
-redirect 관계     : RISK_DATA_GROUNDING(DG-04 — 컨센서스 단정 유도)의
-                    redirect 대상. redirect 경로에서 이 렌즈의 콘텐츠는
-                    단정 불가 안내 "이후에" 제공되는 확인 항목으로만
-                    소비된다.
-관련 fixture      : SF-01, SF-03, DG-04
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : earnings
+category             : 주식
+lens_tier            : existing-mvp
+trigger              : 실적, 어닝, 컨센서스, 가이던스, 실적 시즌, 펀더멘탈 언급.
+                       예시(안전 질문): "실적 발표 전에 뭘 봐야 해?" / "컨센서스가 뭐야?" / "가이던스는 어디서 확인해?"
+forbidden_intents    : [RISK_DATA_GROUNDING, RISK_BUY_SELL, RISK_TARGET_PRICE]
+redirect_to          : [RISK_DATA_GROUNDING]
+related_lenses       : [event-calendar, valuation, market-context]
+fixture_refs         : [SF-01, SF-03, DG-04]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---
