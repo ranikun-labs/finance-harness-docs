@@ -192,7 +192,29 @@ FOMO이니 사지 마세요 (행동 지시)
 
 ---
 
-## 5. Product-MVP draft 렌즈 (inactive)
+## 5. Core Lens metadata registry
+
+아래 10개 Core Analysis Lens는 `01-core-analysis-lenses/`의 canonical
+문서와 문자 단위로 일치해야 하는 등록 metadata다. 이 표는 현재 Runtime
+behavior를 설명할 뿐 새 intent, action, fixture, Lens key, activation
+gate를 만들지 않는다.
+
+| lens_key | canonical path | category | lens_tier | lifecycle_status | implementation_status | runtime_loadable | routable | activation_gate |
+|---|---|---|---|---|---|:---:|:---:|---|
+| `market-context` | `01-core-analysis-lenses/finance-lens-market-context.md` | 공통 시장 | existing-mvp | active | routing-contract | true | true | lens-registration-v1 |
+| `supply-demand` | `01-core-analysis-lenses/finance-lens-supply-demand.md` | 공통 시장 | existing-mvp | active | routing-contract | true | true | lens-registration-v1 |
+| `earnings` | `01-core-analysis-lenses/finance-lens-earnings.md` | 주식 | existing-mvp | active | routing-contract | true | true | lens-registration-v1 |
+| `event-calendar` | `01-core-analysis-lenses/finance-lens-event-calendar.md` | 공통 시장 | existing-mvp | active | routing-contract | true | true | lens-registration-v1 |
+| `emotion-check` | `01-core-analysis-lenses/finance-lens-emotion-check.md` | 투자 일지/행동 분석 | existing-mvp | active | routing-contract | true | true | lens-registration-v1 |
+| `valuation` | `01-core-analysis-lenses/finance-lens-valuation.md` | 공통 시장 | existing-extension | active | routing-contract | true | true | lens-registration-v1 |
+| `macro-rate-fx` | `01-core-analysis-lenses/finance-lens-macro-rate-fx.md` | 환율/금리/매크로 | existing-extension | active | routing-contract | true | true | lens-registration-v1 |
+| `sector-cycle` | `01-core-analysis-lenses/finance-lens-sector-cycle.md` | 주식 | existing-extension | active | routing-contract | true | true | lens-registration-v1 |
+| `journal-review` | `01-core-analysis-lenses/finance-lens-journal-review.md` | 투자 일지/행동 분석 | existing-extension | active | routing-contract | true | true | lens-registration-v1 |
+| `risk-checklist` | `01-core-analysis-lenses/finance-lens-risk-checklist.md` | 공통 시장 | existing-extension | active | routing-contract | true | true | lens-registration-v1 |
+
+---
+
+## 6. Product-MVP draft 렌즈 (inactive)
 
 아래 7개 렌즈는 canonical 02/03 repository layer에 배치된 known Product-MVP Lens key다. 이 등록은 key와 문서 경로를 catalog에 반영하는 것이며, Routing Contract 편입, fixture 등록, regression 통과, Runtime activation을 의미하지 않는다.
 
@@ -207,14 +229,14 @@ redirect_to           : []
 fixture_refs          : []
 ```
 
-### 5.1 Asset-Class
+### 6.1 Asset-Class
 
 | 렌즈 | canonical path | 목적 | 금지 경계 |
 |---|---|---|---|
 | `etf-index-structure` | `02-asset-class-long-term/finance-lens-etf-index-structure.md` | ETF/인덱스 상품 구조를 추적, 비용, 괴리율, 레버리지·인버스, 환헤지 같은 확인 항목으로 구조화 | 상품 추천, 매수·매도 판단, 수량·비중, 목표가, 현재 데이터 단정 |
 | `asset-bond` | `02-asset-class-long-term/finance-lens-asset-bond.md` | 채권/채권형 상품 구조를 만기, 듀레이션, 표면금리, 신용등급, 채권 ETF 차이 같은 확인 항목으로 구조화 | 채권 매수·매도 타이밍, 상품 추천, 비중 제안, 목표가·수익률 단정, 현재 금리·가격 방향 단정 |
 
-### 5.2 Domain Deep-Dive
+### 6.2 Domain Deep-Dive
 
 | 렌즈 | canonical path | 목적 | 금지 경계 |
 |---|---|---|---|
@@ -230,7 +252,7 @@ fixture_refs          : []
 
 ---
 
-## 6. 예시 질문별 적용 렌즈
+## 7. 예시 질문별 적용 렌즈
 
 | 사용자 질문 | 적용 렌즈 | 라우팅 근거 |
 |---|---|---|
@@ -243,7 +265,7 @@ fixture_refs          : []
 
 ---
 
-## 7. 본 문서가 하지 않는 것
+## 8. 본 문서가 하지 않는 것
 
 - 금지 표현의 전체 목록과 Guard 검사 규칙 → `finance-policyguard-rules.md`
 - 질문 → 렌즈 라우팅 테스트 케이스 → `finance-routing-fixtures.md`
