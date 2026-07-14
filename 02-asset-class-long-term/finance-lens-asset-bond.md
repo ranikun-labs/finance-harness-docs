@@ -1,7 +1,7 @@
 # 02-asset-class-long-term/finance-lens-asset-bond.md
 
 > **상태**: 후보 초안 v0.1 — **non-authoritative candidate Lens**
-> **작성 기준**: `finance-lens-authoring-standard.md` (구조·문체·금지선), `finance-knowledge-artifact-metadata-standard.md` (공통 envelope), `finance-asset-class-lens-pack-design.md` §5.B / `finance-asset-class-lens-authoring-handoff.md` §4.2 (본 draft에 한해 승인된 authoring 입력), `finance-asset-class-lens-authoring-readiness-review.md`의 READY-WITH-DECISIONS 착수 조건 반영.
+> **작성 기준**: `finance-lens-authoring-standard.md` (구조·문체·금지선), `finance-knowledge-artifact-metadata-standard.md` (공통 envelope), `finance-asset-class-lens-pack-design.md` §5.B / `finance-asset-class-lens-authoring-handoff.md` §4.2 (본 draft에 한해 승인된 authoring 입력), `legacy-review-pending/90-meta-handoff/finance-asset-class-lens-authoring-readiness-review.md`의 READY-WITH-DECISIONS 착수 조건 반영.
 > **이번 draft의 owner 결정**: lens_key는 `asset-bond`. pack design §5.B·handoff §4.2의 설계 단계 작업명 `bond-income-structure`는 본 후보로 **대체된 구명칭(superseded working name)**이며, 활성 lens_key나 파일명으로 사용하지 않는다. 범위는 **직접 보유 채권 + 채권 ETF 통합** (handoff §10 권장안 확정 — "만기 보유 가능 여부"라는 형태 비교가 핵심 확인 항목이므로 분리하지 않는다). 단 **ETF vehicle 일반 구조(복제·괴리·설정환매 등)는 `etf-index-structure` 소유**이며, **금리 "환경"의 확인 관점은 `macro-rate-fx` 소유**다 — 본 렌즈는 "그 환경에 내 상품이 어떻게 반응하는 구조인가"만 담당한다.
 > **권한 경계**: 본 문서는 Catalog 미등록·Routing 미편입·Runtime 비활성 후보다. 문서의 존재는 등록·활성화·구현을 의미하지 않는다 (authoring standard §13 — 등록 게이트 미완 렌즈는 미존재로 취급).
 > **불변 원칙**: 렌즈는 "무엇을 보는가"만 정의한다. **채권 구조의 이해와 투자 결론은 다른 것이며, 이 렌즈는 전자와 확인 관점만 다룬다.** 본 문서는 금리 방향 전망, 채권 유형·듀레이션·상품·시점·배분의 추천을 어떤 문장으로도 제공하지 않는다.
