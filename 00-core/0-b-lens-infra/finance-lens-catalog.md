@@ -192,7 +192,45 @@ FOMO이니 사지 마세요 (행동 지시)
 
 ---
 
-## 5. 예시 질문별 적용 렌즈
+## 5. Product-MVP draft 렌즈 (inactive)
+
+아래 7개 렌즈는 canonical 02/03 repository layer에 배치된 known Product-MVP Lens key다. 이 등록은 key와 문서 경로를 catalog에 반영하는 것이며, Routing Contract 편입, fixture 등록, regression 통과, Runtime activation을 의미하지 않는다.
+
+공통 상태:
+
+```text
+lifecycle_status      : draft
+implementation_status : contract-only
+runtime_loadable      : false
+routable              : false
+redirect_to           : []
+fixture_refs          : []
+```
+
+### 5.1 Asset-Class
+
+| 렌즈 | canonical path | 목적 | 금지 경계 |
+|---|---|---|---|
+| `etf-index-structure` | `02-asset-class-long-term/finance-lens-etf-index-structure.md` | ETF/인덱스 상품 구조를 추적, 비용, 괴리율, 레버리지·인버스, 환헤지 같은 확인 항목으로 구조화 | 상품 추천, 매수·매도 판단, 수량·비중, 목표가, 현재 데이터 단정 |
+| `asset-bond` | `02-asset-class-long-term/finance-lens-asset-bond.md` | 채권/채권형 상품 구조를 만기, 듀레이션, 표면금리, 신용등급, 채권 ETF 차이 같은 확인 항목으로 구조화 | 채권 매수·매도 타이밍, 상품 추천, 비중 제안, 목표가·수익률 단정, 현재 금리·가격 방향 단정 |
+
+### 5.2 Domain Deep-Dive
+
+| 렌즈 | canonical path | 목적 | 금지 경계 |
+|---|---|---|---|
+| `semiconductor-cycle` | `03-domain-deep-dive/finance-lens-semiconductor-cycle.md` | 반도체 업황, 메모리 사이클, 재고, 가동률, 감산·증설, CAPEX, 장비 주문, 리드타임을 확인 관점으로 구조화 | 사이클 위치 단정, 수혜주 추천, 매수·매도 판단, 목표가, 비중 제안 |
+| `ai-compute-value-chain` | `03-domain-deep-dive/finance-lens-ai-compute-value-chain.md` | AI 인프라 수요가 통과하는 가속기, 메모리, 파운드리, 패키징, 장비·소재, 네트워킹, 전력·냉각 구조를 확인 관점으로 구조화 | 수혜주·승자 지목, 현재 병목·수요 강도 단정, 매수·매도 판단, 목표가, 비중 제안 |
+| `equity-kr-structure` | `03-domain-deep-dive/finance-lens-equity-kr-structure.md` | 한국 시장의 투자자별 매매 공표, 잠정·확정 집계, 프로그램 매매, 지수 편출입, 공매도·대차잔고, 공시·거래 제도를 확인 관점으로 구조화 | 현재 수급·인과 단정, 제도 이벤트 기반 매매 판단, 종목 선별 |
+| `equity-us-structure` | `03-domain-deep-dive/finance-lens-equity-us-structure.md` | 미국 시장의 거래 세션, 공시·실적 보고 체계, 실적 시즌·거시 지표 캘린더, 지수 방법론, 옵션 만기, 기관 보유 보고 한계를 확인 관점으로 구조화 | 현재 시장 상태·인과 단정, 제도 이벤트 기반 매매 판단, 종목 선별 |
+| `earnings-revision` | `03-domain-deep-dive/finance-lens-earnings-revision.md` | 실적 추정치 변화·수정·리비전을 폭, 방향, 분산, 집계 방식, 갱신 여부의 확인 방법론으로 구조화 | 현재 추정치 방향·수치 단정, revision 기반 종목 선별, 매수·매도 판단, 목표가, 비중 조정 |
+
+- 이 7개 렌즈는 catalog-known 상태지만 routing-inactive다.
+- 이 7개 렌즈를 Safe/Risk routing 결과로 선택하려면 별도 Routing Contract 변경, fixture 등록, regression 검증이 필요하다.
+- 본 절은 새로운 intent, action, gate, schema field를 만들지 않는다.
+
+---
+
+## 6. 예시 질문별 적용 렌즈
 
 | 사용자 질문 | 적용 렌즈 | 라우팅 근거 |
 |---|---|---|
@@ -205,7 +243,7 @@ FOMO이니 사지 마세요 (행동 지시)
 
 ---
 
-## 6. 본 문서가 하지 않는 것
+## 7. 본 문서가 하지 않는 것
 
 - 금지 표현의 전체 목록과 Guard 검사 규칙 → `finance-policyguard-rules.md`
 - 질문 → 렌즈 라우팅 테스트 케이스 → `finance-routing-fixtures.md`
