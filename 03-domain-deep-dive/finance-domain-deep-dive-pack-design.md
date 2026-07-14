@@ -17,7 +17,7 @@ runtime state         : not Runtime-active
 
 **대조 기준 (수정하지 않음)**: `finance-lens-catalog.md`, `finance-policyguard-rules.md`, `finance-routing-contract.md`, `finance-routing-fixtures.md`, `finance-output-validator.md`, `finance-market-data-grounding.md`, `finance-knowledge-artifact-metadata-standard.md`, `finance-lens-authoring-standard.md`, `finance-analysis-lens-pack-overview.md`, `00-service-policy.md`, 기존 per-lens 문서.
 
-**계층 소유권 확인 참조 (수정하지 않음)**: `finance-asset-class-lens-pack-design.md`, `finance-asset-class-lens-authoring-readiness-review.md`, `finance-analysis-lens-pack-overview.md` — 본 문서는 이 세 문서를 **02/03 책임 중첩 방지의 확인 용도로만** 참조한다.
+**계층 소유권 확인 참조 (수정하지 않음)**: `finance-asset-class-lens-pack-design.md`, `legacy-review-pending/90-meta-handoff/finance-asset-class-lens-authoring-readiness-review.md`, `finance-analysis-lens-pack-overview.md` — 본 문서는 이 세 문서를 **02/03 책임 중첩 방지의 확인 용도로만** 참조한다.
 
 **본 문서가 하지 않는 것**:
 
