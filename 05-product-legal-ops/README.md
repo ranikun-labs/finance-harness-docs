@@ -2,8 +2,8 @@
 
 ## 1. Purpose
 
-`05-product-legal-ops` is the canonical internal Product / Legal /
-Operations baseline for Finance Harness.
+`05-product-legal-ops` is the canonical internal operational baseline for
+Product / Legal / Operations controls in Finance Harness.
 
 This layer turns reviewed candidate material into implementation and operations
 controls for a small side-project service. It is an internal operational
@@ -17,7 +17,9 @@ It is not:
 - public-launch approval
 - paid-launch approval
 
-External legal review remains unassigned and is a future launch gate.
+It is not legal advice, not legal approval, not externally reviewed, not
+public-launch approval, and not paid-launch approval. External legal review
+remains unassigned and is a future launch gate.
 
 ## 2. Document Scope
 
@@ -47,8 +49,9 @@ baseline. Canonical status permits implementation and operational controls only.
 It does not resolve whether a future public service constitutes investment
 advice, similar advisory activity, or another regulated activity.
 
-Public launch remains gated. Paid launch remains gated. Unresolved legal,
-privacy, provider, market-data, and public-copy questions remain unresolved.
+Public launch remains unresolved and gated. Paid launch remains unresolved and
+gated. Unresolved legal, privacy, provider, market-data, and public-copy
+questions remain unresolved.
 
 For the current prototype stage, the logical roles used in this layer may be
 held by the Project Owner:
