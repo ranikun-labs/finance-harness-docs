@@ -13,6 +13,7 @@ private Git repository.
 - 01-core-analysis-lenses
 - 02-asset-class-long-term
 - 03-domain-deep-dive
+- 05-product-legal-ops
 - 06-professional-standards
 
 위 canonical 경로만 현행 repository Source of Truth로 취급한다.
@@ -21,6 +22,14 @@ private Git repository.
 Lens 문서는 canonical repository placement 상태이지만, Lens Catalog 등록,
 fixture regression, Runtime activation을 완료했다는 의미가 아니다.
 해당 문서는 현재 draft / non-routable / non-runtime-loadable 상태를 유지한다.
+
+`05-product-legal-ops`는 internal operational baseline으로 canonicalized된
+Product / Legal / Operations 계층이다. 법률 자문, 법무 승인, 외부 검토
+의견, 공개 출시 승인, 유료 출시 승인이 아니며, public launch와 paid
+launch gate는 unresolved 상태를 유지한다. 이 계층은 00-core safety and
+Runtime contracts보다 우선하지 않고, service purpose, PolicyGuard,
+Output Validator, market-data grounding, Lens routing, Runtime activation,
+fixture, red-team, regression 계약을 변경하거나 대체하지 않는다.
 
 `06-professional-standards`는 human/professional review 품질 기준의
 canonical layer다. 이 계층은 PolicyGuard, Output Validator, Routing,
