@@ -5,7 +5,8 @@
 ```text
 status            : 초안 v1.0 — 0-C Runtime Contract 첫 문서
 scope             : 0-A Safety Core, 0-B Lens Infra, 1차 Core Analysis
-                    Lens 10종을 하나의 실행 파이프라인으로 연결하는
+                    Lens 10종을 하나의 실행 파이프라인으로 연결하고,
+                    Product-MVP draft Lens 7종의 inactive 경계를 명시하는
                     라우팅 계약. 질문 입력부터 안전 응답 노출까지의
                     분기 규칙만 정의한다.
 source documents  :
@@ -24,10 +25,16 @@ source documents  :
   - 01-core-analysis-lenses/finance-lens-{market-context, supply-demand, event-calendar,
     earnings, valuation, sector-cycle, macro-rate-fx, risk-checklist,
     journal-review, emotion-check}.md
+  [Product-MVP draft 렌즈 7종 — inactive]
+  - 02-asset-class-long-term/finance-lens-{etf-index-structure, asset-bond}.md
+  - 03-domain-deep-dive/finance-lens-{semiconductor-cycle,
+    ai-compute-value-chain, equity-kr-structure, equity-us-structure,
+    earnings-revision}.md
 non-goals         :
   - 백엔드/분류기 구현 코드 (본 문서는 계약만 정의)
   - 후보 fixture의 정식 등록 (후보는 후보로만 표기)
   - 렌즈 본문·intent 정의·금지 규칙의 신설/개정
+  - Product-MVP draft Lens 7종의 Runtime activation 또는 routing 편입
   - 데이터 API 연동 (Phase 1: 데이터 미연결 전제)
 ```
 
@@ -203,6 +210,33 @@ Redirect 계약의 추가 규칙:
 - 각 lens의 "금지 우회 경로"는 해당 lens 문서 §9의 요지이며, §9의 Output Validator가 최종 차단선이다.
 - redirect role의 "지정 대상" 렌즈(valuation, sector-cycle, risk-checklist, journal-review)는 강한 거절(REFUSE_AND_REDIRECT) 경로의 대표 렌즈로, 대체물 제공 검사가 최우선 validator focus다.
 
+### 7.1 Product-MVP draft Lens inactive boundary
+
+아래 7개 Lens key는 `finance-lens-catalog.md`에 known Product-MVP draft key로 등록되어 있고 canonical 02/03 경로에 문서가 존재한다. 그러나 현재 metadata가 `runtime_loadable=false`, `routable=false`, `redirect_to=[]`, `fixture_refs=[]`이므로 본 계약의 §5 Safe routing, §6 Risk redirect, §7 active role 표에 포함하지 않는다.
+
+| lens_key | canonical path | current routing status |
+|---|---|---|
+| `etf-index-structure` | `02-asset-class-long-term/finance-lens-etf-index-structure.md` | inactive — not selectable by Runtime |
+| `asset-bond` | `02-asset-class-long-term/finance-lens-asset-bond.md` | inactive — not selectable by Runtime |
+| `semiconductor-cycle` | `03-domain-deep-dive/finance-lens-semiconductor-cycle.md` | inactive — not selectable by Runtime |
+| `ai-compute-value-chain` | `03-domain-deep-dive/finance-lens-ai-compute-value-chain.md` | inactive — not selectable by Runtime |
+| `equity-kr-structure` | `03-domain-deep-dive/finance-lens-equity-kr-structure.md` | inactive — not selectable by Runtime |
+| `equity-us-structure` | `03-domain-deep-dive/finance-lens-equity-us-structure.md` | inactive — not selectable by Runtime |
+| `earnings-revision` | `03-domain-deep-dive/finance-lens-earnings-revision.md` | inactive — not selectable by Runtime |
+
+Activation boundary:
+
+```text
+known key ≠ runtime_loadable
+known key ≠ routable
+known key ≠ redirect target
+known key ≠ fixture coverage
+```
+
+- 이 7개 렌즈를 Safe/Risk routing 결과로 선택하려면 별도 Routing Contract 변경, fixture 등록, 전체 regression 검증이 필요하다.
+- 본 절은 새로운 intent, action, gate, schema field를 만들지 않는다.
+- 본 절은 `redirect_to` 또는 `fixture_refs` 값을 채우지 않는다.
+
 ---
 
 ## 8. Prompt Template Selection
@@ -342,7 +376,7 @@ journal-review 렌즈와 SAFE_JOURNAL_REVIEW/RISK_ACCOUNT_BASED_ADVICE 경로의
 | validator rewrite 반복 실패 | §8 최소형 폴백 (거절 선언 + 고지) — §9.4 |
 | LLM 응답이 위험 (금지 표현/단정/우회 수용) | 노출 차단 → 재작성 → 재검사. CRITICAL은 원 응답을 어떤 형태로도 노출하지 않는다 |
 | 데이터 부족/출처 불명 | §10 grounding 처리 — 단정 불가 안내 + 확인 방법. "모르는 것"을 아는 것처럼 채우지 않는다 |
-| 렌즈 콘텐츠 부재 (미등록 lens 지목) | 해당 lens는 미존재로 취급 (overview §9.4). 가장 가까운 등록 lens로 대체하거나 UNKNOWN 처리 |
+| 렌즈 콘텐츠 부재 또는 inactive lens 지목 | catalog에 없는 lens는 미존재로 취급한다. catalog-known이지만 inactive인 Product-MVP draft lens는 Runtime 선택 대상이 아니므로 가장 가까운 active 등록 lens로 대체하거나 UNKNOWN 처리한다 |
 
 ---
 
@@ -399,7 +433,7 @@ journal-review 렌즈와 SAFE_JOURNAL_REVIEW/RISK_ACCOUNT_BASED_ADVICE 경로의
 
 - [ ] intent → action → template 매핑이 §8 표(=templates §14)와 일치한다
 - [ ] redirect lens 매핑이 §6 표(=policyguard §6)와 일치한다
-- [ ] 응답에 사용된 lens/intent 이름이 catalog·fixtures 등록 이름과 문자 단위로 일치한다 (미등록 이름 사용 = 실패)
+- [ ] 응답에 사용된 lens/intent 이름이 catalog·fixtures 등록 이름과 문자 단위로 일치한다 (미등록 이름 또는 inactive lens를 Runtime 선택 결과로 사용 = 실패)
 
 **검사 계약**
 
@@ -430,5 +464,5 @@ journal-review 렌즈와 SAFE_JOURNAL_REVIEW/RISK_ACCOUNT_BASED_ADVICE 경로의
 | validator 검사 규칙 원문 | `finance-output-validator.md` |
 | 데이터 정책 원문 | `finance-market-data-grounding.md` |
 | fixture 정의·정식 등록 | `finance-routing-fixtures.md` (후보의 확정은 별도 개정) |
-| 렌즈 콘텐츠 | `01-core-analysis-lenses/finance-lens-*.md` (본 계약은 라우팅만) |
+| 렌즈 콘텐츠 | `01-core-analysis-lenses/finance-lens-*.md`, inactive 02/03 Product-MVP draft 렌즈 문서 (본 계약은 라우팅만) |
 | 백엔드 구현 | 별도 작업 |
