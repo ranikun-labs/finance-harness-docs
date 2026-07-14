@@ -10,26 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : valuation
-category          : 공통 시장
-status            : 기존-확장
-trigger           : PER/PBR/PSR/EV·EBITDA 등 가치 지표, 밸류에이션,
-                    적정가·목표가 개념 주변의 질문.
-                    예시(안전 질문): "PER은 어떻게 봐야 해?" /
-                    "PBR이 뭐야?" /
-                    "밸류에이션 지표는 어디서 확인해?"
-forbidden intent  : RISK_TARGET_PRICE ("목표가 얼마야?", "적정가는?"),
-                    RISK_DATA_GROUNDING ("현재 PER 낮아?", "지금 가격이
-                    비싼 편이야?" — 현재 지표·가치 결론 단정 유도),
-                    RISK_BUY_SELL ("싸니까 사도 되지?")
-                    — Input Guard가 렌즈보다 먼저 처리한다.
-redirect 관계     : RISK_TARGET_PRICE(RF-04)의 지정 redirect 대상
-                    (policyguard §6). RISK_DATA_GROUNDING(DG-03, AM-03)의
-                    확인 항목 담당.
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절/안내 선언
-                    "이후에" 제공되는 확인 항목으로만 소비된다.
-관련 fixture      : RF-04, DG-03, AM-03
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : valuation
+category             : 공통 시장
+lens_tier            : existing-extension
+trigger              : PER/PBR/PSR/EV·EBITDA 등 가치 지표, 밸류에이션, 적정가·목표가 개념 주변의 질문.
+                       예시(안전 질문): "PER은 어떻게 봐야 해?" / "PBR이 뭐야?" / "밸류에이션 지표는 어디서 확인해?"
+forbidden_intents    : [RISK_TARGET_PRICE, RISK_DATA_GROUNDING, RISK_BUY_SELL]
+redirect_to          : [RISK_TARGET_PRICE, RISK_DATA_GROUNDING]
+related_lenses       : [earnings, sector-cycle, market-context]
+fixture_refs         : [RF-04, DG-03, AM-03]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---

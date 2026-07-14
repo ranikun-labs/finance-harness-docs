@@ -10,26 +10,21 @@
 ## 0. Metadata
 
 ```text
-lens key          : risk-checklist
-category          : 공통 시장
-status            : 기존-확장
-trigger           : 리스크 점검·기준 수립·기록 방법에 대한 질문.
-                    예시(안전 질문): "손절이 뭐야?" /
-                    "매수 기준은 어떻게 세워?" /
-                    "판단하기 전에 어떤 위험을 점검하고 기록해야 해?"
-forbidden intent  : RISK_STOP_LOSS ("손절가 얼마야?"),
-                    RISK_POSITION_SIZE ("몇 주 사?", "비중 얼마나?"),
-                    RISK_TARGET_PRICE, RISK_BUY_SELL,
-                    RISK_ACCOUNT_BASED_ADVICE ("내 평단 기준으로 뭐 해?")
-                    — 이 렌즈로 가장 자주 유입되는 위험 의도군.
-                    Input Guard가 렌즈보다 먼저 처리한다.
-redirect 관계     : RISK_BUY_SELL(RF-01~03), RISK_STOP_LOSS(RF-05),
-                    RISK_POSITION_SIZE(RF-06~07)의 redirect 대상
-                    (policyguard §6).
-                    redirect 경로에서 이 렌즈의 콘텐츠는 거절 선언
-                    "이후에" 제공되는 기준 기록 질문으로만 소비된다.
-관련 fixture      : SF-05, SF-06, RF-01, RF-02, RF-03, RF-05, RF-06, RF-07
-output style      : 공통 5단 구조 내 사용 (templates §3)
+lens_key             : risk-checklist
+category             : 공통 시장
+lens_tier            : existing-extension
+trigger              : 리스크 점검·기준 수립·기록 방법에 대한 질문.
+                       예시(안전 질문): "손절이 뭐야?" / "매수 기준은 어떻게 세워?" / "판단하기 전에 어떤 위험을 점검하고 기록해야 해?"
+forbidden_intents    : [RISK_STOP_LOSS, RISK_POSITION_SIZE, RISK_TARGET_PRICE, RISK_BUY_SELL, RISK_ACCOUNT_BASED_ADVICE]
+redirect_to          : [RISK_BUY_SELL, RISK_STOP_LOSS, RISK_POSITION_SIZE]
+related_lenses       : [journal-review, emotion-check, market-context]
+fixture_refs         : [SF-05, SF-06, RF-01, RF-02, RF-03, RF-05, RF-06, RF-07]
+output_style         : 공통 5단 구조 내 사용 (templates §3)
+activation_gate      : lens-registration-v1
+lifecycle_status     : active
+implementation_status: routing-contract
+runtime_loadable     : true
+routable             : true
 ```
 
 ---
