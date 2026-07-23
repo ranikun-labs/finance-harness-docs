@@ -507,22 +507,40 @@ OCR 없음
 가격/수량 선택 입력
 사용자 삭제 기능 제공
 전송구간 HTTPS
-비밀번호 해싱
+외부 사용자는 opaque identity_user_id로만 참조
+Credential/Token/Session의 Finance 저장 없음
 민감 필드 암호화 검토
 관리자 원문 접근 최소화
 LLM 전송 전 민감정보 최소화
 ```
 
-해싱/암호화 구분:
+소유권/보호 구분:
 
 | 데이터 | 처리 |
 |---|---|
-| 비밀번호 | BCrypt/Argon2 해싱 |
+| `identity_user_id` | 외부 Identity가 부여한 opaque 식별자로만 참조하며 생성 규칙·Credential 구조를 해석하지 않음 |
+| Finance Profile | Identity Account와 분리된 Finance Domain 데이터로 관리 |
 | 투자 기록 본문 | 암호화 또는 DB 접근통제 |
 | 가격/수량 | 선택 입력 + 암호화 검토 |
-| 이메일 | 접근통제/암호화 검토 |
-| 세션 토큰 | 안전 저장/만료 |
+| Account, Password, Credential, Access Token, Refresh Token, Session | Finance가 소유·저장하지 않음 |
+| 결제·구독 정보 | V1 미수집. 미래 Commerce 경계의 책임 후보 |
 | API Key | 저장하지 않음 |
+
+### Identity / Commerce 책임 경계
+
+Finance Domain은 외부 사용자를 `identity_user_id`로만 식별한다.
+Identity Account와 Finance Profile은 별개이며, Finance는 Account,
+Password, Credential, Access Token, Refresh Token, Session을 소유하지
+않는다.
+
+Finance가 소유하는 것은 Journal, Question, Checklist, Review, Watchlist와
+각 데이터의 `identity_user_id` 기반 소유권이다. 실제 외부 Identity
+의존은 V1 이후의 별도 Backend Architecture 단계로 유예한다.
+
+결제·구독은 미래 Commerce 경계의 책임 후보이며 V1에는 실제 Billing,
+Payment 또는 결제 데이터 수집을 두지 않는다. 요금제나 Entitlement의
+존재 여부와 관계없이 Finance PolicyGuard와 Output Validator는 모든
+Finance 응답 경로에 항상 적용한다.
 
 ---
 

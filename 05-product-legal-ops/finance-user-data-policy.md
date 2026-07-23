@@ -103,13 +103,14 @@ conflicting `05` wording.
 포함:
 
 ```text
-- 사용자 계정 정보                - 관심종목
-- 투자 일지                       - 사용자 입력 가격·수량
+- opaque identity_user_id          - Finance Profile
+- 관심종목                         - 투자 일지
+- 사용자 입력 가격·수량            - Checklist
 - 대화 입력 (질문 원문/AI 응답)    - Journal Review 입력
 - PolicyGuard 판정 로그           - Output Validator 로그
 - 시장 데이터 조회 기록 (Phase 1.5+) - 운영·감사 이벤트
 - 향후 이미지/OCR                 - 향후 계좌 연동
-- 향후 결제·구독 데이터
+- 미래 Commerce 경계의 결제·구독 데이터 후보 (V1 미수집)
 ```
 
 제외 (non-goals):
@@ -122,6 +123,21 @@ conflicting `05` wording.
 - 광고 목적 데이터 이용의 자동 허용 (§7·§14에서 명시 금지)
 - 구체 암호 알고리즘·인프라 구현의 확정 (§12 — 후속 보안 설계)
 ```
+
+### 2.4 Identity / Finance / Commerce 소유권 경계
+
+Finance는 외부 사용자를 opaque한 `identity_user_id`로만 참조한다.
+Finance는 Account, Password, Credential, Access Token, Refresh Token,
+Session 또는 Identity 저장 구조를 소유하지 않는다.
+
+Finance Profile은 Identity Account와 별개의 Finance Domain 데이터다.
+Finance는 Journal, Question, Checklist, Review, Watchlist와 각 데이터의
+`identity_user_id` 기반 소유권을 관리한다.
+
+결제·구독 데이터는 미래 Commerce 경계의 책임 후보다. V1은 무결제를
+유지하고 결제·구독 데이터를 수집하지 않는다. 향후 요금제 또는
+Entitlement가 도입되더라도 Finance PolicyGuard와 Output Validator는
+모든 Finance 응답에 동일하게 적용한다.
 
 ---
 
@@ -140,9 +156,13 @@ conflicting `05` wording.
 | P-07 | **로그 원문 최소화** — intent/메타데이터 중심 저장, 민감정보·계좌·가격·수량을 불필요하게 로그에 남기지 않음 | policyguard §10, validator §14 (blocked_terms는 키만, 원문 아님) |
 | P-08 | **사용자 프로파일링 금지** — 로그 목적은 디버깅·정책 개선에 한정 | policyguard §10.2 |
 | P-09 | **삭제권 제공** — 사용자 삭제 기능 제공 | 서비스 정책 §13 |
-| P-10 | **암호화 또는 접근통제 검토** — 비밀번호 해싱, 기록 본문 암호화/접근통제, 민감 필드 암호화 검토, 세션 토큰 안전 저장 | 서비스 정책 §13 |
+| P-10 | **암호화 또는 접근통제 검토** — Finance가 소유하는 기록 본문과 민감 필드에 암호화 또는 강한 접근통제를 적용한다 | 서비스 정책 §13 |
 | P-11 | **내부 raw 문서와 사용자 응답의 분리** — raw-restricted/internal-controlled 원문은 응답·로그·디버그 어떤 경로로도 사용자 측에 도달하지 않으며, Frontend에는 sanitized output만 전달 | exposure policy §3~§4, storage decision §5·§8 |
 | P-12 | **개인정보 수집·이용 시 고지** — 목적·항목·보유기간·거부권 고지 기준의 존재 (서비스 정책 §7 인용) | 서비스 정책 §7 — **구체 이행 방식은 외부 법무 검토 필요** |
+| P-13 | **외부 Identity 참조** — Finance는 Account·Credential·Token·Session을 소유하지 않고 opaque `identity_user_id`만 참조한다 | 서비스 정책 §13 |
+| P-14 | **Finance 데이터 소유** — Finance Profile은 Identity Account와 별개이며, Finance는 Journal·Question·Checklist·Review·Watchlist와 그 소유권을 관리한다 | 서비스 정책 §13 |
+| P-15 | **Commerce 유예** — 결제·구독은 미래 Commerce 경계의 책임 후보이며 V1은 무결제·결제 데이터 미수집을 유지한다 | 서비스 정책 §13 |
+| P-16 | **안전정책 불변** — 요금제·Entitlement와 무관하게 Finance PolicyGuard와 Output Validator를 항상 적용한다 | 서비스 정책 §9·§13 |
 
 주의: canonical `exposure_class`(raw-restricted / internal-controlled / public-safe)는 **내부 Knowledge Artifact의 분류**이며, 본 문서 §5의 사용자 데이터 분류와 별개 체계다. 두 체계를 혼용하지 않는다.
 
@@ -154,12 +174,12 @@ conflicting `05` wording.
 
 | 데이터 ID | 데이터 유형 | 예시 | 현재 수집 여부 | 수집 목적 | 필수/선택 | 민감도 후보 | 저장 위치 후보 | LLM 전송 여부 | 로그 허용 범위 | 삭제 대상 | 법무 검토 |
 |---|---|---|---|---|:---:|:---:|---|:---:|---|:---:|:---:|
-| D-01 | 계정 식별자 (내부 user_id) | UUID | 수집 | 계정 식별, 데이터 소유 연결 | 필수 | Internal | 주 DB | 불가 `[제안]` (익명 세션 키로 대체) | 이벤트 로그에 ID만 | 계정 삭제 시 | — |
-| D-02 | 이메일/로그인 정보 | 이메일, 비밀번호 해시 | 수집 | 인증, 계정 복구 | 필수 | Confidential | 주 DB (비밀번호는 해싱 — P-10) | 불가 | 로그 기록 금지 (마스킹) | 계정 삭제 시 | 고지 이행 방식 — 필요 |
-| D-03 | 관심종목 | 종목명/코드 목록 | 수집 | Watchlist 기능 제공 | 선택 | Confidential `[제안]` (투자 관심 프로파일 — `finance-legal-risk-review-notes.md` §7) | 주 DB | 질문 맥락에 한해 해당 종목만 (§8) | 종목명의 일반 로그 기록 금지 `[제안]` | 개별/계정 삭제 시 | 목적 확대 시 — 필요 |
-| D-04 | 투자 일지 텍스트 | 판단 이유, 감정 태그, 배운 점 | 수집 | 기록 저장, 복기 | 선택 | Restricted | 주 DB (암호화 또는 접근통제 — P-10) | Review 요청 시 필요 범위만 (§8) | 본문 로그 기록 금지, 이벤트 메타만 | 개별/계정 삭제 시 | 보유기간 — 필요 |
-| D-05 | 사용자 입력 가격 | "178,000원" | 수집 | 기록의 선택 필드 | 선택 (P-02) | Restricted | 주 DB (암호화 검토 — P-10) | Review 필요 시 "입력값" 라벨로만 (grounding §8) | 일반 로그 복제 금지 (P-07) | 개별/계정 삭제 시 | 필요 |
-| D-06 | 사용자 입력 수량 | "N주" | 수집 | 기록의 선택 필드 | 선택 (P-02) | Restricted | 주 DB (동상) | 동상 | 동상 | 개별/계정 삭제 시 | 필요 |
+| D-01 | 외부 Identity 참조 | opaque `identity_user_id` | 수집 | Finance 데이터 소유 연결 | 필수 | Internal | Finance 주 DB의 소유권 필드 | 불가 `[제안]` (요청 범위의 비식별 correlation key로 대체) | 원문 로그 기본 금지 | Identity Account 삭제 시 Finance 데이터 삭제 범위에 포함 | — |
+| D-02 | Finance Profile | Finance 전용 표시·설정 값 | Profile 기능 사용 시 수집 | Finance 제품 설정·표시 | 선택 | Confidential | Finance 주 DB | 필요 필드만 (§8) | 원문 기록 금지 (마스킹) | 개별/Identity Account 삭제 시 | 고지 이행 방식 — 필요 |
+| D-03 | 관심종목 | 종목명/코드 목록 | 수집 | Watchlist 기능 제공 | 선택 | Confidential `[제안]` (투자 관심 프로파일 — `finance-legal-risk-review-notes.md` §7) | 주 DB | 질문 맥락에 한해 해당 종목만 (§8) | 종목명의 일반 로그 기록 금지 `[제안]` | 개별/Identity Account 삭제 시 | 목적 확대 시 — 필요 |
+| D-04 | 투자 일지 텍스트 | 판단 이유, 감정 태그, 배운 점 | 수집 | 기록 저장, 복기 | 선택 | Restricted | 주 DB (암호화 또는 접근통제 — P-10) | Review 요청 시 필요 범위만 (§8) | 본문 로그 기록 금지, 이벤트 메타만 | 개별/Identity Account 삭제 시 | 보유기간 — 필요 |
+| D-05 | 사용자 입력 가격 | "178,000원" | 수집 | 기록의 선택 필드 | 선택 (P-02) | Restricted | 주 DB (암호화 검토 — P-10) | Review 필요 시 "입력값" 라벨로만 (grounding §8) | 일반 로그 복제 금지 (P-07) | 개별/Identity Account 삭제 시 | 필요 |
+| D-06 | 사용자 입력 수량 | "N주" | 수집 | 기록의 선택 필드 | 선택 (P-02) | Restricted | 주 DB (동상) | 동상 | 동상 | 개별/Identity Account 삭제 시 | 필요 |
 | D-07 | 질문 원문 | "하이닉스 요즘 어때?" | 수집 (처리 시) | 응답 생성 | 필수 (기능상) | Confidential | 저장 여부 자체가 미결 (§10, OQ-U-02) | 필요 범위 전송 (§8) | 무제한 저장 금지 (P-07) — intent/메타 중심 | 저장 시 삭제 대상 | 필요 |
 | D-08 | AI 응답 | sanitized 응답 본문 | 수집 (처리 시) | 사용자 표시, 대화 연속성 | 필수 (기능상) | **조건부** `[제안]`: 기본 Internal. 단 Restricted 데이터(D-04~06, D-09)를 포함·재현·요약·파생한 응답(Journal Review 응답 등)은 **원천 등급(Restricted)을 상속** — §5.1 | 저장 여부 미결 (§10). Restricted 상속분은 저장 시 D-04와 동일 경계 | 해당 없음 (산출물) | validator 메타데이터 중심 (validator §14). Restricted 상속분은 응답 본문 로그 금지 | 저장 시 삭제 대상 (파생분은 원천 기록과 연동 삭제 — §10.2 원칙 3) | — |
 | D-09 | Journal Review 입력 | 복기 대상 기록 선택, 후속 발화 | 수집 (처리 시) | 복기 질문 생성 | 선택 | Restricted (D-04 파생) | D-04와 동일 경계 | 필요 범위만 (§8) | 이벤트 메타만 | D-04와 연동 삭제 | 필요 |
@@ -167,12 +187,12 @@ conflicting `05` wording.
 | D-11 | guard action | pass/block/rewrite/fallback | 수집 (로그) | 동상 | 시스템 생성 | Internal | 동상 | 해당 없음 | 저장 가능 (동상) | 동상 | — |
 | D-12 | validator violation category | 카테고리 키, severity | 수집 (로그) | 안전 검증, regression | 시스템 생성 | Internal | 동상 | 해당 없음 | 카테고리 키 중심 — 원문 금지 (validator §14) | 동상 | — |
 | D-13 | rewrite/fail 결과 | rewrite_type, fallback 여부 | 수집 (로그) | 동상 | 시스템 생성 | Internal | 동상 | 해당 없음 | 저장 가능 | 동상 | — |
-| D-14 | market data source/timestamp | 출처, 기준시각, 조회 시점 | **현재 미수집** (Phase 1.5+) | 표시 정확성 증빙 (`finance-legal-risk-review-notes.md` §9.1) | 시스템 생성 | Internal | 데이터 로그 저장소 | 해당 없음 | 수치·출처·시각 저장 가능 (개인정보 아님 — 단 user_id 결합 제한 §9) | 보존 정책 따름 | 재제공 약관 — 필요 (LR-06) |
+| D-14 | market data source/timestamp | 출처, 기준시각, 조회 시점 | **현재 미수집** (Phase 1.5+) | 표시 정확성 증빙 (`finance-legal-risk-review-notes.md` §9.1) | 시스템 생성 | Internal | 데이터 로그 저장소 | 해당 없음 | 수치·출처·시각 저장 가능 (개인정보 아님 — 단 `identity_user_id` 결합 제한 §9) | 보존 정책 따름 | 재제공 약관 — 필요 (LR-06) |
 | D-15 | 삭제 요청 이벤트 | 요청·완료 타임스탬프 | 수집 (이벤트) | 삭제권 이행 증빙 (P-09) | 시스템 생성 | Internal | 감사 이벤트 저장소 | 해당 없음 | 본문 아닌 이벤트만 | 이행 증빙 목적 보존 (§10) | 보존 기간 — 필요 |
 | D-16 | 이미지 | 증권앱 캡처 등 | **현재 미수집** (P-05) | — | — | Restricted (도입 시) | — | 불가 | — | — | 도입 시 — 필요 (LR-15) |
 | D-17 | OCR 추출 결과 | 캡처 내 텍스트 | **현재 미수집** (P-05) | — | — | Restricted (도입 시) | — | 불가 | — | — | 도입 시 — 필요 |
 | D-18 | 계좌 정보 | 계좌번호, 잔고, 보유종목 | **현재 미수집** (P-03·P-04) | — | — | Restricted (도입 시) | — | 불가 | — | — | 도입 검토 자체 — 필요 (LR-13) |
-| D-19 | 결제·구독 정보 | 플랜, 결제 이력 | **현재 미수집** (유료화 미설계) | — | — | Confidential (도입 시) | — | 불가 | — | — | 유료화 설계 시 — 필요 (LR-12) |
+| D-19 | 미래 Commerce 데이터 후보 | 플랜, 결제·구독 상태 | **현재 미수집** (V1 무결제, 유료화 미설계) | 미래 Commerce 책임 후보 | — | Confidential (도입 시 Commerce 정책 적용) | Finance 저장 위치 없음 | 불가 | — | — | 유료화 설계 시 — 필요 (LR-12) |
 
 ---
 
@@ -182,8 +202,8 @@ conflicting `05` wording.
 
 | 등급 | 포함 데이터 | 저장 허용 범위 | 접근 주체 | 로그 허용 범위 | 외부 전송 조건 | 삭제·보존 원칙 |
 |---|---|---|---|---|---|---|
-| **Internal** | 시스템 생성 메타데이터 (D-01, D-10~D-15), AI 응답(D-08)의 **기본 등급** (파생 상속 예외는 §5.1) | 내부 저장소 | Runtime + 권한 보유 내부 인력 | 메타데이터 그대로 허용 | 원칙 불가 — 장애 분석 등 명시 목적 + 승인 시만 | §10 보존 정책. 사용자 연결 데이터는 계정 삭제 시 연결 해제 또는 삭제 |
-| **Confidential** | 인증 정보(D-02), 관심종목(D-03), 질문 원문(D-07) | 주 DB — 접근통제 필수 | 사용자 본인 + Runtime + 업무상 필요 최소 인력 | 마스킹/토큰화 후에만. 원문 기록 금지 | LLM 전송은 §8 최소화 규칙 하에만. 그 외 불가 | 사용자 삭제권 대상. 보존기간 RETENTION-TO-BE-DECIDED |
+| **Internal** | opaque Identity 참조(D-01), 시스템 생성 메타데이터(D-10~D-15), AI 응답(D-08)의 **기본 등급** (파생 상속 예외는 §5.1) | 내부 저장소 | Runtime + 권한 보유 내부 인력 | 메타데이터 그대로 허용. D-01 원문 로그는 금지 | 원칙 불가 — 장애 분석 등 명시 목적 + 승인 시만 | §10 보존 정책. 사용자 연결 데이터는 Identity Account 삭제 시 연결 해제 또는 삭제 |
+| **Confidential** | Finance Profile(D-02), 관심종목(D-03), 질문 원문(D-07) | Finance 주 DB — 접근통제 필수 | 사용자 본인 + Runtime + 업무상 필요 최소 인력 | 마스킹/토큰화 후에만. 원문 기록 금지 | LLM 전송은 §8 최소화 규칙 하에만. 그 외 불가 | 사용자 삭제권 대상. 보존기간 RETENTION-TO-BE-DECIDED |
 | **Restricted** | 투자 일지(D-04), 입력 가격/수량(D-05~06), Review 입력(D-09), Restricted 파생 AI 응답(D-08 — §5.1), (도입 시) 이미지/OCR/계좌(D-16~18) | 주 DB — 암호화 또는 강한 접근통제 (P-10) | 사용자 본인 + Runtime. 내부 인력 원문 접근은 예외 승인 + 감사 로그 필수 | **원문 로그 전면 금지.** 이벤트 메타데이터만 | LLM 전송은 §8의 필요 범위·라벨링 규칙 하에만. 그 외 전면 불가 | 사용자 삭제권 최우선 대상. 파기 절차 필수. 파생분은 원천 기록과 연동 삭제 |
 
 - 등급 판정이 애매하면 **높은 등급으로 보수 분류**한다 (exposure policy §5.1의 최고 제한 우선 원칙과 동일한 방향 — 체계는 별개).
@@ -225,7 +245,8 @@ conflicting `05` wording.
 
 | 구분 | 데이터 | 규칙 |
 |---|---|---|
-| 필수 수집 | D-01, D-02 | 계정 기능에 필요한 최소 항목만. 프로필 확장 필드(생년월일·직업 등) 선수집 금지 |
+| 필수 참조 | D-01 | 외부 Identity가 제공한 opaque `identity_user_id`만 사용. Account·Credential·Token·Session 수집 금지 |
+| 선택 수집 | D-02 | Finance Profile 기능에 필요한 Finance 전용 필드만. Identity Account 필드 복제 금지 |
 | 선택 수집 | D-03~D-06, D-09 | 미입력 시에도 전 기능 사용 가능해야 함 (가격/수량 미입력 기록 허용 — P-02) |
 | 처리상 수집 | D-07~D-08 | 응답 생성에 필요한 처리. **저장은 별개 결정** (§10, OQ-U-02) |
 | 시스템 생성 (파생) | D-10~D-15 | 사용자 제공 데이터가 아님. §9 로그 정책 적용 |
@@ -256,7 +277,7 @@ conflicting `05` wording.
 
 | 데이터 유형 | 서비스 제공 | 안전 검증 | 장애 대응 | 품질 개선 | 통계 | 마케팅 | 모델 학습 | 기본 정책 |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
-| 계정/인증 (D-01~02) | ✅ | ✅ | ✅ | ❌ | ⚠️ 집계 수치만 | ❌ | ❌ | 인증·소유 연결 한정 |
+| Identity 참조/Finance Profile (D-01~02) | ✅ | ✅ | ✅ | ❌ | ⚠️ 집계 수치만 | ❌ | ❌ | Finance 데이터 소유 연결·제품 설정 한정 |
 | 관심종목 (D-03) | ✅ | ✅ | ⚠️ 장애 건 한정 | ❌ | ⚠️ 익명 집계만 (OQ-U-03) | ❌ | ❌ | 서비스 제공 한정 (`finance-legal-risk-review-notes.md` OQ-03 (a)안) |
 | 투자 일지 (D-04~06, D-09) | ✅ | ✅ | ⚠️ 장애 건 한정 | ❌ (OQ-U-04) | ❌ | ❌ | ❌ | 기록·복기 한정 |
 | 대화 (D-07~08) | ✅ | ✅ | ⚠️ 장애 건 한정 | ⚠️ 원문 아닌 메타/합성 케이스만 (`finance-legal-risk-review-notes.md` OQ-02 (a)안) | ⚠️ intent 분포 등 집계만 | ❌ | ❌ | 응답 생성·안전 실행 한정 |
@@ -281,7 +302,7 @@ P-06(LLM 전송 전 민감정보 최소화)의 구현 기준이다. 특정 LLM �
 ```text
 1. 필요 범위 선택 전송 — 요청 처리에 필요한 필드만 전송한다.
    전체 컨텍스트의 관성적 전송을 금지한다.
-2. 식별자 제거 — user_id, 이메일 등 계정 식별자를 프롬프트에
+2. 식별자 제거 — `identity_user_id` 등 외부 사용자 식별자를 프롬프트에
    포함하지 않는다. 세션 상관관계가 필요하면 요청 단위 임시 키를 쓴다.
 3. 가격·수량 — Review 등 처리에 실제로 필요한 경우에만 전송하며,
    전송 시 "사용자 입력값" 라벨을 유지한다 (grounding §8).
@@ -347,7 +368,7 @@ Privacy Owner, Security Owner, and Operations Owner가 위 체크리스트의
 | 계층 | 내용 | 원문 포함 |
 |---|---|---|
 | 운영 로그 | 요청 처리, 성능, 오류 스택 | 금지 — 사용자 데이터 필드는 마스킹/제외 |
-| 보안 로그 | 인증 시도, 권한 변경, 관리자 접근 | 금지 — 식별자·이벤트만 |
+| 보안 로그 | Finance 데이터 접근 거부, 권한 변경, 관리자 접근 | 금지 — 비식별 correlation key·이벤트만 |
 | 안전 정책 로그 | D-10~D-13 (intent, action, violation category, rewrite) | 금지 — 카테고리 키·메타데이터만 (validator §14 `[canonical]`) |
 | 감사 이벤트 | 삭제 요청/완료(D-15), 관리자 원문 조회, export | 금지 — 이벤트 사실만 |
 | 품질 검증 샘플 | §9.5 참조 | 원칙 금지 — OQ-U-02 결정 전까지 |
@@ -372,13 +393,13 @@ Privacy Owner, Security Owner, and Operations Owner가 위 체크리스트의
 
 ### 9.3 프로파일링 방지 구조 `[제안]`
 
-- 안전 정책 로그(D-10~13)는 **question_id 단위**로 저장하고, user_id와의 결합 조회는 장애·민원 대응 등 명시 목적 + 승인 하에서만 허용한다.
+- 안전 정책 로그(D-10~13)는 **question_id 단위**로 저장하고, `identity_user_id`와의 결합 조회는 장애·민원 대응 등 명시 목적 + 승인 하에서만 허용한다.
 - 사용자별 intent 이력의 누적 집계(예: "이 사용자는 RISK 질문 비율이 높음")를 만들지 않는다 — PolicyGuard 차단 이력의 위험 점수화 금지(§14)와 동일 계열.
 
 ### 9.4 감사 이벤트 최소 목록 `[제안]`
 
 ```text
-- 삭제 요청 접수 / 완료          - 계정 삭제 / 복구 시도
+- 삭제 요청 접수 / 완료          - Identity Account 삭제에 따른 Finance 데이터 파기
 - 관리자의 Restricted 데이터 조회 - 데이터 export 실행
 - 전송 필드 목록(§8.2) 변경      - 로그 설정 변경
 ```
@@ -408,13 +429,13 @@ Closed-beta gate:
 
 | 데이터 | 보존 필요성 | 기본 보존 원칙 (상태) | 삭제 요청 시 범위 |
 |---|---|---|---|
-| 계정/인증 (D-01~02) | 계정 유지 기간 필요 | USER-CONTROLLED (계정 삭제 시 파기) + 법정 의무 확인 전 잔존 여부 LEGAL-REVIEW-REQUIRED | 계정 삭제 → 전체 파기 (예외는 법무 검토 결과 반영) |
-| 관심종목 (D-03) | 기능 제공 기간 | USER-CONTROLLED | 개별 삭제 즉시 반영, 계정 삭제 시 전체 |
+| Identity 참조/Finance Profile (D-01~02) | Finance 데이터 소유 연결·제품 설정 기간 필요 | USER-CONTROLLED (Identity Account 삭제 시 Finance 보유 데이터 파기) + 법정 의무 확인 전 잔존 여부 LEGAL-REVIEW-REQUIRED | Identity Account 삭제 시 Finance 소유 데이터 전체 파기 (예외는 법무 검토 결과 반영) |
+| 관심종목 (D-03) | 기능 제공 기간 | USER-CONTROLLED | 개별 삭제 즉시 반영, Identity Account 삭제 시 전체 |
 | 투자 일지 (D-04~06, D-09) | 사용자가 통제하는 기록 | USER-CONTROLLED | 개별/전체 삭제, 파생(Review 캐시 포함) 연동 삭제 |
 | 질문 원문 (D-07) | 응답 생성 처리 시에만 필요 | **SESSION-ONLY를 기본 제안** — 영속 저장은 OQ-U-02 결정 사항 | 저장 시 대화 삭제 기능과 연동 |
 | AI 응답 (D-08) | 대화 연속성 | RETENTION-TO-BE-DECIDED (D-07 결정과 연동) | 동상. Restricted 파생분(§5.1)은 원천 기록(D-04 등) 삭제 시 연동 삭제 (§10.2 원칙 3의 파생 데이터에 해당) |
 | 안전 로그 (D-10~13) | 정책 개선·regression·증빙 | RETENTION-TO-BE-DECIDED — 기간 상한을 정하되 수치 확정은 owner + 법무 검토 후 | 사용자 연결 해제 (§9.3 구조상 question_id 단위 유지 가능 — 단 결합 키 파기) |
-| 시장 데이터 기록 (D-14) | 표시 정확성 증빙 | RETENTION-TO-BE-DECIDED (개인정보 아님 — 운영 비용 기준) | 해당 없음 (user_id 미결합 원칙) |
+| 시장 데이터 기록 (D-14) | 표시 정확성 증빙 | RETENTION-TO-BE-DECIDED (개인정보 아님 — 운영 비용 기준) | 해당 없음 (`identity_user_id` 미결합 원칙) |
 | 삭제 이벤트 (D-15) | 이행 증빙 | RETENTION-TO-BE-DECIDED + LEGAL-REVIEW-REQUIRED (증빙 보존과 최소화의 균형) | 삭제 대상 아님 (본문 없는 이벤트) — 단 기간 상한 필요 |
 | 이미지/OCR/계좌/결제 (D-16~19) | — | **NOT-COLLECTED** | — |
 
@@ -447,7 +468,7 @@ Closed-beta gate:
 
 | 역할 | 접근 가능 | 접근 불가 / 조건 |
 |---|---|---|
-| 사용자 본인 | 자신의 D-02~D-09 전체 (조회·수정·삭제 — §13) | 타인 데이터, 내부 로그 원본 |
+| 사용자 본인 | 자신의 Finance Profile과 D-03~D-09 (조회·수정·삭제 — §13) | 타인 데이터, 내부 로그 원본, Identity Account·Credential·Token·Session |
 | Application Runtime | 처리에 필요한 필드 (요청 단위) | 처리 외 목적의 대량 조회. 내부 Knowledge 원문은 exposure policy 경계 내에서만 로딩 |
 | 운영 관리자 | Internal 메타데이터, 감사 이벤트 | Restricted 원문 — 예외 승인 + 감사 로그 필수 |
 | 고객지원 | 민원 처리에 필요한 최소 범위 (마스킹 뷰 기본) | 일지·가격·수량 원문 — 사용자 동의 또는 승인 절차 없이는 불가 |
@@ -465,19 +486,18 @@ Closed-beta gate:
 
 ## 12. Encryption and Security Requirements
 
-구체 알고리즘·인프라 구현은 canonical 근거가 있는 것(비밀번호 해싱 방식)만 인용하고, 나머지는 후속 보안·백엔드 설계로 남긴다.
+구체 알고리즘·인프라 구현은 후속 보안·백엔드 설계로 남긴다.
 
 | 구간 | 요구 수준 | 근거/상태 |
 |---|---|---|
 | 전송 구간 | 전 구간 HTTPS(TLS) | `[canonical]` 서비스 정책 §13 |
-| 비밀번호 | BCrypt/Argon2 해싱 | `[canonical]` 서비스 정책 §13 |
 | 저장 구간 (Restricted) | 암호화 또는 강한 접근통제 — 대상 필드: 일지 본문, 입력 가격/수량 | `[canonical]` "암호화 또는 DB 접근통제/암호화 검토" — **암호화 확정 여부는 미결(OQ-U-05), 방식은 후속 보안 설계** |
-| 저장 구간 (Confidential) | 접근통제 필수, 이메일 암호화 검토 | `[canonical]` 서비스 정책 §13 |
+| 저장 구간 (Confidential) | Finance Profile·관심종목·질문 원문에 접근통제 적용 | `[canonical]` 서비스 정책 §13 |
 | 애플리케이션 로그 | 사용자 데이터 필드 마스킹 기본값 (§9.2) | `[제안]` |
 | 백업 | 운영 저장소와 동등 이상의 접근통제 + 수명 주기 상한 (§10.2) | `[제안]` — 구현은 후속 설계 |
 | 관리자 도구 | 마스킹 뷰 기본, 원문 조회는 승인 경로만 (§11.2) | `[제안]` |
 | secret/API key | 증권사 API Key 저장 없음 `[canonical]`. 자체 서비스 시크릿은 코드·로그·repo에 평문 금지 | 서비스 정책 §13 + `[제안]` |
-| 세션 토큰 | 안전 저장·만료 | `[canonical]` 서비스 정책 §13 |
+| Identity 보안정보 | Account, Password, Credential, Access Token, Refresh Token, Session은 Finance 저장 금지 | `[canonical]` 서비스 정책 §13 |
 | 데이터 export | export 파일에도 저장 등급과 동일 통제 적용, 생성·다운로드 이벤트 기록 | `[제안]` (§13 export 결정과 연동) |
 
 ---
@@ -492,7 +512,7 @@ Closed-beta gate:
 | 기록 수정 | — (명시 없음) | 본인 기록의 수정 허용 | 제안 — 구현 결정 필요 |
 | 기록 삭제 | ✅ ("사용자 삭제 기능 제공" — §13) | 개별 + 전체 삭제, 파생 데이터 연동 삭제 (§10.2) | 원칙 확정, 범위는 제안 |
 | 관심종목 삭제 | ✅ (삭제 기능 원칙의 적용 대상) | 개별/전체 즉시 삭제 | 원칙 확정 |
-| 계정 삭제 | — (개별 명시 없음, 삭제권 원칙에서 도출) | 계정 삭제 시 §10.1 범위의 파기 | 제안 — **잔존 의무는 외부 법무 검토 필요** |
+| Identity Account 삭제 | — (개별 명시 없음, 삭제권 원칙에서 도출) | Finance가 소유한 §10.1 범위의 데이터 파기 | 제안 — **잔존 의무는 외부 법무 검토 필요** |
 | 데이터 export | — | 제공 여부 자체가 미결 (OQ-U-06). 제공 시 §12 통제 적용 | 미결 |
 | 대화 기록 저장 선택 | — | D-07/D-08 저장이 결정될 경우, 저장 여부의 사용자 선택권 검토 | OQ-U-02와 연동 |
 | 품질 개선 이용 거부 | — | §9.5가 원문 미사용이 기본이므로 현재는 거부 대상 자체가 없음. 동의 기반 샘플링 도입 시 opt-in 구조를 전제 | 조건부 — **외부 법무 검토 필요** |
@@ -539,7 +559,7 @@ license and redistribution terms are documented.
 | 실시간 시세 / market-data display | 미연동 (Phase 1 — grounding §2) | D-14 | grounding §4 표시 의무 구현 + provider-specific license and redistribution terms documented | **필요** | 권장 | **Yes** (Phase 1.5 개시 전) |
 | 계좌 연동 | 전면 금지 (P-03) | D-18 | 서비스 정책 자체의 개정 — 정체성 변경 수준 (LR-13) | **필요** (검토 착수 자체) | 필요 | **Yes** |
 | 자동매매 | 전면 금지 (서비스 정책 §2) | — | 도입 대상 아님 — gate 없음 (금지 유지) | — | — | **금지 유지** |
-| 유료 구독 | 미설계 | D-19 | 유료화 설계 + LR-12 검토 + 결제 데이터 정책 추가 | **필요** | 필요 | **Yes** |
+| 유료 구독 | 미설계 (V1 무결제) | D-19 (미래 Commerce 책임 후보) | Commerce 경계 승인 + 유료화 설계 + LR-12 검토 + 결제 데이터 정책 추가 | **필요** | 필요 | **Yes** |
 | 맞춤 알림 | 미존재 | D-03 + 알림 설정 | 알림 문구 기준 (copy-guide) + 권유성 판단 (`finance-legal-risk-review-notes.md` §5.5) | **필요** | 권장 | Yes |
 | 모델 학습용 데이터 이용 | 금지 (§7.2) | 대상 데이터별 | 동의 구조 + opt-in + 본 문서 개정 | **필요** | 필요 | **Yes** |
 | 사용자 행동 분석 | 금지 (P-08 범위) | 행동 이벤트 | 프로파일링 금지와의 경계 정의 + 익명화 기준 | **필요** | 권장 | Yes |
