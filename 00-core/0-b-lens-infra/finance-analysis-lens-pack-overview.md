@@ -2,7 +2,7 @@
 
 > **상태**: 초안 v0.1
 > **상위 문서(Safety Core)**: `00-service-policy.md`(서비스 정책 v0.1), `finance-policyguard-rules.md`, `finance-output-validator.md`, `finance-market-data-grounding.md`, `finance-routing-fixtures.md`, `finance-prompt-templates.md`
-> **인접 문서**: `finance-lens-catalog.md`(렌즈 등록부), `finance-harness-reuse-map.md`, `finance-harness-mvp-implementation-handoff-v1_2.md`
+> **인접 문서**: `finance-lens-catalog.md`(렌즈 등록부), `finance-harness-reuse-map.md`, `04-backend-architecture/finance-backend-architecture.md`(canonical Backend Architecture)
 > **범위**: Finance Analysis Lens Pack의 분류 체계, 문서화 순서, 공통 템플릿, 금지선, Safety Core 연결 방식만 정의한다. **개별 렌즈 문서의 본문은 작성하지 않는다.**
 > **불변 원칙**: **판단하지 않고, 기록하게 한다.** 어떤 렌즈도 매수/매도/보유 판단, 목표가/손절가, 수량/비중, 종목 추천, 확정적 예측을 출력하지 않는다.
 
@@ -42,7 +42,7 @@
 | `finance-prompt-templates.md` | ✅ | intent/action → 응답 구조 |
 | `finance-routing-fixtures.md` | ✅ | 32개 fixture, A안 반영 |
 | `finance-harness-reuse-map.md` | ✅ | 패턴 매핑 |
-| `finance-harness-mvp-implementation-handoff-v1_2.md` | ✅ | 구현 인계, PR 순서 |
+| `04-backend-architecture/finance-backend-architecture.md` | ✅ | Finance Domain 소유권, Identity/Commerce 경계, V1 port/adapter 계약 |
 
 ### 2.2 계층 구조
 
@@ -67,7 +67,7 @@ finance-analysis-lens-pack-overview.md← 본 문서 (분류 체계 + 작성 기
 
 ### 2.3 우선순위와 정합성 규칙
 
-- 충돌 시 우선순위는 handoff §1을 따른다: **`00-service-policy.md` > policyguard > 나머지**. Lens Pack 문서는 이 서열의 최하위이며, **상위 문서와 충돌하는 렌즈 내용은 무효**다.
+- 충돌 시 우선순위는 **`00-service-policy.md` > policyguard > 나머지**다. Lens Pack 문서는 이 서열의 최하위이며, **상위 문서와 충돌하는 렌즈 내용은 무효**다. 사용자·Commerce 경계는 canonical Backend Architecture를 따르되, 그 경계도 Safety Core를 완화할 수 없다.
 - Lens Pack은 Safety Core의 금지선을 **완화할 수 없고, 렌즈별로 더 좁게 추가하는 것만 가능**하다.
 - 렌즈 이름(key)의 source of truth는 `finance-lens-catalog.md`이며, catalog에 없는 렌즈 이름은 미존재로 취급한다.
 - catalog에 등록된 draft 렌즈라도 fixture 등록, regression 통과, Runtime eligibility 전환이 없으면 **routing-inactive** 상태다. 이 상태의 렌즈 이름을 응답 라우팅 결과로 사용하면 regression 실패다(fixtures-v2 §10).
@@ -380,11 +380,11 @@ Safe Answer + Journal/Review CTA
 6. 2차 확장 렌즈 착수 (§6 착수 조건 충족 항목부터,
     §9.4 등록 절차 준수)
         ↓
-7. handoff 문서 개정
-   (Lens Pack 문서 목록을 source of truth 표에 반영)
+7. canonical index 정합 확인
+   (README와 관련 Source of Truth 표에 Lens Pack 문서 목록 반영)
 ```
 
-- 3(문서) → 5(fixture) 순서가 뒤집히면 안 된다는 뜻이 아니라, **5를 통과하지 못한 렌즈는 라우팅에 포함하지 않는다**는 게이트가 핵심이다 (handoff §10 "fixture 없이 배포 금지"와 동일 원칙).
+- 3(문서) → 5(fixture) 순서가 뒤집히면 안 된다는 뜻이 아니라, **5를 통과하지 못한 렌즈는 라우팅에 포함하지 않는다**는 게이트가 핵심이다 (`finance-lens-authoring-standard.md` §13).
 - 데이터 표시가 필요한 자산군(환율/금리)은 렌즈 문서 작성 전에 데이터 재제공 약관·출처 검토를 별도 트랙으로 선행한다 (grounding 문서 §11 참고).
 
 ---
@@ -396,7 +396,7 @@ Safe Answer + Journal/Review CTA
 | 항목 | 상태 | 비고 |
 |---|---|---|
 | **Advisory Mode** | **future regulated product track으로만 분리 표기** | 별도 인허가·법률 검토·제품 분리가 완료된 경우에 한해 향후 검토 가능. 본 Pack 문서에는 설계 내용, 렌즈 예약, "추후 이 렌즈가 조언으로 확장된다"는 암시를 일절 두지 않는다 |
-| 매수/매도 권유 | 정책상 금지 (Phase 무관) | handoff §4: "나중에 추가"가 아니라 금지 |
+| 매수/매도 권유 | 정책상 금지 (Phase 무관) | `00-service-policy.md` §2: "나중에 추가"가 아니라 금지 |
 | 목표가/손절가/비중 제안 | 정책상 금지 (Phase 무관) | 동일 |
 | 계좌연동 | Phase 1 범위 외 | 결정 자체를 보류. 렌즈 문서가 계좌 데이터를 전제하지 않게 작성 |
 | 자동매매 | 정책상 금지 | 동일 |

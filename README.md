@@ -1,7 +1,7 @@
 # Finance Harness Documents
 
 Finance Harness의 정책, Lens, Runtime Contract,
-Knowledge Architecture 및 관련 내부 문서를 관리하는
+Knowledge Architecture, Backend Architecture 및 관련 내부 문서를 관리하는
 private Git repository.
 
 ## Canonical repository scope
@@ -13,6 +13,7 @@ private Git repository.
 - 01-core-analysis-lenses
 - 02-asset-class-long-term
 - 03-domain-deep-dive
+- 04-backend-architecture
 - 05-product-legal-ops
 - 06-professional-standards
 
@@ -22,6 +23,12 @@ private Git repository.
 Lens 문서는 canonical repository placement 상태이지만, Lens Catalog 등록,
 fixture regression, Runtime activation을 완료했다는 의미가 아니다.
 해당 문서는 현재 draft / non-routable / non-runtime-loadable 상태를 유지한다.
+
+`04-backend-architecture/finance-backend-architecture.md`는 Finance Backend의
+Domain 소유권, 외부 Identity/Commerce 논리 경계, CurrentUserPort,
+EntitlementPort, V1 local adapter 방향에 대한 canonical Source of Truth다.
+이 문서는 실제 Identity/Commerce 서버, Billing/Payment/Quota 또는 물리
+MSA 구현을 승인하지 않는다.
 
 `05-product-legal-ops`는 internal operational baseline으로 canonicalized된
 Product / Legal / Operations 계층이다. 법률 자문, 법무 승인, 외부 검토
@@ -43,6 +50,8 @@ Runtime, fixture, red-team, regression 계약을 변경하거나 대체하지 �
 
 legacy-review-pending 문서는 보존 자료이며,
 canonical repository 문서나 Runtime loading 대상으로 간주하지 않는다.
+`legacy-review-pending/90-meta-handoff`의 Backend 구현 제안도 역사적
+참고 자료일 뿐이며, canonical Backend Architecture로 사용하지 않는다.
 
 ## Source of Truth
 
