@@ -26,9 +26,19 @@ fixture regression, Runtime activation을 완료했다는 의미가 아니다.
 
 `04-backend-architecture/finance-backend-architecture.md`는 Finance Backend의
 Domain 소유권, 외부 Identity/Commerce 논리 경계, CurrentUserPort,
-EntitlementPort, V1 local adapter 방향에 대한 canonical Source of Truth다.
-이 문서는 실제 Identity/Commerce 서버, Billing/Payment/Quota 또는 물리
-MSA 구현을 승인하지 않는다.
+EntitlementPort, Finance DB 소유권, AI Runtime, Shared Platform Audit,
+V1 local adapter 방향에 대한 canonical Source of Truth다.
+
+장기 공통 목표 Deployment Unit은 Carelog CRM Server, Finance Harness
+Server, Dev Harness Cloud Server, AI Runtime Server, Shared Platform
+Server(Identity, Commerce, Audit)다. Finance Harness Server는 독립 제품
+서비스이며 Finance Domain 데이터와 제품별 AI 결과·근거의 Source of
+Truth를 계속 소유한다.
+
+이 목표 구조는 Finance V1의 실제 Shared Platform·AI Runtime 의존이나
+서버·Database·Migration·API Client 구현을 승인하지 않는다. V1은 local
+Identity/Entitlement adapter 결정을 유지하며 Billing, Payment,
+Subscription, Quota를 구현하지 않는다.
 
 `05-product-legal-ops`는 internal operational baseline으로 canonicalized된
 Product / Legal / Operations 계층이다. 법률 자문, 법무 승인, 외부 검토
