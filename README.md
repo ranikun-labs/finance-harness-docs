@@ -16,8 +16,20 @@ private Git repository.
 - 04-backend-architecture
 - 05-product-legal-ops
 - 06-professional-standards
+- service-policy
 
 위 canonical 경로만 현행 repository Source of Truth로 취급한다.
+
+`finance-harness-docs`는 Finance AI Knowledge·Safety 문서뿐 아니라 Finance
+Product Service Policy의 canonical 문서도 소유한다. 미래 Finance Backend
+Repository는 이 정책을 참조하여 Architecture, Implementation, Runtime
+Evidence만 소유하며, Product Service Policy 본문의 Source of Truth를
+복제하지 않는다.
+
+`service-policy`는 금융 하네스 웹·앱의 가입, 상품, Promotion, Trial, Usage,
+개인정보·마케팅 적용 정책을 다루는 canonical 계층이다. 기존 숫자 기반
+문서 구조(00~06)와는 별도의 최상위 책임 계층이며, 세부 경계는
+[`service-policy/README.md`](./service-policy/README.md)를 따른다.
 
 `02-asset-class-long-term`와 `03-domain-deep-dive`의 신규 Product-MVP
 Lens 문서는 canonical repository placement 상태이지만, Lens Catalog 등록,
