@@ -30,7 +30,8 @@ Migration, 또는 Implementation 완료를 의미하지 않는다.
 이 문서의 값 변경은 원칙적으로 Master Product Decision 재개를 요구하지 않는다.
 ```
 
-불변 원칙(명시적 활성화, 자동 결제 없음, 종료 후 무료 복귀 등)은
+불변 원칙(영구 무료 Plan 없음, 명시적 활성화, 자동 결제 없음, Trial 중
+Starter 기간 경과, 남은 Starter로의 조건부 복귀 등)은
 [`finance-product-policy.md`](./finance-product-policy.md)가 소유한다. 이
 문서는 그 원칙 위에서 바뀔 수 있는 숫자만 소유한다.
 
@@ -61,7 +62,34 @@ Owner: Product Owner
 Last reviewed: 미실측 (문서 생성 시점 기준 값 없음)
 ```
 
-## 3. Trial 기간
+## 3. Starter 기간
+
+```text
+Current candidate: 가입 후 30일
+Decision status: experiment candidate
+Evidence required: Starter 활성 사용자 비율, 사용자당 AI 원가, Starter → Trial 전환율
+Measurement: 가입일 대비 Starter 사용일수, 일간 Usage 소진율, 전환 시점 분포
+Adjustment trigger: 원가·악용률 또는 전환율이 목표와 현저히 다를 때
+Owner: Product Owner
+Last reviewed: 미실측
+```
+
+이 값은 §2 Welcome Promotion 신청 가능 기간과 별개의 Starter Entitlement
+후보다. 두 기간을 같은 정책으로 합치지 않는다.
+
+## 4. Starter 일간 기본 Usage
+
+```text
+Current candidate: 하루 1개 분석 주제
+Decision status: experiment candidate
+Evidence required: Starter 사용자당 원가, 일간 한도 도달률, 분석 주제당 완료율
+Measurement: 사용자별 일간 완료 분석 주제 수와 실제 AI 원가
+Adjustment trigger: 원가·사용성·악용률이 목표와 현저히 다를 때
+Owner: Product Owner
+Last reviewed: 미실측
+```
+
+## 5. Pro Trial 기간
 
 ```text
 Current candidate: 7 days
@@ -74,7 +102,19 @@ Owner: Product Owner
 Last reviewed: 미실측 (문서 생성 시점 기준 값 없음)
 ```
 
-## 4. 전체 Trial Usage Unit
+## 6. Pro Trial 활성화 기한
+
+```text
+Current candidate: 가입 후 14일 이내
+Decision status: experiment candidate
+Evidence required: 활성화 지연 분포, Trial 활성화율, Starter → Trial 전환율
+Measurement: 가입일 대비 Trial 활성화 시점과 활성화 포기율
+Adjustment trigger: 기한이 활성화 또는 전환을 과도하게 막거나 악용을 늘릴 때
+Owner: Product Owner
+Last reviewed: 미실측
+```
+
+## 7. 전체 Pro Trial Usage Unit
 
 ```text
 Current candidate: 미정
@@ -86,7 +126,7 @@ Owner: Product Owner
 Last reviewed: 미실측
 ```
 
-## 5. 일간 Usage Unit
+## 8. 일간 Usage Unit
 
 ```text
 Current candidate: 미정
@@ -98,7 +138,7 @@ Owner: Product Owner
 Last reviewed: 미실측
 ```
 
-## 6. 기능별 Usage 가중치
+## 9. 분석 유형별 Usage 가중치
 
 ```text
 Current candidate: 미정 (기능별 원가 차이만 정성적으로 확인된 상태)
@@ -110,10 +150,10 @@ Owner: Product Owner
 Last reviewed: 미실측
 ```
 
-## 7. 고비용 기능 제공 횟수
+## 10. 최상위·고비용 기능 제공 횟수
 
 ```text
-Current candidate: 미정
+Current candidate: Pro Trial 전체 기간 중 총 1~2회
 Decision status: experiment candidate
 Evidence required: 고비용 기능 사용률, Trial 대비 유료 전환 기여도
 Measurement: Trial 사용자당 고비용 기능 호출 횟수
@@ -122,7 +162,7 @@ Owner: Product Owner
 Last reviewed: 미실측
 ```
 
-## 8. Rate Limit 후보
+## 11. Rate Limit 후보
 
 ```text
 Current candidate: 미정
@@ -134,7 +174,31 @@ Owner: Product Owner
 Last reviewed: 미실측
 ```
 
-## 9. 실험 시작·종료 조건
+## 12. Usage Reset 운영값
+
+```text
+Current candidate: 미정
+Decision status: experiment candidate
+Evidence required: 일간 Usage 한도 도달 시점, 지역별 사용 분포, Support 문의
+Measurement: Reset 시각 전후의 요청·소진·이의제기 분포
+Adjustment trigger: 특정 Reset 기준이 사용성 또는 운영 부담을 과도하게 높일 때
+Owner: Product Owner
+Last reviewed: 미실측
+```
+
+## 13. Cost Guardrail 후보
+
+```text
+Current candidate: 미정
+Decision status: experiment candidate
+Evidence required: 분석 주제당 실제 AI 원가, Starter·Trial 사용자당 원가 상한
+Measurement: Plan별 평균·상위 원가와 전환율의 상관관계
+Adjustment trigger: 비용이 지속 가능한 상한을 초과하거나 기능 제한이 전환을 과도하게 막을 때
+Owner: Product Owner
+Last reviewed: 미실측
+```
+
+## 14. 실험 시작·종료 조건
 
 ```text
 Current candidate: 미정
@@ -146,17 +210,21 @@ Owner: Product Owner
 Last reviewed: 미실측
 ```
 
-## 10. 관측 지표
+## 15. 관측 지표
 
 이 문서의 값을 조정할 때 최소한 다음 지표를 함께 검토한다.
 
 ```text
 Trial 활성화율
+Starter 활성 사용자 비율
 전화번호 인증 이탈률
 사용자당 AI 원가
+분석 주제당 실제 AI 원가
+내부 모델 호출 수
 전체 Usage 소진율
 일간 한도 도달률
 고비용 기능 사용률
+Starter → Trial 전환율
 Trial 중 유료 전환율
 중복 가입 차단률
 Support·이의제기 발생률

@@ -29,8 +29,8 @@ Migration, 또는 Implementation 완료를 의미하지 않는다. 위 Metadata�
 ## 1. 문서 목적
 
 이 문서는 `service-policy` 계층의 Master Product Policy다. 가입, Welcome
-Promotion, Trial, Usage, 마케팅 정책의 불변 원칙과 무료/Trial/유료 Feature
-Matrix를 정의한다.
+Promotion, Starter, Trial, Usage, Entitlement, 마케팅 정책의 불변 원칙과
+Starter/Pro Trial/Paid Feature Matrix를 정의한다.
 
 정확한 수치(기간, Usage Unit, 가중치, 신청 가능 일수 등)는 이 문서가
 소유하지 않는다. 수치는 `finance-launch-experiment-values.md`가 소유한다.
@@ -40,6 +40,16 @@ Matrix를 정의한다.
 그 하위 문서들이 따라야 할 원칙만 고정한다.
 
 ## 2. 제품 목적
+
+### 2.1 제품 운영 방향
+
+Finance Harness는 영구 무료 사용량을 중심으로 운영되는 범용 무료 AI 서비스가
+아니다. 구조화된 Lens, Journal 및 Review를 통해 깊이 있는 분석 경험을 제공하는
+premium-oriented service다. Starter와 Pro Trial은 사용자가 이 유료 제품 가치를
+확인하도록 제공하는 제한된 Entitlement다.
+
+이 방향은 Plan별 투자 판단 정확성·안전성 또는 투자 성과의 차이를 뜻하지 않는다.
+모든 Plan은 동일한 Safety·PolicyGuard·Evidence 기준을 적용한다.
 
 금융 하네스는 다음을 위한 제품이다.
 
@@ -72,7 +82,7 @@ Market Context 이해
 ```text
 Kakao-first이지만 Kakao-only가 아니다
 OAuth Core는 Provider-neutral이다
-전화번호 없이 기본 무료 서비스를 이용할 수 있다
+전화번호 없이 가입 후 Starter 이용을 할 수 있다
 이메일·전화번호는 자동 Account 병합 기준이 아니다
 Account Linking은 인증된 Account에서 명시적으로 수행한다
 ```
@@ -94,14 +104,19 @@ Account Linking은 인증된 Account에서 명시적으로 수행한다
 세부 Eligibility 조건, 중복 검사 방식, 운영자 예외 승인 절차는 후속 문서
 `finance-welcome-promotion-policy.md`에서 관리한다.
 
-## 5. Trial 원칙
+## 5. Starter·Trial·Entitlement 원칙
 
 ```text
-사용자가 명시적으로 활성화한다
-자동 결제로 전환되지 않는다
-기간과 Usage 한도를 함께 적용한다
-종료 후 기본 무료 권한으로 복귀한다
-기존 Journal과 생성 결과를 계속 열람할 수 있다
+영구 무료 Plan은 제공하지 않는다
+신규 가입자에게 기간 제한 Starter Entitlement를 제공한다
+Starter에서도 안전하고 유의미한 기본 심층 분석을 제공한다
+Pro Trial은 사용자가 명시적으로 활성화한다
+Pro Trial은 계정당 한 번의 활성화 자격이다
+Pro Trial은 자동 결제나 자동 유료 전환으로 연결되지 않는다
+Starter 기간은 Pro Trial 중에도 계속 경과한다
+Trial 종료 후 Starter 기간이 남았을 때만 Starter로 복귀한다
+Starter까지 만료되면 미결제 사용자의 신규 AI 분석 생성을 중단한다
+Entitlement가 만료돼도 기존 Journal과 기존 분석 결과의 조회·삭제·Export는 유지한다
 ```
 
 정확한 Trial 기간은 이 문서에 고정하지 않는다. 후속 문서
@@ -112,7 +127,9 @@ Account Linking은 인증된 Account에서 명시적으로 수행한다
 ## 6. Usage 원칙
 
 ```text
-기능별 Usage Unit을 사용한다
+사용자에게 의미 있는 분석 주제와 완료된 분석 결과를 Usage 단위로 사용한다
+내부 모델 호출 횟수는 사용자 Usage가 아니다
+질문 구조화 호출과 최종 분석 호출을 각각 차감하지 않는다
 전체 한도와 일간 한도가 존재한다
 고비용 기능은 별도 가중치 또는 제한을 적용한다
 서비스 내부 실패는 원칙적으로 사용자 Usage를 차감하지 않는다
@@ -138,23 +155,19 @@ Promotion 신청과 마케팅 수신 동의를 분리한다
 [`05-product-legal-ops/finance-user-data-policy.md`](../05-product-legal-ops/finance-user-data-policy.md)를
 참조한다.
 
-## 8. 무료·Trial·유료 Feature Matrix
+## 8. Starter·Trial·유료 Feature Matrix
 
 아래는 개념 Matrix다. 정확한 횟수나 Usage Unit 수치는 포함하지 않는다.
 
-| 기능 | 기본 무료 | Trial | 유료 Plan |
-|---|---|---|---|
-| 질문 및 분석 | 기본 무료 | Trial 제공 | 유료 Plan 전용 아님 |
-| Checklist | 기본 무료 | Trial 제공 | 유료 Plan 전용 아님 |
-| Journal | 기본 무료 | Trial 제공 | 유료 Plan 전용 아님 |
-| Review | 기본 무료 | Trial 제공 | 유료 Plan 전용 아님 |
-| Market Context | 기본 무료 | Trial 제공 | 유료 Plan 전용 아님 |
-| 고급 Lens | Trial 제외 | Trial 제한 제공 | 유료 Plan 전용 |
-| 고비용 전문가급 분석 | Trial 제외 | Trial 제한 제공 | 유료 Plan 전용 |
-| 재생성 | 기본 무료(제한적) | Trial 제한 제공 | 유료 Plan 확장 |
-| 반복 분석 | 기본 무료(제한적) | Trial 제한 제공 | 유료 Plan 확장 |
-| 대량 분석 | Trial 제외 | Trial 제외 | 유료 Plan 전용 |
-| API·자동화 연동 | 현재 범위 밖 | 현재 범위 밖 | 현재 범위 밖 |
+| 기능 | Starter | Pro Trial | Paid Plan | AI 생성 Entitlement 종료 |
+|---|---|---|---|---|
+| 질문 및 분석 | 기본 심층 분석·제한된 Usage | Paid에 가까운 범위 | Plan별 확장 | 신규 생성 차단 |
+| Checklist·Journal·기존 결과 조회 | 제공 | 제공 | 제공 | 기존 데이터 접근 유지 |
+| 고급 Lens | 제한 | 제공 | Plan별 확장 | 신규 AI 처리 차단 |
+| 최상위·고비용 기능 | 제한 또는 제외 | 제한 체험 | Plan별 제공 | 신규 AI 처리 차단 |
+| 반복·후속 분석 | 제한 | 제공 | Plan별 확장 | 신규 AI 처리 차단 |
+| 편의 기능 | 제한 | Paid에 가까운 범위 | Plan별 확장 | 기존 데이터 접근 범위에서 유지 |
+| API·자동화 연동 | 현재 범위 밖 | 현재 범위 밖 | 현재 범위 밖 | 현재 범위 밖 |
 
 각 셀의 정확한 한도, 제한 방식, 제공 횟수는
 [`finance-launch-experiment-values.md`](./finance-launch-experiment-values.md)와
@@ -163,9 +176,10 @@ Promotion 신청과 마케팅 수신 동의를 분리한다
 ### 원칙
 
 ```text
-무료·Trial·유료의 차이는 투자 판단 정확성이나 안전성의 우열이 아니다.
+Starter·Pro Trial·Paid의 차이는 투자 판단 정확성이나 안전성의 우열이 아니다.
 모든 Plan은 동일한 Safety·PolicyGuard·Evidence 기준을 적용한다.
-유료화 차이는 사용량, 기능 범위, 반복, 저장 및 편의성이다.
+Plan별 차이는 사용량, 분석 깊이, 분석 범위, Lens, 반복·후속 분석 및 편의 기능이다.
+분석 깊이는 투자 성과, 정확성 또는 더 강한 투자 판단을 약속하는 광고 표현이 아니다.
 ```
 
 ## 9. 이 문서가 소유하지 않는 것
