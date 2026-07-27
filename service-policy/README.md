@@ -72,6 +72,15 @@ Backend Architecture
 - `finance-trial-and-entitlement-policy.md` — Starter·Pro Trial·Paid 상태,
   만료 후 데이터 접근, 재가입·악용 및 Paid 전환 정책 경계.
 
+### 관련 Canonical Context
+
+- [Finance Product Marketing Context](../05-product-legal-ops/finance-product-marketing-context.md) —
+  Product Policy를 대체하지 않는 포지셔닝·Retention·후보 상태 context.
+- [Finance Growth and Monetization Validation Plan](../05-product-legal-ops/finance-growth-and-monetization-validation-plan.md) —
+  Experiment 실행 완료를 뜻하지 않는 Free·Trial·수익화 후보의 검증 계획.
+
+위 문서의 수치 후보는 Product Policy가 아니라 Launch Experiment Candidate다.
+
 ### 후속 계획 문서 (이번 PR에서 생성하지 않음)
 
 다음 문서는 후속 Batch에서 작성한다. 아래 파일명은 계획일 뿐이며, 현재 이
