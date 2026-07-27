@@ -41,6 +41,14 @@ Domain 소유권, 외부 Identity/Commerce 논리 경계, CurrentUserPort,
 EntitlementPort, Finance DB 소유권, AI Runtime, Shared Platform Audit,
 V1 local adapter 방향에 대한 canonical Source of Truth다.
 
+`04-backend-architecture`의 다음 문서는 이 상위 Architecture 결정을
+V1 구현 범위·Core Loop/Domain 계약·Build/Verification 순서로 번역한다.
+코드, Runtime, Release 완료 또는 외부 플랫폼 연동 승인을 뜻하지 않는다.
+
+- [Finance MVP Implementation Scope](./04-backend-architecture/finance-mvp-implementation-scope.md)
+- [Finance Core Loop and Domain Contract](./04-backend-architecture/finance-core-loop-and-domain-contract.md)
+- [Finance MVP Build and Verification Plan](./04-backend-architecture/finance-mvp-build-and-verification-plan.md)
+
 장기 공통 목표 Deployment Unit은 Carelog CRM Server, Finance Harness
 Server, Dev Harness Cloud Server, AI Runtime Server, Shared Platform
 Server(Identity, Commerce, Audit)다. Finance Harness Server는 독립 제품
