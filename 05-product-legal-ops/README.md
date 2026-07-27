@@ -20,6 +20,8 @@ remains unassigned and is a future launch gate.
 | `finance-legal-risk-review-notes.md` | Internal legal-risk issue map, launch-gate framing, and owner-review decision surface. |
 | `finance-user-data-policy.md` | Internal user-data inventory, minimization, LLM transmission, logging, retention/deletion placeholders, and future-feature data gates. |
 | `finance-disclaimer-and-copy-guide.md` | Internal copy, disclaimer, CTA, marketing, personalization-wording, and public-copy gate baseline. |
+| `finance-product-marketing-context.md` | Canonical internal operational baseline for product positioning, target customer, healthy Retention, and decision-state context; it does not replace Product Policy. |
+| `finance-growth-and-monetization-validation-plan.md` | Canonical internal operational baseline for Free, Trial, analysis tier, pricing, and monetization validation; it does not mean an experiment has executed. |
 | `finance-ops-monitoring-guide.md` | Internal monitoring, incident triage, release checks, evidence, deletion, LLM transmission, market-data, and copy-compliance operations baseline. |
 
 ## 3. Authority Hierarchy
@@ -127,7 +129,7 @@ verified.
 
 ## 11. Provenance
 
-The four canonical documents in this layer are derived from fixed external
+The canonical documents listed above are derived from fixed external
 candidate sources. The independent English red-team review and Korean decision
 summary remain external evidence and provenance records, not canonical legal
 approval.
@@ -138,4 +140,6 @@ approval.
 - `finance-legal-risk-review-notes.md`
 - `finance-user-data-policy.md`
 - `finance-disclaimer-and-copy-guide.md`
+- `finance-product-marketing-context.md`
+- `finance-growth-and-monetization-validation-plan.md`
 - `finance-ops-monitoring-guide.md`
