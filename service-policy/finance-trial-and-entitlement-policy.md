@@ -52,7 +52,7 @@ Database Schema, Entitlement 저장 구조 또는 Runtime 구현을 확정하지
 `PRO_TRIAL_AVAILABLE`는 Starter와 함께 존재할 수 있는 활성화 자격이며, Pro
 Trial이 시작되면 `PRO_TRIAL_ACTIVE`가 분석 생성 권한에 우선한다. Paid Plan이
 활성화되면 `PAID_ACTIVE`가 우선한다. 구체적인 저장 모델이나 상태 표현은
-구현에서 정하지 않는다.
+이 문서에서 정하지 않는다.
 
 ## 3. 신규 가입과 Starter
 
@@ -79,10 +79,11 @@ Usage, 분석 깊이·범위, Lens, 반복·후속 분석 및 편의 기능이�
 - 결제수단 등록을 기본 전제로 하지 않는다.
 ```
 
-Pro Trial은 일반 Paid Plan에 가까운 경험을 제공할 수 있다. 최상위·고비용
-기능은 Trial 전체에서 제한된 횟수만 체험하도록 할 수 있으며, 정확한 횟수와
-기능 목록은 Product Policy가 아니라 Launch Experiment Value 및 Open Decision의
-범위다.
+Pro Trial은 일반 Paid Plan의 핵심 사용 경험에 가까운 범위를 제공한다. Trial
+사용자는 Starter보다 넓은 Usage, Lens, 분석 깊이, 반복·후속 분석 및 편의 기능을
+경험한다. 최상위·고비용 기능은 Trial 전체에서 제한된 횟수로 제공할 수 있으며,
+정확한 Usage 한도·횟수와 기능 목록은 Product Policy가 아니라 Launch Experiment
+Value 및 Open Decision의 범위다.
 
 ### 4.1 NOTE-01 — 전화번호·SMS 검증 Gate
 

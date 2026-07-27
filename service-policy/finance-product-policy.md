@@ -41,6 +41,16 @@ Starter/Pro Trial/Paid Feature Matrix를 정의한다.
 
 ## 2. 제품 목적
 
+### 2.1 제품 운영 방향
+
+Finance Harness는 영구 무료 사용량을 중심으로 운영되는 범용 무료 AI 서비스가
+아니다. 구조화된 Lens, Journal 및 Review를 통해 깊이 있는 분석 경험을 제공하는
+premium-oriented service다. Starter와 Pro Trial은 사용자가 이 유료 제품 가치를
+확인하도록 제공하는 제한된 Entitlement다.
+
+이 방향은 Plan별 투자 판단 정확성·안전성 또는 투자 성과의 차이를 뜻하지 않는다.
+모든 Plan은 동일한 Safety·PolicyGuard·Evidence 기준을 적용한다.
+
 금융 하네스는 다음을 위한 제품이다.
 
 ```text
