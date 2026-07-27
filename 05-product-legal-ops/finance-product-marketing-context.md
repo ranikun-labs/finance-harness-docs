@@ -142,7 +142,7 @@ Finance Harness는 투자 결정을 대신하지 않는다. 사용자가 자신�
 - 모든 Plan의 Safety·PolicyGuard·Evidence 기준은 동일하다.
 - 내부 모델 호출 수는 사용자 Usage가 아니다.
 - Trial은 명시적으로 활성화하며 자동 결제·자동 유료 전환은 없다.
-- Max 또는 Extended를 무제한 제공하지 않는다.
+- Extended를 무제한 제공하지 않는다.
 - 분석 등급과 Subscription Plan을 분리한다.
 - Deep는 사용 전 안내, Extended는 사용 전 명시적 확인을 제공한다.
 - 상품형 Export와 사용자 데이터 권리를 분리한다.

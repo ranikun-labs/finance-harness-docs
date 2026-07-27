@@ -48,7 +48,7 @@ non-goals             : Product Policy 변경, 영구 Free Lite 채택, 가격·
 - 투자 판단을 대신하지 않고 Safety·PolicyGuard·Evidence 기준을 Plan별로 차등하지 않는다.
 - 내부 모델 호출 수는 사용자 Usage가 아니다.
 - Trial은 명시적으로 활성화하며 자동 결제는 없다.
-- Max 또는 Extended를 무제한 제공하지 않는다.
+- Extended를 무제한 제공하지 않는다.
 - 분석 등급과 Subscription Plan을 분리한다.
 - Deep 사용 전 차감을 안내하고 Extended 사용 전 명시적 확인을 받는다.
 - 상품형 Export와 데이터 권리를 분리하고 Healthy Retention을 우선한다.
@@ -125,7 +125,8 @@ Extended가 증분 Paid 전환을 만드는지, 사용자가 Deep과 차이를 �
 - 초기 Subscription Plan은 최대 3개를 후보로 둔다.
 - Standard 또는 Basic Plan 필요성은 미검증이다.
 - Pro 고객에게 제한된 Extended를 제공할 수 있는지 검증한다.
-- Expert는 Extended 횟수 외에 누적 Review 가치를 제공해야 한다.
+- 미채택 Subscription Plan 후보인 Expert는 Extended 횟수만이 아니라 누적
+  Review·Report 등 검증된 추가 가치가 있어야 한다.
 
 Free / Standard / Pro / Expert 4개 Plan과 가격·정확한 Usage는 현재 확정하지 않는다.
 

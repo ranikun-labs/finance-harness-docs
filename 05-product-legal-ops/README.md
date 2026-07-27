@@ -129,7 +129,7 @@ verified.
 
 ## 11. Provenance
 
-The four canonical documents in this layer are derived from fixed external
+The canonical documents listed above are derived from fixed external
 candidate sources. The independent English red-team review and Korean decision
 summary remain external evidence and provenance records, not canonical legal
 approval.
