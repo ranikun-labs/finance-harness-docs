@@ -41,9 +41,10 @@ baseline. Canonical status permits implementation and operational controls only.
 It does not resolve whether a future public service constitutes investment
 advice, similar advisory activity, or another regulated activity.
 
-Public launch remains unresolved and gated. Paid launch remains unresolved and
-gated. Unresolved legal, privacy, provider, market-data, and public-copy
-questions remain unresolved.
+Public launch remains unresolved and gated. Starter·Trial·Paid Product
+Direction은 확정됐지만, 가격·결제·환불·약관·공개 카피의 Legal Review는
+미완료이며 Paid launch remains unresolved and gated. Unresolved legal,
+privacy, provider, market-data, and public-copy questions remain unresolved.
 
 For the current prototype stage, the logical roles used in this layer may be
 held by the Project Owner:
@@ -97,7 +98,7 @@ discipline, but it does not create or replace 06 standards.
 |---|---|---|
 | Private prototype | Allowed with conditions | Keep no public users, no payment, no market-data redistribution, session-only Q/A originals by default, and metadata-only safety logs. |
 | Closed beta | Gated by operational readiness | Persistent user data must not be enabled until an owner-approved retention, deletion, backup, and audit treatment exists. |
-| Free public launch | Blocked | Advisory-status review, public privacy/terms/disclaimer/copy review, retention/deletion/backup/audit decisions, provider-processing review, and incident notification procedure remain unresolved. |
+| Starter public launch | Blocked | Advisory-status review, public privacy/terms/disclaimer/copy review, retention/deletion/backup/audit decisions, provider-processing review, and incident notification procedure remain unresolved. |
 | Paid public launch | Blocked | Separate paid-service review is required; paid or premium copy must not imply deeper judgment, greater accuracy, improved returns, reduced losses, personalized advice, portfolio advice, premium recommendations, rankings, or signals. |
 
 ## 9. Future Feature Gates

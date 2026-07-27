@@ -134,9 +134,10 @@ Finance Profile은 Identity Account와 별개의 Finance Domain 데이터다.
 Finance는 Journal, Question, Checklist, Review, Watchlist와 각 데이터의
 `identity_user_id` 기반 소유권을 관리한다.
 
-결제·구독 데이터는 미래 Commerce 경계의 책임 후보다. V1은 무결제를
-유지하고 결제·구독 데이터를 수집하지 않는다. 향후 요금제 또는
-Entitlement가 도입되더라도 Finance PolicyGuard와 Output Validator는
+결제·구독 데이터는 미래 Commerce 경계의 책임 후보다. 현재 Finance는
+결제·구독 데이터를 수집하지 않으며, Starter·Pro Trial·Paid Entitlement의
+Product Direction은 확정돼도 결제 구현·데이터 정책은 별도 gate 대상이다.
+요금제 또는 Entitlement와 무관하게 Finance PolicyGuard와 Output Validator는
 모든 Finance 응답에 동일하게 적용한다.
 
 ---
@@ -161,7 +162,7 @@ Entitlement가 도입되더라도 Finance PolicyGuard와 Output Validator는
 | P-12 | **개인정보 수집·이용 시 고지** — 목적·항목·보유기간·거부권 고지 기준의 존재 (서비스 정책 §7 인용) | 서비스 정책 §7 — **구체 이행 방식은 외부 법무 검토 필요** |
 | P-13 | **외부 Identity 참조** — Finance는 Account·Credential·Token·Session을 소유하지 않고 opaque `identity_user_id`만 참조한다 | 서비스 정책 §13 |
 | P-14 | **Finance 데이터 소유** — Finance Profile은 Identity Account와 별개이며, Finance는 Journal·Question·Checklist·Review·Watchlist와 그 소유권을 관리한다 | 서비스 정책 §13 |
-| P-15 | **Commerce 유예** — 결제·구독은 미래 Commerce 경계의 책임 후보이며 V1은 무결제·결제 데이터 미수집을 유지한다 | 서비스 정책 §13 |
+| P-15 | **Commerce 경계 분리** — Starter·Trial·Paid Product Direction과 별개로 결제·구독 데이터는 현재 미수집이며 미래 Commerce 경계의 책임 후보다 | service-policy의 Trial·Entitlement 정책 |
 | P-16 | **안전정책 불변** — 요금제·Entitlement와 무관하게 Finance PolicyGuard와 Output Validator를 항상 적용한다 | 서비스 정책 §9·§13 |
 
 주의: canonical `exposure_class`(raw-restricted / internal-controlled / public-safe)는 **내부 Knowledge Artifact의 분류**이며, 본 문서 §5의 사용자 데이터 분류와 별개 체계다. 두 체계를 혼용하지 않는다.
@@ -192,7 +193,7 @@ Entitlement가 도입되더라도 Finance PolicyGuard와 Output Validator는
 | D-16 | 이미지 | 증권앱 캡처 등 | **현재 미수집** (P-05) | — | — | Restricted (도입 시) | — | 불가 | — | — | 도입 시 — 필요 (LR-15) |
 | D-17 | OCR 추출 결과 | 캡처 내 텍스트 | **현재 미수집** (P-05) | — | — | Restricted (도입 시) | — | 불가 | — | — | 도입 시 — 필요 |
 | D-18 | 계좌 정보 | 계좌번호, 잔고, 보유종목 | **현재 미수집** (P-03·P-04) | — | — | Restricted (도입 시) | — | 불가 | — | — | 도입 검토 자체 — 필요 (LR-13) |
-| D-19 | 미래 Commerce 데이터 후보 | 플랜, 결제·구독 상태 | **현재 미수집** (V1 무결제, 유료화 미설계) | 미래 Commerce 책임 후보 | — | Confidential (도입 시 Commerce 정책 적용) | Finance 저장 위치 없음 | 불가 | — | — | 유료화 설계 시 — 필요 (LR-12) |
+| D-19 | 미래 Commerce 데이터 후보 | 플랜, 결제·구독 상태 | **현재 미수집** (Starter·Trial·Paid 방향은 확정, 결제·구독 구현은 미설계) | 미래 Commerce 책임 후보 | — | Confidential (도입 시 Commerce 정책 적용) | Finance 저장 위치 없음 | 불가 | — | — | 유료화 설계 시 — 필요 (LR-12) |
 
 ---
 
@@ -513,7 +514,7 @@ Closed-beta gate:
 | 기록 삭제 | ✅ ("사용자 삭제 기능 제공" — §13) | 개별 + 전체 삭제, 파생 데이터 연동 삭제 (§10.2) | 원칙 확정, 범위는 제안 |
 | 관심종목 삭제 | ✅ (삭제 기능 원칙의 적용 대상) | 개별/전체 즉시 삭제 | 원칙 확정 |
 | Identity Account 삭제 | — (개별 명시 없음, 삭제권 원칙에서 도출) | Finance가 소유한 §10.1 범위의 데이터 파기 | 제안 — **잔존 의무는 외부 법무 검토 필요** |
-| 데이터 export | — | 제공 여부 자체가 미결 (OQ-U-06). 제공 시 §12 통제 적용 | 미결 |
+| 데이터 export | ✅ (Entitlement 만료 후에도 기존 Journal·분석 결과의 Export 허용) | 형식·필드·보안·감사·제공 방식은 §12 통제와 후속 검토에 따름 | 원칙 확정, 구현·법무 경계 미결 |
 | 대화 기록 저장 선택 | — | D-07/D-08 저장이 결정될 경우, 저장 여부의 사용자 선택권 검토 | OQ-U-02와 연동 |
 | 품질 개선 이용 거부 | — | §9.5가 원문 미사용이 기본이므로 현재는 거부 대상 자체가 없음. 동의 기반 샘플링 도입 시 opt-in 구조를 전제 | 조건부 — **외부 법무 검토 필요** |
 
@@ -559,7 +560,7 @@ license and redistribution terms are documented.
 | 실시간 시세 / market-data display | 미연동 (Phase 1 — grounding §2) | D-14 | grounding §4 표시 의무 구현 + provider-specific license and redistribution terms documented | **필요** | 권장 | **Yes** (Phase 1.5 개시 전) |
 | 계좌 연동 | 전면 금지 (P-03) | D-18 | 서비스 정책 자체의 개정 — 정체성 변경 수준 (LR-13) | **필요** (검토 착수 자체) | 필요 | **Yes** |
 | 자동매매 | 전면 금지 (서비스 정책 §2) | — | 도입 대상 아님 — gate 없음 (금지 유지) | — | — | **금지 유지** |
-| 유료 구독 | 미설계 (V1 무결제) | D-19 (미래 Commerce 책임 후보) | Commerce 경계 승인 + 유료화 설계 + LR-12 검토 + 결제 데이터 정책 추가 | **필요** | 필요 | **Yes** |
+| 유료 구독 | Product Direction 확정, 결제·구독 구현 미설계 | D-19 (미래 Commerce 책임 후보) | Commerce 경계 승인 + 유료화 설계 + LR-12 검토 + 결제 데이터 정책 추가 | **필요** | 필요 | **Yes** |
 | 맞춤 알림 | 미존재 | D-03 + 알림 설정 | 알림 문구 기준 (copy-guide) + 권유성 판단 (`finance-legal-risk-review-notes.md` §5.5) | **필요** | 권장 | Yes |
 | 모델 학습용 데이터 이용 | 금지 (§7.2) | 대상 데이터별 | 동의 구조 + opt-in + 본 문서 개정 | **필요** | 필요 | **Yes** |
 | 사용자 행동 분석 | 금지 (P-08 범위) | 행동 이벤트 | 프로파일링 금지와의 경계 정의 + 익명화 기준 | **필요** | 권장 | Yes |
@@ -630,7 +631,7 @@ OUT-OMG-06  지표 설계 시 프로파일링 금지(P-08, §9.3) 유지 —
 | OQ-U-03 | 관심종목 익명 집계 통계 허용 | §7.1 ⚠️, legal-risk baseline | (a) 전면 금지 (b) 익명 집계만 허용 | (b) — 단 익명화 기준 정의 선행 | Product Owner + Privacy Owner | No | **필요** (익명화 충분성) |
 | OQ-U-04 | 일지 데이터의 품질 개선 이용 | §7.1 ❌ | (a) 금지 유지 (b) 동의 기반 opt-in | (a) 유지 — Restricted 데이터는 품질 목적에서도 제외 | Product Owner + Privacy Owner | No | 필요 ((b) 시) |
 | OQ-U-05 | Restricted 저장 암호화의 확정 (접근통제만 vs 필드 암호화) | 서비스 정책 §13 "암호화 검토" — 미확정 | (a) 필드 암호화 (b) 강한 접근통제 + 저장소 암호화 | 후속 보안 설계에서 결정 — 본 문서는 "둘 중 하나 필수"만 고정 | Security Owner | Yes (구현 전) | 불필요 (기술 결정) |
-| OQ-U-06 | 데이터 export 제공 여부 | §13 — 미결 | (a) 미제공 (b) 일지·관심종목 한정 제공 | (b) 지향 — 사용자 통제 강화. 단 export 파일 보안(§12) 동시 설계 | Product Owner + Security Owner | No | 권장 (이동권 관련 — 확정 판단은 future External Legal Review) |
+| OQ-U-06 | 데이터 export의 형식·필드·보안·제공 방식 | §13 — Entitlement 만료 후 기존 Journal·분석 결과 Export 원칙 확정 | (a) 최소 범위 (b) 확장 범위 | 사용자 통제를 유지하되 export 파일 보안·감사(§12)를 동시 설계 | Product Owner + Security Owner | No | 권장 (이동권 관련 — 확정 판단은 future External Legal Review) |
 | OQ-U-07 | 삭제 이벤트(D-15)의 보존 상한 | §10.1 — 증빙 보존 vs 최소화 긴장 | (a) 단기 (b) 분쟁 대비 장기 | future External Legal Review 결과에 따름 — 검토 전 기본값은 최소 보존 (§10.2 원칙 4) | Privacy Owner + Operations Owner | No | **필요** |
 | OQ-U-08 | 고객지원의 원문 접근 절차 | §11.1 — 마스킹 뷰 기본 | (a) 사용자 동의 기반 임시 열람 (b) 내부 승인 기반 | (a) 우선 — 동의 UX 설계와 함께 | Product Owner + Privacy Owner | No | 권장 |
 
