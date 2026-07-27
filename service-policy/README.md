@@ -63,17 +63,19 @@ Backend Architecture
   Trial·Usage·마케팅 원칙과 무료/Trial/유료 Feature Matrix.
 - `finance-launch-experiment-values.md` — 변경 가능한 Launch Experiment
   수치의 단일 Source of Truth.
+- `finance-onboarding-and-identity-policy.md` — 가입·External Identity·
+  Account Linking과 Shared Identity/Finance Product 책임 경계.
+- `finance-privacy-and-marketing-gate.md` — 가입·추가 혜택의 개인정보 처리와
+  채널별 마케팅 동의 분리 Gate.
 
 ### 후속 계획 문서 (이번 PR에서 생성하지 않음)
 
 다음 문서는 이번 기반 문서 검수·Merge 이후 별도 PR에서 작성한다. 아래
 파일명은 계획일 뿐이며, 현재 이 Repository에 존재하지 않는다.
 
-- `finance-onboarding-and-identity-policy.md`
 - `finance-welcome-promotion-policy.md`
 - `finance-trial-and-entitlement-policy.md`
 - `finance-ai-usage-and-quota-policy.md`
-- `finance-privacy-and-marketing-gate.md`
 
 ## 5. 기존 계층과의 Canonical 관계
 
