@@ -60,22 +60,24 @@ Backend Architecture
 ### 현재 존재하는 문서
 
 - `finance-product-policy.md` — Master Product Policy. 가입·Promotion·
-  Trial·Usage·마케팅 원칙과 무료/Trial/유료 Feature Matrix.
+  Starter·Trial·Usage·Entitlement·마케팅 원칙과 Plan Feature Matrix.
 - `finance-launch-experiment-values.md` — 변경 가능한 Launch Experiment
   수치의 단일 Source of Truth.
 - `finance-onboarding-and-identity-policy.md` — 가입·External Identity·
   Account Linking과 Shared Identity/Finance Product 책임 경계.
 - `finance-privacy-and-marketing-gate.md` — 가입·추가 혜택의 개인정보 처리와
   채널별 마케팅 동의 분리 Gate.
+- `finance-ai-usage-and-quota-policy.md` — 사용자 기준 AI Usage, Quota,
+  실패·재시도·운영 보정 및 Cost·Abuse Validation 경계.
+- `finance-trial-and-entitlement-policy.md` — Starter·Pro Trial·Paid 상태,
+  만료 후 데이터 접근, 재가입·악용 및 Paid 전환 정책 경계.
 
 ### 후속 계획 문서 (이번 PR에서 생성하지 않음)
 
-다음 문서는 이번 기반 문서 검수·Merge 이후 별도 PR에서 작성한다. 아래
-파일명은 계획일 뿐이며, 현재 이 Repository에 존재하지 않는다.
+다음 문서는 후속 Batch에서 작성한다. 아래 파일명은 계획일 뿐이며, 현재 이
+Repository에 존재하지 않는다.
 
 - `finance-welcome-promotion-policy.md`
-- `finance-trial-and-entitlement-policy.md`
-- `finance-ai-usage-and-quota-policy.md`
 
 ## 5. 기존 계층과의 Canonical 관계
 
@@ -84,7 +86,7 @@ Backend Architecture
 | `00-core` | AI Safety·PolicyGuard·Output Validator·Runtime Contract의 불변 기준 | service-policy는 이를 링크로 참조하며 재정의하지 않는다 |
 | `01`/`02`/`03` | Finance Analysis Lens | service-policy는 비용·Trial 제공 범위 판단 시 Lens Catalog를 참조할 수 있으나 Lens를 정의하지 않는다 |
 | `05-product-legal-ops` | 데이터·법무·카피·운영 Baseline | service-policy는 개인정보 최소수집·보존·삭제 원칙과 카피 일반 제한을 05에서 참조한다 |
-| `06-professional-standards` | Evidence·Uncertainty·Quality·Human Review | 무료·Trial·유료 모든 Plan에 동일하게 적용되며, service-policy는 Plan별 권한을 06에 두지 않는다 |
+| `06-professional-standards` | Evidence·Uncertainty·Quality·Human Review | Starter·Trial·Paid 모든 Plan에 동일하게 적용되며, service-policy는 Plan별 권한을 06에 두지 않는다 |
 | `service-policy` | 가입·상품·혜택·Trial·Usage·마케팅 적용 정책 | 이 문서 |
 
 ## 6. Product Policy 전용 최소 Metadata
