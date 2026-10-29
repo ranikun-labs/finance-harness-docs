@@ -32,11 +32,11 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 1. Finance가 인증 사용자와 대상 Resource 소유권을 검증한다.
 2. 기존 Input PolicyGuard가 질문을 분류한다. **Guard보다 먼저 Lens나 Tool을 실행하지 않는다.**
 3. 현재 사용 가능한 Core Expert Lens 중 질문에 맞는 1~3개를 선택한다. Draft·비활성 Lens 7개를 자동으로 활성화하지 않는다.
-4. 명시적으로 허용된 **실제 조회 전용 Tool을 최소 하나** 호출한다. 사용자 소유 Journal 같은 Product Tool부터 시작할 수 있다.
+4. 사용자가 명시 선택한 Journal 한 건에 대해 Finance Product가 소유한 조회 전용 Tool을 호출한다. Finance는 호출 시점마다 신뢰된 Principal·Tenant·Resource 권한 출처와 선택 범위를 확인한다. Tenant/Authority 출처가 승인되지 않았거나 확인되지 않으면 호출을 차단한다. Shared AI는 Finance DB를 직접 읽지 않으며 Tool 결과 Scope가 실행 Context보다 넓으면 거부한다. 입력·출력·실패 계약은 §5.1을 따른다.
 5. 시장 최신 자료까지 MVP에 포함하려면 데이터 제공처의 사용·재제공 권한, 출처, 신선도, 기준시각을 별도 승인해야 한다. 아직 승인되지 않았다면 시장 Tool 구현을 성공으로 표시하지 않는다.
-6. 조회 결과와 출처·시간·사용자 입력·모델 해석을 분리하고, 필요한 수치·규칙 계산은 결정적 코드에서 수행한다.
+6. Journal 내용과 사용자가 입력한 수치는 ‘사용자가 기록한 내용’으로 표시하고 외부에서 검증된 시장 사실로 승격하지 않는다. Tool 결과의 source ID, 기록 시각, 수정 시각, 조회 시각 및 원본에서 확인 가능한 revision을 모델 해석과 분리한다. 필요한 수치·규칙 계산은 결정적 코드에서 수행한다.
 7. Shared AI 실행 결과를 Finance Output Validator와 Evidence 검증을 거쳐 사용자에게 제공한다.
-8. 같은 세션의 후속 질문에서 방금 사용한 가정·근거와 사용자가 선택한 Journal을 참조한다. 원문 장기 저장을 기본 허용하지 않는다.
+8. 같은 세션 후속 질문은 §5.2의 제한된 Context만 사용한다. 매 턴 Input PolicyGuard를 다시 실행하고, 선택 Journal은 현재 권한으로 재인가·재조회한다. 로그아웃·세션 만료·동의 또는 선택 철회·원본 삭제 시 해당 Context와 파생 참조·캐시를 사용 불가로 만든다. TTL·삭제 전파 정책이 승인되지 않으면 이 기능을 활성화하지 않는다.
 9. 사용자가 명시 저장하지 않은 경우 Journal·Portfolio·투자 상태는 자동 변경하지 않는다.
 
 **완료 판정:** 실제 허용 Tool 호출, 올바른 Lens 선택, 정책/권한 검사, 근거가 있는 출력, 같은 세션 후속 대화가 **동일한 실제 워크플로우**에서 검증되어야 한다.
@@ -80,8 +80,24 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 | Hook / Guardrail | 권한·안전 규칙 위반을 코드에서 막는 검사 | 입력 전, Tool 호출 전, Evidence 처리 시, 출력 노출 전 강제 실행 |
 | Reviewer | 중요한 분석 결과의 추가 독립 검증 | 충돌 자료·고위험 요청 등 필요성이 입증된 때만 호출. 상시 멀티에이전트는 MVP 필수 아님 |
 
+### 5.1 첫 Product Tool: SelectedJournalRead (제안 계약)
+
+- 입력은 사용자가 선택하고 Finance가 검증한 Journal 참조 한 건, 허용된 필드 집합, 인증된 실행 Context 참조와 요청 Deadline으로 제한한다. 모델/사용자가 전달한 Principal·Tenant·Owner ID나 자유 검색 조건으로 Resource 범위를 넓히지 않는다. 정확한 wire DTO와 endpoint는 별도 승인 Gate다.
+- Finance Adapter는 기존 owner-scoped Journal 상세 조회 경계를 통해 매 호출 시점의 Principal·Tenant·Journal 접근권과 선택 상태를 검증한다. 신뢰된 Tenant/Authority 공급원이 없으면 Fail-closed다. Shared AI는 Context 무결성, Tool capability allowlist와 결과 Scope 비확대를 검증한다. Resource ID나 과거 Context snapshot은 인가 증거가 아니다.
+- 정상 응답은 typed `SelectedJournalReadResult`로, Journal 참조, Finance 전용 `sourceClass=USER_AUTHORED_JOURNAL`, 선택된 typed 내용, 기록/수정 시각, Tool 관측 시각, 원본이 제공하는 경우에만 revision, Core Evidence 참조를 담는다. 실제 필드 allowlist는 Finance User Data Policy와 Owner 검토 후 정한다. 이 source class는 Finance 제품 확장이고 Shared AI 공용 enum을 변경하지 않는다.
+- Tool은 조회 전용이며 Journal·Portfolio·Analysis를 저장하거나 수정하지 않는다. 무인가·권한 불일치/철회·타인 Resource·Deadline 초과·Tool 실패·필수 데이터 누락은 fail-closed 처리하고, 원문이나 부분 응답은 노출하지 않는다. 존재 여부 노출을 막는 안전한 오류 범주를 사용한다.
+- Timeout 수치와 재시도 계약은 미결정이다. Owner가 별도 승인하기 전 자동 재시도는 하지 않는다. 향후 재시도가 승인되더라도 매 시도마다 현재 권한을 재검증하고 전체 Deadline을 넘기지 않는다.
+
+### 5.2 같은 세션 Context 경계 (제안 계약)
+
+- Finance Product가 세션 의미, 사용자 선택, 데이터 최소화, 동의·철회·삭제 책임을 소유한다. Shared AI는 요청 단위 Context를 운반·검증하며 Finance의 영구 대화 저장소가 되지 않는다. 세션 참조는 현재 인증 사용자와 Product/Tenant Scope에 묶이지만, 참조값만으로 접근을 허용하지 않는다.
+- 후속 Context는 승인된 최소 질문·가정·Evidence 참조로 제한한다. 원문 전체, 모든 Journal, 영구 Memory, embedding/index 저장은 기본 비활성이다. 매 턴 PolicyGuard, 선택 Resource 재인가·재조회, Output Validator를 다시 수행하며 이전 판정이나 인증 snapshot을 승계하지 않는다.
+- 로그아웃/세션 만료, 동의·선택 철회, Journal 삭제·권한 변경 시 Context와 파생 캐시·참조를 검색·실행에 사용할 수 없게 한다. 저장 위치, TTL, 크기/턴 상한, 삭제 전파, 감사 메타데이터는 Finance User Data Policy와 Owner 승인 Gate다. 값과 실행 책임이 정해지기 전 same-session follow-up은 구현 완료로 보지 않는다.
+
+
 ## 6. 근거·안전·품질 기준
 
+- Provenance는 Core Evidence envelope의 `evidence_id/kind/source_refs/producer_ref/observed_at/execution_ref/scope_ref/schema_version`를 유지하고 Finance typed extension으로 `sourceClass`(사용자 작성 Journal 또는 승인된 외부 자료), Journal 참조, 기록/수정/조회 시각, 원본에 존재하는 경우에만 revision, 사용자 입력 라벨을 분리한다. 실제 Journal에 없는 revision을 만들어내지 않는다. 사용자 Journal은 ‘사용자가 해당 내용을 기록했다’는 근거이지 현재 시장 사실이나 투자 타당성의 외부 근거가 아니다. 외부 자료에는 해당하는 게시/유효 시각, 출처·라이선스·신선도 판정을 기록한다. 모델 해석은 근거 ID를 참조하지만 Source Evidence로 승격하지 않는다.
 - 검증된 외부 사실은 출처 ID·게시 시점·적용 시각·단위를 갖는다. 사용자 입력 가격/보유 정보는 시장의 검증된 현재 사실과 구분한다.
 - 최신 시황 자료가 없으면 임의의 현재가나 컨센서스를 만들어내지 않고 **UNKNOWN / 조회 불가**를 표시한다.
 - 다른 사용자의 Journal·대화·Evidence는 검색·임베딩·캐시·Tool 등 어떤 경로로도 섞이지 않는다.
@@ -108,7 +124,7 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 1. MVP에 붙일 첫 시장 Evidence Source와 라이선스·최신성 정책
 2. 운영 Finance Tenant/Authority 발급 근거와 보호된 Tool의 실행 시점 인가
 3. 실제 HTTP wire schema·endpoint·timeout·서비스 인증
-4. 장기 대화 원문 저장·검색·정정·삭제 및 사용자 동의
+4. 같은 세션 Context의 위치·TTL·범위·철회/삭제 전파, 장기 대화 원문 저장·검색·정정·삭제 및 사용자 동의. TTL·영구 저장·삭제 동작은 이 제안으로 승인되지 않는다.
 5. Portfolio 정본·계좌연동·개인 맞춤 투자자문 확장 여부와 정책/법무 검토
 6. Draft Lens 활성화 여부 및 개별 회귀 검증
 
