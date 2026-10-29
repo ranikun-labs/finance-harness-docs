@@ -98,6 +98,8 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 ## 6. 근거·안전·품질 기준
 
 - Provenance는 Core Evidence envelope의 `evidence_id/kind/source_refs/producer_ref/observed_at/execution_ref/scope_ref/schema_version`를 유지하고 Finance typed extension으로 `sourceClass`(사용자 작성 Journal 또는 승인된 외부 자료), Journal 참조, 기록/수정/조회 시각, 원본에 존재하는 경우에만 revision, 사용자 입력 라벨을 분리한다. 실제 Journal에 없는 revision을 만들어내지 않는다. 사용자 Journal은 ‘사용자가 해당 내용을 기록했다’는 근거이지 현재 시장 사실이나 투자 타당성의 외부 근거가 아니다. 외부 자료에는 해당하는 게시/유효 시각, 출처·라이선스·신선도 판정을 기록한다. 모델 해석은 근거 ID를 참조하지만 Source Evidence로 승격하지 않는다.
+- Finance는 이 typed extension을 별도 Product 계약으로 정의·버전 관리하고 Core Evidence의 `domain_extension_ref`로 연결한다. 이 제안은 Shared AI Core Evidence envelope를 확장하거나 wire DTO를 확정하지 않는다.
+- Provider로 전송할 수 있는 정확한 Journal 필드 목록은 User Data Policy §§8.2, 8.5 검토와 Owner 승인 뒤에만 정한다. 이 제안은 Journal 원문을 외부 Provider에 전송하도록 승인하지 않는다.
 - 검증된 외부 사실은 출처 ID·게시 시점·적용 시각·단위를 갖는다. 사용자 입력 가격/보유 정보는 시장의 검증된 현재 사실과 구분한다.
 - 최신 시황 자료가 없으면 임의의 현재가나 컨센서스를 만들어내지 않고 **UNKNOWN / 조회 불가**를 표시한다.
 - 다른 사용자의 Journal·대화·Evidence는 검색·임베딩·캐시·Tool 등 어떤 경로로도 섞이지 않는다.
