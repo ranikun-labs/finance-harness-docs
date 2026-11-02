@@ -1,6 +1,6 @@
 # Finance AI Agent — 제품 비전·실행 가능한 MVP 행동 계약 (제안)
 
-> 상태: **PROPOSED / NOT_EFFECTIVE** · Owner 기획 방향 선택: 2026-10-29 · 정식 정책 승인·구현 완료·운영 출시 아님
+> 상태: **PROPOSED / NOT_EFFECTIVE** · Owner 기획 방향 선택: 2026-10-29 · MVP Q4 범위 합의: 2026-11-02 · 정식 정책 승인·구현 완료·운영 출시 아님
 >
 > 소유: Finance Product · 소비: Finance BE/FE, Shared AI · 문서 유형: 신규 행동 계약 초안 v0.1
 >
@@ -19,7 +19,7 @@ Finance Harness의 장기 목표는 단순 금융 챗봇이나 질문 체크리�
 | ① 내 투자 | “내가 기록한 반도체 투자 가정과 아직 확인하지 못한 위험은?” | **본인이 명시 선택한 Journal** 및 권한 있는 기록에 대한 조회 전용 분석. 보유 Portfolio 전체 정본 관리·계좌 자동 연동은 후속 결정 |
 | ② 시장 현황 | “반도체 업황과 금리 변화에 어떤 근거가 있어?” | 승인된 자료의 출처·기준시각을 확인해 설명. 데이터 제공처·라이선스가 없으면 현재 상황을 지어내지 않음 |
 | ③ 미래 가능성 | “금리 인하와 경기 둔화가 겹치면 어떤 시나리오가 가능할까?” | 가정·기간·인과·반론·확인할 지표를 비교. 단정적 목표가·투자 행동 지시 없음 |
-| ④ 대화 연속성 | “지난번에 말한 공급과잉 가설을 다시 검토해 줘” | 같은 세션의 허용된 대화 맥락 + 사용자 지정 기록을 사용. 영구 대화 저장·장기 기억은 별도 동의/삭제 정책 Gate |
+| ④ 대화 연속성 | “지난번에 말한 공급과잉 가설을 다시 검토해 줘” | 같은 세션의 최소 Context + 사용자가 명시적으로 “기억해줘”라고 요청한 허용 선호·판단 기준의 별도 Memory를 사용. 영구 대화 원문·자동 Memory 추출은 제외. 영구 Memory 운영 활성화는 동의·보존·삭제·백업·감사 Gate 승인 후 |
 
 이는 **목표 사용자 경험**이지, 현재 4가지 기능이 모두 Runtime에 구현됐다는 주장이 아니다.
 
@@ -37,9 +37,10 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 6. Journal 내용과 사용자가 입력한 수치는 ‘사용자가 기록한 내용’으로 표시하고 외부에서 검증된 시장 사실로 승격하지 않는다. Tool 결과의 source ID, 기록 시각, 수정 시각, 조회 시각 및 원본에서 확인 가능한 revision을 모델 해석과 분리한다. 필요한 수치·규칙 계산은 결정적 코드에서 수행한다.
 7. Shared AI 실행 결과를 Finance Output Validator와 Evidence 검증을 거쳐 사용자에게 제공한다.
 8. 같은 세션 후속 질문은 §5.2의 제한된 Context만 사용한다. 매 턴 Input PolicyGuard를 다시 실행하고, 선택 Journal은 현재 권한으로 재인가·재조회한다. 로그아웃·세션 만료·동의 또는 선택 철회·원본 삭제 시 해당 Context와 파생 참조·캐시를 사용 불가로 만든다. TTL·삭제 전파 정책이 승인되지 않으면 이 기능을 활성화하지 않는다.
-9. 사용자가 명시 저장하지 않은 경우 Journal·Portfolio·투자 상태는 자동 변경하지 않는다.
+9. **명시적 장기 Memory(새 MVP Slice):** 사용자가 “이 기준을 다음에도 기억해줘”처럼 명시적으로 요청한 허용된 선호·판단 기준에 한해, Finance가 분류·정규화·권한·중복·동의·보존 정책을 검증한 후 별도의 Product-owned Write Command로 저장한다(§5.3). 일반 진술만으로 자동 장기 저장하지 않고 LLM이 DB/Tool에 직접 쓰지 않는다. 실제 영구 쓰기 활성화는 Finance User Data Policy의 별도 Gate 승인 전 금지한다.
+10. 사용자가 명시 저장하지 않은 경우 Journal·Portfolio·투자 상태는 자동 변경하지 않는다.
 
-**완료 판정:** 실제 허용 Tool 호출, 올바른 Lens 선택, 정책/권한 검사, 근거가 있는 출력, 같은 세션 후속 대화가 **동일한 실제 워크플로우**에서 검증되어야 한다.
+**완료 판정(제품 목표):** 실제 허용 Tool 호출, 올바른 Lens 선택, 정책/권한 검사, 근거가 있는 출력, 같은 세션 후속 대화, 명시적 Memory 저장·후속 조회·삭제/철회가 **승인된 테스트 경로**에서 검증되어야 한다. **구현 시험 PASS ≠ 영구 저장 운영 승인**. 동의·보존·삭제·백업·감사 Gate가 미완료면 Production Memory 쓰기는 OFF이며 출시 가능 MVP라고 주장하지 않는다.
 
 ## 4. 목표 시스템과 책임
 
@@ -76,7 +77,7 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 | Agent Orchestrator | 어떤 확인을 어떤 순서로 할지 조정하는 실행 감독 | **단일 bounded Orchestrator**부터 시작. 무한 반복·자율 쓰기 금지 |
 | Expert Lens / Skill | 실적·수급·가치평가·위험 등 전문가 분석 관점 | 기존 Catalog 재사용. Lens 문서가 존재해도 실제 Tool이나 활성 Runtime을 뜻하지 않음 |
 | Tool | 실제 DB/공시/시장 자료 조회나 계산을 하는 코드 | 명시적 Allowlist, 인가된 Resource, 입력 검증·시간/비용 상한 |
-| Memory / Context | 이전 대화·투자 일지·선택 기억·분석 당시 자료 | 원본 투자 기록, 대화, 파생 기억, 실행 Snapshot을 분리. 영구 저장은 명시 동의/삭제 정책 선행 |
+| Memory / Context | 이번 대화의 맥락·명시 저장한 사용자 기준·원본 Journal | Conversation Context(일시), Explicit Long-term Memory(Product 소유), Journal SSOT, Execution State를 분리. AI 추론·분류 로그 자동 프로파일링 금지. 영구 저장 활성화는 데이터·보존/삭제 정책 승인 선행 |
 | Hook / Guardrail | 권한·안전 규칙 위반을 코드에서 막는 검사 | 입력 전, Tool 호출 전, Evidence 처리 시, 출력 노출 전 강제 실행 |
 | Reviewer | 중요한 분석 결과의 추가 독립 검증 | 충돌 자료·고위험 요청 등 필요성이 입증된 때만 호출. 상시 멀티에이전트는 MVP 필수 아님 |
 
@@ -91,9 +92,25 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 ### 5.2 같은 세션 Context 경계 (제안 계약)
 
 - Finance Product가 세션 의미, 사용자 선택, 데이터 최소화, 동의·철회·삭제 책임을 소유한다. Shared AI는 요청 단위 Context를 운반·검증하며 Finance의 영구 대화 저장소가 되지 않는다. 세션 참조는 현재 인증 사용자와 Product/Tenant Scope에 묶이지만, 참조값만으로 접근을 허용하지 않는다.
-- 후속 Context는 승인된 최소 질문·가정·Evidence 참조로 제한한다. 원문 전체, 모든 Journal, 영구 Memory, embedding/index 저장은 기본 비활성이다. 매 턴 PolicyGuard, 선택 Resource 재인가·재조회, Output Validator를 다시 수행하며 이전 판정이나 인증 snapshot을 승계하지 않는다.
+- 후속 Context는 승인된 최소 질문·가정·Evidence 참조로 제한한다. 원문 전체, 모든 Journal, embedding/index 저장은 기본 비활성이다. 명시적 사용자 요청의 장기 Memory는 §5.3의 **별도 Product Command** 경로로만 다룬다. 같은 세션 Context 자체를 영구 기억으로 자동 승격하지 않는다. 매 턴 PolicyGuard, 선택 Resource 재인가·재조회, Output Validator를 다시 수행하며 이전 판정이나 인증 snapshot을 승계하지 않는다.
 - 로그아웃/세션 만료, 동의·선택 철회, Journal 삭제·권한 변경 시 Context와 파생 캐시·참조를 검색·실행에 사용할 수 없게 한다. 저장 위치, TTL, 크기/턴 상한, 삭제 전파, 감사 메타데이터는 Finance User Data Policy와 Owner 승인 Gate다. 값과 실행 책임이 정해지기 전 same-session follow-up은 구현 완료로 보지 않는다.
 
+
+### 5.3 명시적 장기 Memory — MVP 추가 계약 (2026-11-02, 제안)
+
+**사용자 경험:** “나는 실적 발표 전에 컨센서스를 확인하는 편이야”는 **현재 대화에서만 자동 반영**한다. “이 기준을 다음 대화에서도 기억해줘”라는 **명시적인 저장 명령**이 들어온 경우에만 영구 저장을 시도한다. AI가 먼저 “기억할까요?”를 제안하거나 발언을 자동 추출해 저장하는 UX는 V2 후보이며 MVP 필수가 아니다.
+
+**저장 가능 범위:** 사용자가 직접 지정한 *선호·검토 기준* 중 Finance 정책이 허용한 정보만. Journal에 실제 매수·매도했다는 주장, 보유 수량·금액·계좌, 위험 Intent 누적·안전 로그 기반 사용자 성향 분석, 모델 추론/프로파일은 Memory에 원본 사실로 기록하지 않는다. 현재 User Data Policy P-08의 **프로파일링 금지**를 우회하지 않으며, 신규 저장 정보의 데이터 분류·사용 목적·허용 필드·동의/고지·보존 상태는 Product/Privacy Owner의 별도 결정 사항이다.
+
+**읽기:** Finance가 현재 인증 사용자와 Product Scope로 승인된 유효 Memory만 조회해 요청별 최소 Context로 전달한다. Memory는 **제품 정본 Journal 사실이나 매수 여부의 증거가 아니다.** 현재 원본과 충돌하면 원본 조회 결과가 우선하며, 근거가 확인되지 않으면 “확인 불가”로 답한다. 승인하지 않은 다른 사용자·제품의 Memory는 이용하지 않는다.
+
+**쓰기:** Shared AI LLM이 사용자 ID·권한·DB 쓰기 Tool을 생성하거나 정하지 않는다. Finance Application Service가 의도·정책·Actor를 검증한 **별도 명시적 저장 Command**만 처리한다. 같은 명령의 중복 전송/응답 유실은 요청 Scope에 묶인 멱등성으로 처리하되, 같은 내용을 다른 시점에 변경할 수 있으므로 무조건 내용 전체를 Dedup하지 않는다. 동시 수정·삭제 충돌 및 삭제 후 Stale Callback의 재생성 차단을 구현 계약에 명시한다.
+
+**사용자 통제:** 저장된 Memory의 본인 조회·정정·삭제가 함께 제공되어야 한다. 삭제·권한 철회 즉시 이후 읽기에 부적격하도록 차단하고, 인덱스·파생 Cache·백업 정리는 승인된 보존/복구 정책에 따라 추적한다. 실제 물리 삭제의 완료를 검증하지 않고 전체 파기 완료라고 주장하지 않는다.
+
+**Fail-closed / 운영 Gate:** 동의·허용 데이터 범위·Retention 기간·Backup·Audit·삭제 전파 및 Provider 전송 필드 계약이 승인되지 않으면 **영구 저장/재조회 Production 활성화를 차단**한다. Synthetic Test에서의 Write/Read PASS는 Production 허가가 아니다. Raw Conversation History·사용자 투자 성향 자동 프로파일링은 기본 비활성이다.
+
+**관련 기술 설계:** [Finance Agent MVP 기술 설계 초안](finance-agent-mvp-technical-design-proposal.md). 승인된 API/DB Schema/기술 Stack은 아직 없으며 해당 문서의 Port·필드는 예시 논리 계약이다.
 
 ## 6. 근거·안전·품질 기준
 
@@ -115,7 +132,7 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 
 **B. 실제 Agent MVP:** 허용된 조회 Tool 최소 하나, 기존 사용 가능한 Lens 일부, 정책·근거 기반 구조화 답변, 세션 후속 대화, 재현 테스트를 한 경로에서 동작시킨다.
 
-**C. 개인화 Research:** 사용자 선택형 Portfolio·장기 Memory, Market Provider 다중화. 제품·데이터·법무·권한·삭제 승인을 별도로 받는다.
+**C. 개인화 Research:** 사용자가 명시 저장하지 않은 선호를 AI가 추출·저장 제안하는 UX, 다양한 Memory 타입, 사용자 선택형 Portfolio, Market Provider 다중화는 후속 검토한다. **명시적 장기 Memory만 B의 MVP로 이동**하며 Data Policy/Privacy/Release Gate는 그대로 유지한다.
 
 **D. 고급 Agent:** 조건부 전문가/Reviewer, 풍부한 시나리오, 더 많은 Tool·자료원. 품질·비용 측정으로 확장 여부를 판단한다.
 
@@ -126,7 +143,7 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 1. MVP에 붙일 첫 시장 Evidence Source와 라이선스·최신성 정책
 2. 운영 Finance Tenant/Authority 발급 근거와 보호된 Tool의 실행 시점 인가
 3. 실제 HTTP wire schema·endpoint·timeout·서비스 인증
-4. 같은 세션 Context의 위치·TTL·범위·철회/삭제 전파, 장기 대화 원문 저장·검색·정정·삭제 및 사용자 동의. TTL·영구 저장·삭제 동작은 이 제안으로 승인되지 않는다.
+4. 같은 세션 Context의 위치·TTL·범위·철회/삭제 전파. 명시적 장기 Memory의 저장 허용 항목·데이터 등급·동의/고지·보존·백업·감사·정정·삭제·원본 무효화와 Feature Gate. 자동 장기 대화 원문 저장은 MVP 범위 밖이며 TTL·영구 저장·삭제 동작은 이 제안만으로 승인되지 않는다.
 5. Portfolio 정본·계좌연동·개인 맞춤 투자자문 확장 여부와 정책/법무 검토
 6. Draft Lens 활성화 여부 및 개별 회귀 검증
 
