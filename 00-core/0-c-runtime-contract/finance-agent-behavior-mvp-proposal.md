@@ -130,7 +130,7 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 
 **A. 기존 통합 완결:** RPL-127 Finance + RPL-126 Shared AI의 General Analysis 첫 Slice에서 L2/L3 통합을 진행한다. 새 장기 Agent 기능을 해당 Jira 범위에 임의 추가하지 않는다.
 
-**B. 실제 Agent MVP:** 허용된 조회 Tool 최소 하나, 기존 사용 가능한 Lens 일부, 정책·근거 기반 구조화 답변, 세션 후속 대화, 재현 테스트를 한 경로에서 동작시킨다.
+**B. 실제 Agent MVP:** 허용된 조회 Tool 최소 하나, 기존 사용 가능한 Lens 일부, 정책·근거 기반 구조화 답변, 세션 후속 대화, **사용자가 명시 요청한 장기 Memory의 저장·후속 조회·정정·삭제**를 합성 데이터의 승인된 테스트 경로에서 검증한다. 영구 저장 운영 활성화는 별도 Privacy·Retention·Backup·Audit Gate에 묶으며, 기존 RPL-126/127 Slice에 신규 Memory 구현을 임의 추가하지 않는다.
 
 **C. 개인화 Research:** 사용자가 명시 저장하지 않은 선호를 AI가 추출·저장 제안하는 UX, 다양한 Memory 타입, 사용자 선택형 Portfolio, Market Provider 다중화는 후속 검토한다. **명시적 장기 Memory만 B의 MVP로 이동**하며 Data Policy/Privacy/Release Gate는 그대로 유지한다.
 
