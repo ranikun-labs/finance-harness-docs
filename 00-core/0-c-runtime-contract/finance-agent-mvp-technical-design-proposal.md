@@ -86,6 +86,17 @@ Explicit "기억해줘" → Finance Product Command [정책/동의/인가]
 - **Stale Callback/Race:** Memory 삭제와 과거 저장 명령 완료가 경합하는 경우, 이전 요청이 삭제 이후 기억을 되살리지 못해야 한다. 버전·Tombstone·현재 상태 비교/Transaction 경계는 구현 전 결정한다.
 - Repeated DELETE, Soft/Hard 삭제, 삭제 응답/복구 시점, Backup/Retention 수치는 Owner 승인 전 임의로 확정하지 않는다.
 
+### 4.4 권한·동시성·철회 불변식 (논리 계약 후보)
+
+- **Command origin:** typed Write/Update/Delete/Withdraw Command는 명시적 현재 사용자 의도를 담은 인증 Finance 애플리케이션 요청에서만 생성될 수 있다. Actor와 Tenant는 신뢰된 Finance `CurrentUserPort`/Authority Source에서 가져온다. Prompt·LLM·Tool·검색 결과가 제시한 Actor, Tenant, Resource, 승인 또는 완성된 command payload는 신뢰하지 않는다. 모델이 반환한 내용은 검증 전까지 입력 데이터일 뿐이다.
+- **Application authorization:** Finance 애플리케이션은 대상·허용 범위·정책·필요한 사용자 확인을 검증하고, 각 쓰기 시점에 현재 Actor/Resource 권한과 동의 상태를 재확인한다. 확인·인가가 불가능하거나 상태가 바뀌면 쓰기를 거부한다. Shared AI에는 Finance 데이터 쓰기 권한을 부여하지 않는다.
+- **Expected version:** 신규 생성은 대상이 아직 유효한 Memory로 존재하지 않는다는 기대 조건을 검증한다. 수정·삭제·철회는 요청이 관찰한 논리 버전에 대한 조건부 compare-and-set를 요구한다. 버전/존재 조건 불일치는 stale command로 보고 fail-closed 처리한다. 실제 필드, DDL, 잠금 또는 저장소 알고리즘은 확정하지 않는다.
+- **Revocation generation:** 동의 철회·삭제는 관련 논리 revocation generation을 단조 증가시키고 무효화/tombstone 경계와 결속한다. generation의 scope와 물리적 원자성 방법은 Owner 결정으로 남긴다. 이전 version/generation을 가진 지연 작업·재시도·콜백은 쓰기 전에 현재 상태와 다시 대조하고, 이미 철회되었거나 삭제된 Memory를 되살리지 못하게 거부한다.
+- **Read/exposure:** 모든 조회는 현재 요청 Actor/Resource, 동의·철회·삭제 상태를 재인가한다. 결과 반환 직전에 버전과 권한·동의·revocation generation을 마지막으로 확인한다. 불일치·조회 실패는 출력 노출 없이 fail-closed다.
+- **Streaming:** Memory가 영향을 준 응답은 첫 바이트 전에 최종 검증을 완료할 수 있도록 버퍼링한다. 스트리밍 중 철회를 막거나 첫 바이트 전 검증할 수 없는 경로에서는 Memory 의존 스트리밍을 지원하지 않고 결과를 폐기한다. 이미 보낸 바이트를 회수할 수 있다는 보장은 하지 않는다.
+
+이는 요구되는 안전 결과를 정의하는 논리 불변식이다. 구체적인 API/DTO, 동의 UX, generation key, tombstone 저장, 트랜잭션 순서, retry policy, retention·backup·audit 항목은 Owner 승인 없이 확정하지 않는다.
+
 ## 5. Logical Memory Data Model — 구현 전 구체화가 필요한 초안
 
 | 논리 항목 | 의미 / 제약 |
@@ -118,6 +129,17 @@ Explicit "기억해줘" → Finance Product Command [정책/동의/인가]
 | **G6 Verification** | 합성 데이터의 실제 Product/Platform E2E, 독립 Reviewer, Release Combined Tree와 운영 점검 | 기능 출시 주장 금지 |
 
 **Policy 충돌 유의:** Finance User Data Policy P-08은 로그 기반 사용자 프로파일링을 금지한다. 본 설계의 **사용자 명시 저장 선호**가 허용 가능한 새로운 사용자 데이터 항목인지, Profile과 어떻게 구분하고 고지·관리할지는 **Product/Privacy Owner Decision**이 필요하다. 기존 P-08을 본 제안으로 완화하지 않는다.
+
+### 6.1 검증 및 출시 Gate — 순서와 현재 증거
+
+| 순서 | Gate | 요구되는 결과 | 현재 상태 |
+| --- | --- | --- | --- |
+| 1 | Docs 독립 검토 | 최신 고정 HEAD에서 M1/M2/M3/m1 정책·계약 검토 및 Finding Closure | PR #20의 문서 검수 상태는 고정 HEAD별 Review 기록에서 확인한다. Review는 검수한 SHA와 문서 범위에만 적용되며 Runtime 검증이나 Release 승인이 아니다 |
+| 2 | 합성 결정적 E2E | 합성 Context와 고정 Fake Model을 쓰는 비운영 Finance↔Shared AI 계약 검증 | General Analysis bridge에 한해 L2/L3 PASS: [Shared AI PR #40 Actions #41758867244](https://github.com/ranikun-labs/platform-services/actions/runs/41758867244), Finance source `d8fae6be7b497cf5afbe153a06bb19214d67ec35`, Shared AI source `31f68b5437bee8de889b9e704db0a35d57045ffd`. 별도 Finance/Platform JVM, 실제 HTTP; `test` profile, synthetic Context/Fake Model, local test auth disabled. Memory 기능 검증은 NOT_RUN |
+| 3 | Production Auth/Security | 운영 대상 인증·인가·Actor/Tenant/Resource 격리, 로그·권한·보안 경계의 실환경 검증 | NOT_RUN. 합성 Identity·Local fixture 결과로 대체 불가 |
+| 4 | Memory Release/Privacy | 허용 필드·분류·고지/동의·목적·Retention/만료·삭제·backup/restore·audit·Provider 전송에 대한 승인 및 릴리스 결정 | NOT_APPROVED. Production Memory Read/Write OFF |
+
+Finance PR #12 Actions #41754777853은 해당 Finance SHA의 Native test PASS를 보인다. Shared AI PR #40의 위 Actions는 이 설계의 Memory Read/Write, Production Auth, live Provider/LLM 실행 또는 외부 사용자 E2E를 검증하지 않는다. 기존 검증은 정확한 PR source 조합과 General Analysis bridge 범위에서만 재사용한다.
 
 ## 7. 검증 계약 — 최소 Golden Set (전부 아직 NOT_RUN)
 
