@@ -63,10 +63,12 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 | 수준 | 실제 의미 | 완료 상태 |
 |---|---|---|
 | L1 | 양쪽 저장소에서 동일한 논리 소비자 계약 테스트 | 기존 PASS |
-| L2 | 실제 컴파일되는 Outbound/Inbound Bridge와 교차 계약 테스트 | 미완료 |
-| L3 | 두 서비스 사이 실제 HTTP 요청/응답 | 미완료 |
+| L2 | 실제 컴파일되는 Outbound/Inbound Bridge와 교차 계약 테스트 | PASS — Finance BE `d8fae6be7b497cf5afbe153a06bb19214d67ec35` + Shared AI `31f68b5437bee8de889b9e704db0a35d57045ffd` 조합 |
+| L3 | 두 서비스 사이 실제 HTTP 요청/응답 | PASS — 별도 Finance·Shared AI JVM 사이 HTTP 요청/응답 |
 | L4 | 신뢰된 실제 사용자·Tenant/Resource 권한 E2E | 미완료 |
 | 출시 | 운영 Credential·Provider·보안·법무·배포 승인 | 별도 Gate |
+
+**증거 범위:** [Shared AI PR #40 Actions #41758867244](https://github.com/ranikun-labs/platform-services/actions/runs/41758867244)에서 Finance PR #12의 고정 소스 `d8fae6be7b497cf5afbe153a06bb19214d67ec35`를 사용해 bridge/HTTP 계약 테스트와 두 JVM 실행이 통과했다. [Finance PR #12 Actions #41754777853](https://github.com/ranikun-labs/finance-harness-be/actions/runs/41754777853)는 해당 Finance 소스의 Native 검증 증거다. 두 서비스 HTTP 실행은 `test` 프로파일의 합성 Context·Fake Model·로컬 테스트 경로를 사용했고 운영 인증은 비활성화했다. 따라서 이 PASS는 RPL-127/RPL-126의 General Analysis bridge에 한정되며, Finance Agent Memory 기능·생산자 모델 호출·운영 사용자/Tenant 권한 검증을 증명하지 않는다. PR #20의 문서 검수 상태는 고정 HEAD별 Review 기록에서 확인한다. Review는 검수한 SHA와 문서 범위에만 적용되며 Runtime 검증이나 Release 승인이 아니다.
 
 내부 Direct HTTP/JSON은 Foundation ADR-0015의 기준 방향. 실제 endpoint, wire DTO, timeout, 서비스 인증은 별도 결정이므로 임의 확정하지 않는다.
 
@@ -100,17 +102,21 @@ MVP도 **실제 Agent 실행 흐름이 한 번 완성되는 수준**이어야 �
 
 **사용자 경험:** “나는 실적 발표 전에 컨센서스를 확인하는 편이야”는 **현재 대화에서만 자동 반영**한다. “이 기준을 다음 대화에서도 기억해줘”라는 **명시적인 저장 명령**이 들어온 경우에만 영구 저장을 시도한다. AI가 먼저 “기억할까요?”를 제안하거나 발언을 자동 추출해 저장하는 UX는 V2 후보이며 MVP 필수가 아니다.
 
-**저장 가능 범위:** 사용자가 직접 지정한 *선호·검토 기준* 중 Finance 정책이 허용한 정보만. Journal에 실제 매수·매도했다는 주장, 보유 수량·금액·계좌, 위험 Intent 누적·안전 로그 기반 사용자 성향 분석, 모델 추론/프로파일은 Memory에 원본 사실로 기록하지 않는다. 현재 User Data Policy P-08의 **프로파일링 금지**를 우회하지 않으며, 신규 저장 정보의 데이터 분류·사용 목적·허용 필드·동의/고지·보존 상태는 Product/Privacy Owner의 별도 결정 사항이다.
+**저장 가능 범위(제안, 제한적):** 사용자가 직접 작성하고 명시적으로 장기 저장을 요청한 *선호 또는 검토 기준*만 후보가 될 수 있다. 일반 발언, 대화에서 추론한 정보, 투자/위험 성향이나 프로파일, 위험 Intent·보안 로그, Journal 사실·보유 내역·수량·금액·계좌 정보는 자동 수집하거나 Memory로 저장하지 않는다. 저장 대상이 될 수 있는 Preference/Review Criterion의 허용 필드, 데이터 분류, 목적, 고지·동의, 만료·보존기간, 백업·복구, 감사 및 Provider 전송 범위는 승인되지 않았다. 이 제안은 User Data Policy P-08의 프로파일링 금지를 바꾸거나 그 예외를 만들지 않는다.
 
 **읽기:** Finance가 현재 인증 사용자와 Product Scope로 승인된 유효 Memory만 조회해 요청별 최소 Context로 전달한다. Memory는 **제품 정본 Journal 사실이나 매수 여부의 증거가 아니다.** 현재 원본과 충돌하면 원본 조회 결과가 우선하며, 근거가 확인되지 않으면 “확인 불가”로 답한다. 승인하지 않은 다른 사용자·제품의 Memory는 이용하지 않는다.
 
-**쓰기:** Shared AI LLM이 사용자 ID·권한·DB 쓰기 Tool을 생성하거나 정하지 않는다. Finance Application Service가 의도·정책·Actor를 검증한 **별도 명시적 저장 Command**만 처리한다. 같은 명령의 중복 전송/응답 유실은 요청 Scope에 묶인 멱등성으로 처리하되, 같은 내용을 다른 시점에 변경할 수 있으므로 무조건 내용 전체를 Dedup하지 않는다. 동시 수정·삭제 충돌 및 삭제 후 Stale Callback의 재생성 차단을 구현 계약에 명시한다.
+**쓰기:** 현재 인증된 Finance 애플리케이션 요청에 명시적 사용자 의도가 포함된 경우에만 Finance가 검증된 typed Write/Update/Delete/Withdraw Command를 만들 수 있다. Actor·Tenant·Resource 권한은 신뢰된 Finance `CurrentUserPort`와 승인된 Authority Source에서 얻으며 프롬프트, LLM, Tool 결과, 검색 문서가 제공한 ID·명령은 권한으로 취급하지 않는다. LLM이 만든 command payload도 신뢰되지 않은 의도 제안일 뿐이다. Finance 애플리케이션은 요청별 의도·대상·정책을 검증하고 필요한 확인을 받은 뒤, 실행 시점마다 현재 권한을 재검증해야 한다. 이 Command는 논리 계약이며 API·DTO·schema를 확정하지 않는다.
+
+**Lifecycle 불변식(논리 계약):** 갱신/삭제는 예상 버전에 대한 조건부 비교·갱신을 만족해야 한다. 동의 철회·삭제는 단조 증가하는 논리 revocation generation에 결속되어야 하며 tombstone/invalidation 이후 이전 버전·generation을 가진 비동기 작업, 재시도, callback이 삭제된 데이터를 되살리지 못하도록 fail-closed 처리한다. 모든 Read와 Write는 현재 Actor/Resource 권한·동의·상태를 다시 확인한다. stale version/generation은 거부한다. 응답 노출 직전에 최신 권한·동의·철회·버전을 다시 검증한다. 버퍼링으로 첫 바이트 전에 재검증할 수 없는 Memory 의존 스트리밍은 제공하지 않는다. 이미 전송된 스트리밍 출력은 회수할 수 있다고 가정하지 않는다. 실제 저장 방식·generation 범위·트랜잭션 구현은 별도 Owner 결정이다.
 
 **사용자 통제:** 저장된 Memory의 본인 조회·정정·삭제가 함께 제공되어야 한다. 삭제·권한 철회 즉시 이후 읽기에 부적격하도록 차단하고, 인덱스·파생 Cache·백업 정리는 승인된 보존/복구 정책에 따라 추적한다. 실제 물리 삭제의 완료를 검증하지 않고 전체 파기 완료라고 주장하지 않는다.
 
 **Fail-closed / 운영 Gate:** 동의·허용 데이터 범위·Retention 기간·Backup·Audit·삭제 전파 및 Provider 전송 필드 계약이 승인되지 않으면 **영구 저장/재조회 Production 활성화를 차단**한다. Synthetic Test에서의 Write/Read PASS는 Production 허가가 아니다. Raw Conversation History·사용자 투자 성향 자동 프로파일링은 기본 비활성이다.
 
 **관련 기술 설계:** [Finance Agent MVP 기술 설계 초안](finance-agent-mvp-technical-design-proposal.md). 승인된 API/DB Schema/기술 Stack은 아직 없으며 해당 문서의 Port·필드는 예시 논리 계약이다.
+
+**구현·출시 Gate 순서:** 이 제안은 `Docs 독립 검토 → 합성 데이터의 결정적 E2E → Production Auth/Security 검증 → Memory Release/Privacy 승인`을 별도 Gate로 둔다. 앞 단계의 통과는 다음 승인을 대신하지 않는다. 현재 합성 HTTP PASS는 §4의 Finance General Analysis bridge에만 해당한다. Memory 구현·E2E는 NOT_RUN, Production Memory Read/Write는 OFF다.
 
 ## 6. 근거·안전·품질 기준
 
