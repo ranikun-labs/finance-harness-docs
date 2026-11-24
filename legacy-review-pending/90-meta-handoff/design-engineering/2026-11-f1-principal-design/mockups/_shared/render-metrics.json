@@ -1,0 +1,2126 @@
+{
+ "finance/01-review/start-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1242,
+  "nav": [
+   "tabbar@0,783 390x61"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "검토 시작"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/start-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1101,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "검토 시작"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/start-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1109,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "검토 시작"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/start-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1109,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "검토 시작"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/start-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1242,
+  "nav": [
+   "tabbar@0,1181 390x61"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "검토 시작"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 2091,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1927,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1935,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1399,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 1,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 2091,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/list-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 844,
+  "nav": [
+   "tabbar@0,783 390x61"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/list-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/list-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 768,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/list-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/list-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 844,
+  "nav": [
+   "tabbar@0,783 390x61"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/detail-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1456,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/detail-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1386,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/detail-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/detail-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/detail-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1456,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/retro-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1340,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "복기 저장"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/retro-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1302,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "복기 저장"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/retro-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1062,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "복기 저장"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/retro-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 988,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "복기 저장"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/retro-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1340,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "복기 저장"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1416,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1333,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1341,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1345,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 1,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1416,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/list-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 844,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/list-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/list-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 768,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/list-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/list-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 844,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1199,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1199,
+  "nav": [
+   "cnav@0,1098 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1031,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 938,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1031,
+  "nav": [
+   "cnav@0,930 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/create-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 901,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "일정 추가"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/create-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "일정 추가"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/create-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 808,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "일정 추가"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/create-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "일정 추가"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/create-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 901,
+  "nav": [
+   "cnav@0,800 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "일정 추가"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 926,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 926,
+  "nav": [
+   "cnav@0,825 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/occurred-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 866,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/occurred-768x1024-light": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/occurred-1024x768-light": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 773,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/occurred-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/occurred-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 866,
+  "nav": [
+   "cnav@0,765 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-390x844-dark": {
+  "W": 390,
+  "sw": 390,
+  "h": 2091,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/start-1440x900-dark": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1109,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "검토 시작"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/detail-1440x900-dark": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@40,64 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/retro-390x844-dark": {
+  "W": 390,
+  "sw": 390,
+  "h": 1340,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "복기 저장"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-390x844-dark": {
+  "W": 390,
+  "sw": 390,
+  "h": 1416,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-1440x900-dark": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/list-390x844-dark": {
+  "W": 390,
+  "sw": 390,
+  "h": 844,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-390x844-dark": {
+  "W": 390,
+  "sw": 390,
+  "h": 1031,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-390x844-dark": {
+  "W": 390,
+  "sw": 390,
+  "h": 926,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/occurred-1440x900-dark": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 900,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-320x640-light": {
+  "W": 320,
+  "sw": 320,
+  "h": 2299,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-320x640-dark": {
+  "W": 320,
+  "sw": 320,
+  "h": 2299,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-375x812-light": {
+  "W": 375,
+  "sw": 375,
+  "h": 2111,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-375x812-dark": {
+  "W": 375,
+  "sw": 375,
+  "h": 2111,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-393x852-light": {
+  "W": 393,
+  "sw": 393,
+  "h": 2091,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-393x852-dark": {
+  "W": 393,
+  "sw": 393,
+  "h": 2091,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-320x640-light": {
+  "W": 320,
+  "sw": 320,
+  "h": 1229,
+  "nav": [
+   "cnav@0,539 320x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-320x640-dark": {
+  "W": 320,
+  "sw": 320,
+  "h": 1229,
+  "nav": [
+   "cnav@0,539 320x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-375x812-light": {
+  "W": 375,
+  "sw": 375,
+  "h": 1199,
+  "nav": [
+   "cnav@0,711 375x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-375x812-dark": {
+  "W": 375,
+  "sw": 375,
+  "h": 1199,
+  "nav": [
+   "cnav@0,711 375x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-393x852-light": {
+  "W": 393,
+  "sw": 393,
+  "h": 1199,
+  "nav": [
+   "cnav@0,751 393x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/detail-393x852-dark": {
+  "W": 393,
+  "sw": 393,
+  "h": 1199,
+  "nav": [
+   "cnav@0,751 393x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-loading-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 844,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/result-partial-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 2217,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-streaming-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1701,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/03-ai-followup/thread-streaming-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 1630,
+  "nav": [
+   "pnav-rail@40,0 224x835"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "질문 보내기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 1,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/create-error-390-full-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 997,
+  "nav": [
+   "cnav@0,896 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "일정 추가"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-one-row-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 987,
+  "nav": [
+   "cnav@0,787 390x57"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-confirm-390x844-light": {
+  "W": 390,
+  "sw": 390,
+  "h": 1052,
+  "nav": [
+   "cnav@0,743 390x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-confirm-1440x900-light": {
+  "W": 1440,
+  "sw": 1440,
+  "h": 938,
+  "nav": [
+   "crail@0,0 80x900"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-320x640-light": {
+  "W": 320,
+  "sw": 320,
+  "h": 1072,
+  "nav": [
+   "cnav@0,539 320x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-375x812-light": {
+  "W": 375,
+  "sw": 375,
+  "h": 1031,
+  "nav": [
+   "cnav@0,711 375x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/overdue-1180x800-light": {
+  "W": 1180,
+  "sw": 1180,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/05-schedule/agenda-1180x800-light": {
+  "W": 1180,
+  "sw": 1180,
+  "h": 800,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ }
+}
