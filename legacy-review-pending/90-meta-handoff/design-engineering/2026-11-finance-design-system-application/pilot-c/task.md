@@ -33,7 +33,7 @@ J3 저널 상세(`/app/journal/:id`)의 **메타 영역**이 적합하다. 03 �
 | 5 | `finance-harness-docs:service-policy/finance-ux-delta-auth-journal-handoff.md` | UX-Δ §4·§5 (저널 계약) |
 | 6 | `scratchpad(비보존)/finance-design/03-screen-specs.md` | **J3 절 + §0.1 값·§0.3 상태 어휘 + 부록** (주 입력) |
 | 7 | `scratchpad(비보존)/finance-design/05-handoff-plan.md` | **PR-3 범위·AC, §4 공통 AC 1~12** |
-| 8 | `scratchpad(비보존)/pilotA/review.md` | Pilot A 리뷰 체크 방식(참고만) |
+| 8 | `pilot-a/review-1st.md` (이 폴더) | Pilot A 리뷰 체크 방식(참고만) |
 | 9 | `finance-harness-fe:src/pages/JournalDetailPage.tsx` | **대상 파일** |
 | 10 | `finance-harness-fe:src/pages/JournalDetailPage.test.tsx` | **대상 테스트** |
 | 11 | `finance-harness-fe:src/components/common/RecordTagBadge.tsx` | 읽기 전용 참고 (수정 금지, 라벨 키 출처 확인용) |

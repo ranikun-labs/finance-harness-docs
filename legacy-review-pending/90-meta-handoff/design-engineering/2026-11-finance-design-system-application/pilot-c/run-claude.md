@@ -43,7 +43,7 @@ for f in \
   finance-harness-docs:service-policy/finance-ux-delta-auth-journal-handoff.md \
   $S/finance-design/03-screen-specs.md \
   $S/finance-design/05-handoff-plan.md \
-  $S/pilotA/review.md ; do test -f "$f" && echo "OK $f" || echo "MISSING $f"; done
+  $S/pilot-a/review-1st.md ; do test -f "$f" && echo "OK $f" || echo "MISSING $f"; done
 ```
 
 참고: 현재 `finance-harness-fe` 체크아웃의 `JournalDetailPage.tsx`는 base와 다를 수 있다(다른 세션 작업 포함). 과제 기준 파일은 **반드시 `7dd9590`의 내용**이다. 작업은 worktree에서만 한다.
