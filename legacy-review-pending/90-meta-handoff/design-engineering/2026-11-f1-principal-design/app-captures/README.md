@@ -36,7 +36,7 @@
 | `carelog/event-detail.png` | Carelog | 일정 상세(기록됨) | `/app/events/event-tenant-transitioned` |
 | `carelog/event-new.png` | Carelog | 일정 추가 | `/app/events/new` |
 | `carelog/settings.png` | Carelog | 계정 | `/app/settings` (캡처만) |
-| `carelog/customer-detail-320x640.png` | Carelog | 고객 상세 320×640 | 하단 내비 101px와 본문 높이(D-7의 증거) |
+| `carelog/customer-detail-320x640.png` | Carelog | 고객 상세 320×640 | 하단 내비 101px와 본문 높이(F1-G4의 증거) |
 | `carelog/customer-detail-1179x800.png`, `-1180x800.png` | Carelog | 고객 상세, 가로 경계 | 1단 → 2단 전환 증거 |
 | `dark-390-finance-carelog.png` | 둘 다 | Finance 결과·저널 상세, Carelog 일정·고객 상세 390 Dark | F1-01 C-1의 증거 |
 | `finance/metrics.json`, `carelog/metrics.json` | — | 캡처별 측정값(내비 위치·크기, 넘침, 44·24 미만 대상, 12px 미만 글자, 진한 버튼, major surface 수) | 키 = `<화면>-<폭>x<높이>[-dark]` |

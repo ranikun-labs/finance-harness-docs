@@ -9,7 +9,7 @@
 1. **폭 기준은 두 제품 모두 바꾸지 않는다(A).** Finance 768 / 1024(가로) / 1280, Carelog 768 / 가용 폭 1100 이상이면서 가로. 시안 6묶음을 경계 전후 20개 폭에서 렌더해 두 Host 계약과 같은 전환을 확인했다(§3).
 2. **두 제품이 공유할 것은 "값"이 아니라 "역할"이다.** 내비 위치와 경계값은 제품마다 다르게 두고, Layout Primitive 6개와 List/Detail·Sticky Action·Form·Notice 규칙을 공통 계약 후보(C)로 올린다(§4, F1-04).
 3. **Finance 구현에 계약과 다른 곳이 1건 있다.** 1280×1366(세로)에서 `layout.ts`는 rail이라고 하는데 실제 화면은 상단 내비다(§2 F-1). 필수 수정이다.
-4. **Owner 결정이 필요한 것은 8건이다(§7).** 가장 영향이 큰 것은 Carelog 폰 하단 내비 높이(101px)와 Finance 후속 질문 기능이다.
+4. **Owner 결정이 필요한 것은 9건이다(§7.2, F1-G1~G9).** 가장 영향이 큰 것은 Carelog 폰 하단 내비 높이(101px)와 Finance 후속 질문 기능이다.
 
 ## 1. 분류 기준 (이 문서와 F1-02~05에서 같은 뜻으로 쓴다)
 
@@ -18,7 +18,7 @@
 | A | 기존 Host 계약 유지. 계약 값은 그대로 두고 그 안에서 표현만 정리하는 것도 A | 경계값, 내비 위치, 2-pane 조건, 상단 바 한 줄 정리 |
 | B | Owner가 승인한 변경의 적용 | Carelog 반경 16/10, Teal Light |
 | C | 두 제품에서 재사용 근거가 있는 공통 확장. v1.1 후보, 별도 승인 필요 | Layout Primitive, Notice, Field |
-| D | Owner Gate. 정책·기능·API·인증·데이터·카피 의미·기존 LOCK 변경 | 후속 질문 기능, 하단 내비 계정 줄 이동 |
+| D | Owner Gate. 정책·기능·API·인증·데이터·카피 의미·기존 LOCK 변경. 이 문서에서는 `F1-G<n>`으로 번호를 붙인다 | 후속 질문 기능, 하단 내비 계정 줄 이동 |
 
 ## 2. 입력 HEAD와 Drift
 
@@ -61,7 +61,7 @@
 | `docs/04` §5: 읽기 폭 720, 사이드 내비 220, 2-pane 열 360 | Finance 660·760, 레일 224 | A. 폭은 토큰이 아니고 Host가 정한다(`docs/04` §5) |
 | `docs/02` §10.5: 결과·업무 처리 화면의 Strong은 하단 고정 | Carelog 폰은 모든 화면에 하단 내비 101px가 있다 | Carelog는 Key Block 안 인라인 Strong으로 둔다(F1-03 §4). Finance 폰은 하단 고정 유지 |
 | `docs/02` L29·L134, `docs/10` CM-3: 반경 16/10과 Teal을 "후보" 또는 "LOCK 변경"으로 적음 | Owner 결정(2026-11-24)이 대체: `carelog-architecture@aba36e3` 분석 README L41·L55, `carelog-fe@963f173` README "Where Carelog differs" 표와 그 아래 문단 | B. 원문은 v1.0.0 동결이라 고치지 않고 이 차이만 기록한다 |
-| `docs/02` §10.4·`fin-result-d`: 결과 화면의 "확인할 것"은 읽기 전용 Status Display | 현재 FE는 결과 화면에서 체크 상태를 바꿀 수 있다(`ko.ts` "직접 확인한 상태를 표시할 수 있어요") | 기능 계약이 우선(`AI_START_HERE` §3-1). 시안 ①은 Checkbox로 그렸다. 어느 쪽이 맞는지는 D-6 |
+| `docs/02` §10.4·`fin-result-d`: 결과 화면의 "확인할 것"은 읽기 전용 Status Display | 현재 FE는 결과 화면에서 체크 상태를 바꿀 수 있다(`ko.ts` "직접 확인한 상태를 표시할 수 있어요") | 기능 계약이 우선(`AI_START_HERE` §3-1). 시안 ①은 Checkbox로 그렸다. 어느 쪽이 맞는지는 F1-G3. 같은 화면의 맥락 포함 Checkbox와 사실 칩은 F1-G8 |
 
 ### 3.3 경계 검증 [사실, 시안 렌더]
 
@@ -90,12 +90,12 @@
 |---|---|---|---|---|
 | AppHost | 앱 전체 틀과 최대 폭 | 최대 1360 | 최대 없음 | C(이름) / A(값) |
 | PrimaryNav | 주 내비. `placement = bottom / top / rail` | 위 §3.1 | bottom / rail | C(이름) / A(값) |
-| ContentHost | 한 열의 읽기 폭. `measure = reading / result / readable / scan` | 660 / 760 | 520·560 / 720 | C(이름) / A(값). Carelog scan 720은 아래 참고 |
+| ContentHost | 한 열의 읽기 폭. `measure = reading / result / readable / scan` | 660 / 760 | 520·560 / 720 | C(이름) / A(값). Carelog scan 720은 계약에 없는 값이라 FE Host 결정(아래 참고) |
 | PaneGroup | 목록·상세 또는 원본·작성. `active = Host 판정` | 승인된 2쌍 | 가용 1100 + 가로 | C(이름) / A(조건) |
-| AsideColumn | 본문 옆 보조 열. 본문 끝에 있던 블록만 옮긴다 | 결과 화면 "기록으로 이어가기" 300, 1280 이상 | 쓰지 않음(상세 pane 안은 한 열) | **D-10**(Finance 한정, Host 계약에 없는 구성). §5.3 |
+| AsideColumn | 본문 옆 보조 열. 본문 끝에 있던 블록만 옮긴다 | 결과 화면 "기록으로 이어가기" 300, 1280 이상 | 쓰지 않음(상세 pane 안은 한 열) | **D: F1-G7**(Finance 한정, Host 계약에 없는 구성). §5.3 |
 | StickyAction | 고정 하단 행동 1줄 | 폰·태블릿의 결과·작성 | 쓰지 않음 | A |
 
-- **Carelog scan 폭 720 [권고, A]**: 현재 목록·일정은 폭 제한이 없어서 1024~1179에서 행이 944px까지 늘어나고 시각이 오른쪽 끝으로 간다(`app-captures/carelog/schedule.png`). README는 읽기 폭 520·560만 적고 scan 폭은 정하지 않았다. 720으로 묶으면 시각·제목·상태가 한눈에 들어온다. 트레이드오프: 1024 가로에서 오른쪽 여백이 생긴다. 2-pane이 켜지는 1180부터는 영향이 없다.
+- **Carelog scan 폭 720 [권고, FE Host 결정]**: 현재 목록·일정은 폭 제한이 없어서 1024~1179에서 행이 944px까지 늘어나고 시각이 오른쪽 끝으로 간다(`app-captures/carelog/schedule.png`). README는 읽기 폭 520·560만 적고 scan 폭은 정하지 않았다. 720으로 묶으면 시각·제목·상태가 한눈에 들어온다. 트레이드오프: 1024 가로에서 오른쪽 여백이 생긴다. 2-pane이 켜지는 1180부터는 영향이 없다.
 
 ## 5. List / Detail
 
@@ -116,7 +116,7 @@
 - Finance: Journal List·Detail(①열 0.38fr, 최소 300), Original·Retrospective(1:1). 그 밖의 화면은 한 열이다.
 - Carelog: 일정·고객 루트에서 목록 + 선택 상세. 상세 pane 안은 한 열, 최대 640.
 
-### 5.3 Finance 결과 화면의 보조 열 (D-10, 결정 전 시안)
+### 5.3 Finance 결과 화면의 보조 열 (F1-G7, 결정 전 시안)
 
 이 구성은 `nav-map.md`·`route-architecture.md` §7·UX-Δ §7.1 어디에도 없는 새 구성이라 Owner 결정이 필요하다. 2-pane 금지에 걸리지 않는다고 보는 이유는 다음과 같다. 보조 열에는 본문 끝에 있던 "기록으로 이어가기" 블록만 들어간다. 질문과 결과를 나누지 않고, 새 정보도 없다. `nav-map.md`의 "Desktop 최대 2 major surfaces"와 `docs/04` §4의 "본문 | 보조" 안에 있다. 1280 미만에서는 본문 끝과 고정 하단으로 돌아간다. **Owner가 2-pane으로 본다면 뺀다.** 보조 열을 없애면 태블릿 구성(한 열 + 고정 하단)이 그대로 데스크톱에 쓰이고, 다른 시안과 문서에는 영향이 없다.
 
@@ -127,7 +127,7 @@
 | 확인 대화상자 | `docs/05` §3 그대로. 폰은 화면 가운데 패널(좌우 16), 태블릿 이상은 최대 440. 전체 화면 모달은 쓰지 않는다 | A(명세 유지) |
 | Bottom Sheet | 폰에서 파괴적이지 않은 선택(기록 유형 고르기 등)에만. 768 이상에서는 같은 내용을 Dialog로. 반경 `radius.sheet` 24 | C. 명세가 캔버스 v1.1에만 있다(FD-1, FD-7) |
 | Carelog 기록 완료 확인 | 인라인 `inset` 패널 유지. 새 Dialog를 만들지 않는다 | A(현행 구조) |
-| 이탈 보호 | Finance는 지금 `window.confirm`이다. Dialog로 바꾸려면 라우팅 변경이 필요해서 디자인 PR과 분리한다 | D-7 아님. 구현 과제로 F1-05에 둔다 |
+| 이탈 보호 | Finance는 지금 `window.confirm`이다. Dialog로 바꾸려면 라우팅 변경이 필요해서 디자인 PR과 분리한다 | Owner Gate 아님. 구현 과제로 F1-05에 둔다 |
 | Form 폭 | 한 열. 폰은 전폭, 태블릿 이상은 ContentHost 폭 안. 라벨은 필드 위 | C(Field) |
 | Form 저장 버튼 | 폰은 전폭. 768 이상은 내용 폭(최소 200) 왼쪽 정렬(`docs/05` §2 "데스크톱은 내용 폭 왼쪽 정렬") | A |
 | 키보드(폰) | 입력이 Key인 화면(검토 시작, 복기)은 저장 버튼을 고정하지 않고 흐름 안에 둔다. 고정 하단을 쓰는 화면은 `scroll-padding-bottom` 96 | A(`docs/04` §5) |
@@ -137,20 +137,32 @@
 | Touch Target | WCAG 2.2 AA 2.5.8은 24px. Ranikun 계약은 44px(시각 36 + 위아래 4 확장). 시안 렌더 134회(화면 94 + 경계 40)에서 44 미만 0건 | A |
 | 포커스 | 2px `color.focus`, offset 2 | A |
 
-## 7. 아직 분류되지 않았던 항목의 분류와 Owner Gate
+## 7. 분류 확정 항목과 Owner Gate
 
-| ID | 항목 | 분류 | 근거 | 권고 |
-|---|---|---|---|---|
-| D-1 | Compact 줄높이 9개 | **D(확인 한 줄)** | 정본은 9개를 모두 정했다(`docs/02` §6 L81-89, `tokens/density.compact.tokens.json`, `preview/tokens.css`). 그런데 `carelog-fe` README는 "reading 24와 body 21만 확정, 나머지는 Comfortable 값 유지"라고 적는다 | "정본 값이 확정값"이라고 확인. 시안은 정본 값으로 그렸다 |
-| D-2 | 레일 D-4(PLANNED = info) | **A** | `carelog-fe@963f173` README "Status rails" 행이 이미 현행 계약이고 `docs/02` §1 L17과 같다 | 유지 |
-| D-3 | Dark Teal 본값(#3cb7ab / #8fe0d6 / #0f2e2c) | **C** | 정본 `brand.carelog-b.dark`는 "신규 후보"(`docs/02` L30). carelog-fe는 토큰만 갖고 노출하지 않는다 | v1.1에서 확정. 시안 Dark는 이 값으로 그렸다 |
-| D-4 | Dark on-strong #0b1220, Dark brand-border | **C**(값) / **D**(노출) | carelog-fe README가 "proposals (unconfirmed)"라고 적는다 | on-strong은 채택 권고(7.63:1). brand-border는 쓰는 곳이 생길 때 정한다 |
-| D-5 | Dark 노출 | **D** | 두 제품 모두 `.dark`를 켜는 코드가 없다 [사실: grep] | C-1을 고친 뒤 결정 |
-| D-6 | 결과 화면 "확인할 것"을 바꿀 수 있게 둘지 | **D** | §3.2 마지막 행 | 바꿀 수 있게 유지(현행). 맥락 요약이 바로 갱신된다 |
-| D-7 | Carelog 폰 하단 내비의 계정 줄을 탭 줄로 합치기(101 → 57px) | **D** | 계정 기능 위치는 제품 결정. 320×640에서 본문 높이가 539px다. 실제 앱은 타임라인 첫 행이 잘리고(`app-captures/carelog/customer-detail-320x640.png`), 시안은 Key Block의 "일정 추가"가 첫 화면 밖이다(`carelog/04-customers/captures/detail-320x640-light.png`). 비교 시안 `05-schedule/captures/agenda-one-row-390x844-light.png` | 합치기 권고. 기능과 `BOTTOM_TABS`는 그대로다 |
-| D-8 | Finance 후속 질문(시안 ③) | **D** | 경로·UX 계약·Review API가 없다. 정책 Matrix에 "반복·후속 분석"만 있다 | F1-02 §5 |
-| D-9 | 문구 변경 | **D**(변경할 때) | ① "AI와 복기하기"(`ko.ts:542`. `nav-map.md`는 "복기하기"): 시안은 현행 유지. ② 검토 시작 제목: 시안은 규범 시안 문구 "무엇을 검토할까요?", 현행은 "지금 판단하려는 것을 검토해 보세요". ③ 결과 화면 고정 하단 문장 "작성 화면에서 다시 고칠 수 있어요"(규범 `fin-result-d` 문구)는 작성 화면을 보지 못한 상태의 기능 약속이다 | ①은 유지. ②③은 Owner·카피 확인 뒤 적용 |
-| D-10 | Finance 결과 화면 1280 이상 보조 열 | **D** | §5.3. Host 계약에 없는 구성 | 채택 권고. 거절되면 한 열 + 고정 하단 유지 |
+ID는 F1 고유 번호(`F1-G1`~`F1-G9`)다. carelog-fe README의 D-4(상태 레일), carelog-architecture 분석의 D-1~D-8, 지시문의 D-3(1100 2단 LOCK)과는 다른 번호 체계다. **Owner Gate는 아래 9건이 전부이고**, F1-00과 PR 본문도 이 목록을 쓴다.
+
+### 7.1 분류만 확정한 항목 (Owner Gate 아님)
+
+| 항목 | 분류 | 근거 | 처리 |
+|---|---|---|---|
+| Carelog 상태 레일 PLANNED = info (carelog-fe README의 결정 D-4) | **A** | `carelog-fe@963f173` README "Status rails" 행이 이미 현행 계약이고 `docs/02` §1 L17과 같다 | 유지 |
+| Carelog 가로 1100 이상 2단 (지시문의 D-3) | **A** | `adaptiveHostModel.ts:12` | 유지. 바꾸지 않는다 |
+| Dark Teal 본값(#3cb7ab / #8fe0d6 / #0f2e2c) | **C** | 정본 `brand.carelog-b.dark`는 "신규 후보"(`docs/02` L30). carelog-fe는 토큰만 갖고 노출하지 않는다 | v1.1에서 값 확정. 시안 Dark는 이 값으로 그렸다 |
+| Dark on-strong #0b1220, Dark brand-border | **C** | carelog-fe README가 "proposals (unconfirmed)"라고 적는다 | on-strong은 채택 권고(7.63:1). brand-border는 쓰는 곳이 생길 때 정한다. 사용자 노출은 F1-G2 |
+
+### 7.2 Owner Gate (9건)
+
+| ID | 항목 | 근거 | 권고 |
+|---|---|---|---|
+| F1-G1 | Compact 줄높이 9개가 확정값인지 | 정본은 9개를 모두 정했다(`docs/02` §6 L81-89, `tokens/density.compact.tokens.json`). `carelog-fe` README는 "reading 24와 body 21만 확정, 나머지는 Comfortable 값 유지"라고 적는다 | "정본 값이 확정값"이라고 확인. 시안은 정본 값으로 그렸다 |
+| F1-G2 | Dark 노출 | 두 제품 모두 `.dark`를 켜는 코드가 없다 [사실: grep] | Carelog Dark 면 결함(C-1)을 고친 뒤 결정 |
+| F1-G3 | 결과 화면 "확인할 것"을 바꿀 수 있게 둘지 | §3.2 마지막 행. 현행 FE는 바꿀 수 있고 규범 시안 `fin-result-d`는 읽기 전용이다 | 바꿀 수 있게 유지(현행) |
+| F1-G4 | Carelog 폰 하단 내비의 계정 줄을 탭 줄로 합치기(101 → 57px) | 계정 기능 위치는 제품 결정. 320×640에서 본문 높이가 539px다. 실제 앱은 타임라인 첫 행이 잘리고(`app-captures/carelog/customer-detail-320x640.png`), 시안은 Key Block의 "일정 추가"가 첫 화면 밖이다(`carelog/04-customers/captures/detail-320x640-light.png`). 비교 시안 `05-schedule/captures/agenda-one-row-390x844-light.png` | 합치기 권고. 기능과 `BOTTOM_TABS`는 그대로다 |
+| F1-G5 | Finance 후속 질문(시안 ③ 전체) | 경로·UX 계약·Review API가 없다. 정책 Matrix에 "반복·후속 분석"만 있다 | 지금은 만들지 않는다. F1-02 §5 |
+| F1-G6 | 문구 변경 3건 | ① "AI와 복기하기"(`ko.ts:542`. `nav-map.md`는 "복기하기"): 시안은 현행 유지. ② 검토 시작 제목: 시안은 규범 시안 문구 "무엇을 검토할까요?", 현행은 "지금 판단하려는 것을 검토해 보세요". ③ 결과 화면 고정 하단 문장 "작성 화면에서 다시 고칠 수 있어요"(규범 `fin-result-d` 문구)는 작성 화면을 보지 못한 상태의 기능 약속이다 | ①은 유지. ②③은 Owner·카피 확인 뒤 적용 |
+| F1-G7 | Finance 결과 화면 1280 이상 보조 열 | §5.3. Host 계약에 없는 구성 | 채택 권고. 거절되면 한 열 + 고정 하단 유지(`01-review/captures/result-noaside-1440x900-light.png`) |
+| F1-G8 | Finance 결과 화면에서 맥락 포함 여부와 함께 남길 사실을 고르게 할지 | 시안 ①은 규범 시안 `fin-result-d`와 `docs/05` §3a·§3b(1~4단계는 결과 화면, 6단계에서 작성 화면이 최종 확인)를 따라 "검토 맥락도 판단 기록에 함께 남기기" Checkbox, 사실 행 "함께 남기기" 칩, 저장 범위 요약을 결과 화면에 뒀다. 반면 UX-Δ §5·§7.1과 현행 FE `DecisionContextPanel`은 이 선택을 작성 화면에 둔다. 기능 계약이 디자인 문서보다 우선이므로(`AI_START_HERE` §3-1) 결과 화면에 두는 것은 승인 없이 구현할 수 없다. Finance 분석 Q1과 같은 질문이다 | 1차는 현행대로 작성 화면에만 두고(PR-F1은 이 블록을 넣지 않는다), 승인되면 PR-F6에서 결과 화면에 추가. 얻는 것: 읽는 자리에서 바로 고른다. 버리는 것: 결과 화면이 길어지고 같은 선택이 두 화면에 생긴다 |
+| F1-G9 | Carelog 날짜·시각을 24시간제 `M월 D일 (요일) HH:mm`으로 | `docs/04` §3은 24시간제다. 현행 화면은 `오전 10:45`, `2026-07-20` 형식이다. 표기 변경은 사용자가 보는 문구가 바뀌는 일이다 | 적용 권고. 시안 ④⑤⑥은 24시간제로 그렸다 |
 
 ## 8. 검증 범위
 

@@ -4,12 +4,12 @@ Finance 3개, Carelog 3개. 각 폴더의 `index.html`은 Foundation v1.0.0 `tok
 
 | # | 폴더 | 화면 | 분류 |
 |---|---|---|---|
-| ① | `finance/01-review` | 검토 시작·결과 | A + C |
-| ② | `finance/02-journal` | 저널 목록·상세·복기 | A + C |
-| ③ | `finance/03-ai-followup` | AI 대화(후속 질문) | **D 전체** |
-| ④ | `carelog/04-customers` | 고객 목록·상세 | A·B + C |
-| ⑤ | `carelog/05-schedule` | 일정 조회·작성 | A·B + C |
-| ⑥ | `carelog/06-record` | 업무 기록(일정 상세) | A·B + C |
+| ① | `finance/01-review` | 검토 시작·결과 | A + C + D(F1-G3·G6·G7·G8) |
+| ② | `finance/02-journal` | 저널 목록·상세·복기 | A + C (문구는 F1-G6) |
+| ③ | `finance/03-ai-followup` | AI 대화(후속 질문) | **D 전체(F1-G5)** |
+| ④ | `carelog/04-customers` | 고객 목록·상세 | A·B + C + D(F1-G4·G9) |
+| ⑤ | `carelog/05-schedule` | 일정 조회·작성 | A·B + C + D(F1-G4·G9) |
+| ⑥ | `carelog/06-record` | 업무 기록(일정 상세) | A·B + C + D(F1-G9) |
 
 - `_shared/f1.css`: 시안용 Adaptive 계층(인라인된 것과 같은 내용). FE 코드가 아니다.
 - `_shared/PretendardVariable.subset.woff2`: Pretendard Variable을 시안에 쓰인 글자만 남겨 줄인 파일(94KB). SIL OFL 1.1, 라이선스는 `_shared/Pretendard-OFL-1.1.txt`. 원본은 design-system `preview/PretendardVariable.woff2`.
