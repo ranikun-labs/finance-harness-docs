@@ -1,0 +1,918 @@
+{
+ "finance/01-review/boundary-result-767x1024": {
+  "W": 767,
+  "sw": 767,
+  "h": 1859,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-767x1024": {
+  "W": 767,
+  "sw": 767,
+  "h": 1318,
+  "nav": [],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-768x1024": {
+  "W": 768,
+  "sw": 768,
+  "h": 1927,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-768x1024": {
+  "W": 768,
+  "sw": 768,
+  "h": 1386,
+  "nav": [
+   "pnav-top@288,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1023x768": {
+  "W": 1023,
+  "sw": 1023,
+  "h": 1927,
+  "nav": [
+   "pnav-top@415,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1023x768": {
+  "W": 1023,
+  "sw": 1023,
+  "h": 1386,
+  "nav": [
+   "pnav-top@415,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1024x768": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1935,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1024x768": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@0,64 224x703"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1024x1366": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1927,
+  "nav": [
+   "pnav-top@416,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1024x1366": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1386,
+  "nav": [
+   "pnav-top@416,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1279x1366": {
+  "W": 1279,
+  "sw": 1279,
+  "h": 1927,
+  "nav": [
+   "pnav-top@543,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1279x1366": {
+  "W": 1279,
+  "sw": 1279,
+  "h": 1386,
+  "nav": [
+   "pnav-top@543,6 200x52"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1280x1366": {
+  "W": 1280,
+  "sw": 1280,
+  "h": 1399,
+  "nav": [
+   "pnav-rail@0,64 224x1301"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 1,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1280x1366": {
+  "W": 1280,
+  "sw": 1280,
+  "h": 1366,
+  "nav": [
+   "pnav-rail@0,64 224x1301"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1280x800": {
+  "W": 1280,
+  "sw": 1280,
+  "h": 1399,
+  "nav": [
+   "pnav-rail@0,64 224x735"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 1,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1280x800": {
+  "W": 1280,
+  "sw": 1280,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@0,64 224x735"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1099x800": {
+  "W": 1099,
+  "sw": 1099,
+  "h": 1935,
+  "nav": [
+   "pnav-rail@0,64 224x735"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1099x800": {
+  "W": 1099,
+  "sw": 1099,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@0,64 224x735"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/01-review/boundary-result-1100x800": {
+  "W": 1100,
+  "sw": 1100,
+  "h": 1935,
+  "nav": [
+   "pnav-rail@0,64 224x735"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "판단 기록 남기기"
+  ],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 0,
+  "aside": 0,
+  "sticky": 1,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "finance/02-journal/boundary-detail-1100x800": {
+  "W": 1100,
+  "sw": 1100,
+  "h": 1310,
+  "nav": [
+   "pnav-rail@0,64 224x735"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 0,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-767x1024": {
+  "W": 767,
+  "sw": 767,
+  "h": 1178,
+  "nav": [
+   "cnav@0,923 767x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-767x1024": {
+  "W": 767,
+  "sw": 767,
+  "h": 1024,
+  "nav": [
+   "cnav@0,923 767x101"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-768x1024": {
+  "W": 768,
+  "sw": 768,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-768x1024": {
+  "W": 768,
+  "sw": 768,
+  "h": 1024,
+  "nav": [
+   "crail@0,0 80x1024"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1024x1366": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1366,
+  "nav": [
+   "crail@0,0 80x1366"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1024x1366": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1366,
+  "nav": [
+   "crail@0,0 80x1366"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1024x768": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1024x768": {
+  "W": 1024,
+  "sw": 1024,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x768"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1099x800": {
+  "W": 1099,
+  "sw": 1099,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1099x800": {
+  "W": 1099,
+  "sw": 1099,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1100x800": {
+  "W": 1100,
+  "sw": 1100,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1100x800": {
+  "W": 1100,
+  "sw": 1100,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1179x800": {
+  "W": 1179,
+  "sw": 1179,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1179x800": {
+  "W": 1179,
+  "sw": 1179,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1180x800": {
+  "W": 1180,
+  "sw": 1180,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1180x800": {
+  "W": 1180,
+  "sw": 1180,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1180x1366": {
+  "W": 1180,
+  "sw": 1180,
+  "h": 1366,
+  "nav": [
+   "crail@0,0 80x1366"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1180x1366": {
+  "W": 1180,
+  "sw": 1180,
+  "h": 1366,
+  "nav": [
+   "crail@0,0 80x1366"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 1,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/04-customers/boundary-detail-1280x800": {
+  "W": 1280,
+  "sw": 1280,
+  "h": 1085,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ },
+ "carelog/06-record/boundary-overdue-1280x800": {
+  "W": 1280,
+  "sw": 1280,
+  "h": 812,
+  "nav": [
+   "crail@0,0 80x800"
+  ],
+  "lt44": [],
+  "lt24": [],
+  "tiny": [],
+  "clip": [],
+  "con": [],
+  "strong": [
+   "기록 완료"
+  ],
+  "pageTitles": 1,
+  "keyValues": 1,
+  "panes": 2,
+  "aside": 0,
+  "sticky": 0,
+  "cardInCard": 0,
+  "font": true,
+  "errs": []
+ }
+}
