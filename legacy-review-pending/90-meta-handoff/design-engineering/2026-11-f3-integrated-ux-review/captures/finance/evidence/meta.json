@@ -1,0 +1,20 @@
+[
+ {
+  "file": "editor-opens-scrolled-390.png",
+  "product": "finance",
+  "head": "2ae32e3",
+  "state": "editor-opens-scrolled-390",
+  "data": "fixture",
+  "innerWidth": 390,
+  "innerHeight": 844,
+  "orientation": "portrait-primary",
+  "scrollY": 0,
+  "docH": 1712,
+  "docW": 390,
+  "theme": "light",
+  "lang": "ko",
+  "url": "/app/journal/new?type=investment",
+  "note": "결과 화면을 끝까지 읽고 하단 CTA를 누른 직후의 작성 화면",
+  "fullPage": false
+ }
+]
