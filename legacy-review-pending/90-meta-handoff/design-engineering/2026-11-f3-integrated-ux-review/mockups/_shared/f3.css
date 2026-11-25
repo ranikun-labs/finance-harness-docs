@@ -2,7 +2,7 @@
 .carelog-app { --color-bg-page:#ffffff; --color-surface-card:#f2f4f6; --color-surface-inset:#e9ecef; }
 html, body { margin: 0; }
 .phone { width: 390px; min-height: 844px; }
-.proposal-note { align-self: flex-start; margin: var(--space-8) var(--space-16) 0; padding: var(--space-4) var(--space-8); font-size: 12px; line-height: 16px; color: var(--color-text-tertiary); border: 1px dashed var(--color-line-control); border-radius: var(--radius-badge); }
+.ds .proposal-note { align-self: flex-start; margin: var(--space-8) var(--space-16) 0; padding: var(--space-4) var(--space-8); font-size: 12px; line-height: 16px; color: var(--color-text-tertiary); border: 1px dashed var(--color-line-control); border-radius: var(--radius-badge); }
 .tabbar.cols-3 { grid-template-columns: repeat(3, 1fr); }
 .page.tight { gap: var(--space-16); }
 .page.form-page { gap: var(--space-24); }

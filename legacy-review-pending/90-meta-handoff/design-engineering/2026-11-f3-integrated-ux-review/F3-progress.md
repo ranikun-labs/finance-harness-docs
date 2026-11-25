@@ -35,17 +35,13 @@
 | 0 준비·인벤토리 | 완료 | 04:51 | 05:10 | UNKNOWN | 없음 | 두 제품 `pnpm install --frozen-lockfile && pnpm build` exit 0. fixture 실행 방법 조사는 하위 에이전트(Sonnet) 2개 |
 | 1 사용자 여정 | 완료 | 05:00 | 05:35 | UNKNOWN | 없음 | 두 제품 모두 폰 390, 768 세로, 1024·1180 가로, 1440 직접 조작 |
 | 2 체계적 검증 | 완료 | 05:20 | 06:20 | 단계 0~2 합계 약 $9 (기준값 대비, 05:54 조회 $31.39) | 06:30 무렵 5시간 한도 도달, 09:10 UTC 초기화 | Carelog 532회, Finance 557회 자동 측정. 상태 화면, 키보드, 확대 실험, 알려진 항목 9개 판정 |
-| 3 종합·시안 | 진행 중 | 06:20 | | UNKNOWN | 하위 에이전트 2개가 한도로 중단 | Carelog 문서 작성 완료 |
-| 4 구현 인계 | 대기 | | | | | |
+| 3 종합·시안 | 완료 | 06:20 | 09:30 | UNKNOWN | 하위 에이전트 2개가 한도로 중단됐다가 09:25에 재개 | 문서 F3-00~05, 시안 5개 |
+| 4 구현 인계 | 완료 | 09:25 | 09:30 | UNKNOWN | 없음 | F3-05 PR 묶음 13개(공통 2, Carelog 6, Finance 5) |
 
-## 다음 행동 (09:25 UTC 갱신)
+## 다음 행동 (09:30 UTC 갱신)
 
-1. 체크포인트 push.
-2. 문서 작성: `F3-02-finance.md`, `F3-04-system.md`, `F3-05-handoff.md`, `F3-00-summary.md` 결론. (`F3-03-carelog.md`는 작성 완료)
-3. `F3-01-inventory.md`와 시안 5개(`mockups/carelog/C-01`·`C-02`·`C-03`, `mockups/finance/F-02`·`F-05`)는 하위 에이전트가 사용량 제한으로 중단됐다. 이어서 완성하거나 직접 만든다.
-4. Draft PR 1건 생성(base main, finance-harness-docs), 사후 확인, 메인에 최종 보고.
-
-작업용 메모(비보존, 세션 scratchpad `f3-work/`): `notes-synthesis.md`(Finding 확정 목록), `notes-carelog.md`, `notes-finance.md`. 측정 원자료: `run/care-audit.jsonl`, `run/fin-audit.jsonl`.
+1. 최종 체크포인트 push와 Draft PR 1건(base main).
+2. 사후 확인(Draft 여부, base, 변경 범위, 다른 저장소 쓰기 0건)과 메인 최종 보고.
 
 ## 단계 1 발견 초안 — Carelog (직접 조작, fixture, `9c3a028`)
 

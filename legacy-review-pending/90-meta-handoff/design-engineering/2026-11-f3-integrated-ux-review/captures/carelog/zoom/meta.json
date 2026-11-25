@@ -1,6 +1,6 @@
 [
  {
-  "file": "A-200-1280x800-창--schedule.png",
+  "file": "zoom200-1280x800-schedule.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "A-200-1280x800-창--schedule",
@@ -18,7 +18,7 @@
   "fullPage": false
  },
  {
-  "file": "A-200-1280x800-창--event-overdue.png",
+  "file": "zoom200-1280x800-event-overdue.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "A-200-1280x800-창--event-overdue",
@@ -36,7 +36,7 @@
   "fullPage": false
  },
  {
-  "file": "A-400-reflow-1280x1024-창--schedule.png",
+  "file": "zoom400-1280x1024-schedule.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "A-400-reflow-1280x1024-창--schedule",
@@ -54,7 +54,7 @@
   "fullPage": false
  },
  {
-  "file": "A-400-reflow-1280x1024-창--event-overdue.png",
+  "file": "zoom400-1280x1024-event-overdue.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "A-400-reflow-1280x1024-창--event-overdue",
@@ -72,7 +72,7 @@
   "fullPage": false
  },
  {
-  "file": "B-글자-200-폰-schedule.png",
+  "file": "text200-phone-schedule.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "B-글자-200-폰-schedule",
@@ -90,7 +90,7 @@
   "fullPage": false
  },
  {
-  "file": "B-글자-200-폰-event-overdue.png",
+  "file": "text200-phone-event-overdue.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "B-글자-200-폰-event-overdue",
@@ -108,7 +108,7 @@
   "fullPage": false
  },
  {
-  "file": "B-글자-200-데스크톱-schedule.png",
+  "file": "text200-desktop-schedule.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "B-글자-200-데스크톱-schedule",
@@ -126,7 +126,7 @@
   "fullPage": false
  },
  {
-  "file": "B-글자-200-데스크톱-event-overdue.png",
+  "file": "text200-desktop-event-overdue.png",
   "product": "carelog",
   "head": "9c3a028",
   "state": "B-글자-200-데스크톱-event-overdue",
