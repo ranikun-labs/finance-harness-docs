@@ -228,7 +228,7 @@ callback 또는 session handoff를 결정하지 않는다.
 비운영 참조 로그인(non-production reference login)과 DEV 계정 생성(DEV account creation)은
 검증(verification) 표면이며 제품 여정(product journey)이 아니다. 이 경로는 OAuth-first 원칙을 바꾸지
 않으며 Auth Entry의 production 문구도 바꾸지 않는다. 두 경로는 production 빌드와 production
-환경에 존재하지 않고 DEV acceptance 빌드 모드에서만 노출된다. 가입 응답의 409(이미 가입된 이메일)는
+환경에서 노출·동작하지 않으며, DEV acceptance 빌드 모드에서만 노출된다. 가입 응답의 409(이미 가입된 이메일)는
 계정 존재 여부를 노출하므로, 공개 DEV 공유 전에 해결해야 할 미해결 항목으로 남긴다.
 
 ## 7. Responsive and accessibility contract
