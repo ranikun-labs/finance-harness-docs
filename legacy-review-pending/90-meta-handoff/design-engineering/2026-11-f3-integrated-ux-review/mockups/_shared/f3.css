@@ -1,0 +1,43 @@
+/* F3 proposal mockups: additions only. Colours via tokens; the one literal block is the Carelog surface override. */
+.carelog-app { --color-bg-page:#ffffff; --color-surface-card:#f2f4f6; --color-surface-inset:#e9ecef; }
+html, body { margin: 0; }
+.phone { width: 390px; min-height: 844px; }
+.proposal-note { align-self: flex-start; margin: var(--space-8) var(--space-16) 0; padding: var(--space-4) var(--space-8); font-size: 12px; line-height: 16px; color: var(--color-text-tertiary); border: 1px dashed var(--color-line-control); border-radius: var(--radius-badge); }
+.tabbar.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.page.tight { gap: var(--space-16); }
+.page.form-page { gap: var(--space-24); }
+.brand-text { color: var(--color-brand-deep); font-weight: 600; }
+.btn--grow { flex: 1; }
+.btn--nowrap { white-space: nowrap; }
+.row-actions { display: flex; align-items: center; gap: var(--space-4); }
+.row-actions .spacer { flex: 1; }
+.align-end { display: flex; justify-content: flex-end; gap: var(--space-8); }
+/* card with a status rail on the left edge */
+.card.railed { position: relative; padding-left: calc(var(--layout-card-padding) + var(--space-4)); }
+.card.railed::before { content: ""; position: absolute; left: 0; top: var(--space-16); bottom: var(--space-16); width: var(--rail-width); border-radius: 2px; background: var(--rail-color); }
+.list-row .end { flex: none; }
+.list-row .cust { color: var(--color-brand-deep); font-weight: 600; font-size: var(--type-supporting-size); line-height: var(--type-supporting-line); }
+/* C-03 sticky header block */
+.sticky-head { position: sticky; top: 0; z-index: 2; background: var(--color-bg-page); padding: var(--space-8) var(--layout-page-gutter) var(--space-12); display: flex; flex-direction: column; gap: var(--space-12); }
+.sticky-head .top { display: flex; align-items: center; justify-content: space-between; min-height: var(--touch-min); padding: 0 var(--space-4); }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); }
+.day { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 60px; padding: var(--space-8) 0 var(--space-4); border-radius: var(--radius-control); }
+.day .dot { width: var(--space-4); height: var(--space-4); border-radius: var(--radius-full); background: transparent; }
+.day .dot.on { background: var(--color-brand-strong); }
+.day.sel { background: var(--color-brand-subtle); color: var(--color-brand-deep); }
+.day.sel .t-meta, .day.sel .t-content-title { color: var(--color-brand-deep); }
+.notice-bar { display: flex; align-items: center; justify-content: space-between; min-height: var(--touch-min); padding: 0 var(--space-16); border-radius: var(--radius-inset); background: var(--color-status-warning-bg); color: var(--color-status-warning-fg); font-size: var(--type-supporting-size); line-height: var(--type-supporting-line); font-weight: 600; }
+.date-head { display: flex; align-items: baseline; gap: var(--space-8); padding: 0 var(--space-4); }
+.body-flow { flex: 1; padding: var(--space-8) var(--layout-page-gutter) var(--space-32); display: flex; flex-direction: column; gap: var(--space-24); }
+.time-col { width: 64px; flex: none; }
+/* F-02 */
+.collapse-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); min-height: 56px; padding: var(--space-8) var(--space-8) var(--space-8) var(--space-16); background: var(--color-surface-card); border-radius: var(--radius-card); }
+.pills { display: flex; flex-wrap: wrap; gap: var(--space-8); }
+.pill { appearance: none; border: 0; cursor: pointer; min-height: var(--touch-min); padding: 0 var(--space-16); border-radius: var(--radius-full); background: transparent; box-shadow: inset 0 0 0 1px var(--color-line-control); color: var(--color-text-body); font-size: var(--type-supporting-size); line-height: var(--type-supporting-line); font-weight: 600; font-family: inherit; }
+.ph { color: var(--color-text-tertiary); }
+.meta-end { text-align: right; }
+.card.row-card { flex-direction: row; align-items: center; justify-content: space-between; padding-top: var(--space-8); padding-bottom: var(--space-8); }
+/* F-05 dialog */
+.scrim { position: absolute; inset: 0; z-index: 5; background: var(--color-scrim); display: flex; align-items: center; padding: 0 var(--space-16); }
+.dialog { width: 100%; background: var(--color-surface-overlay); border-radius: var(--radius-card); box-shadow: var(--shadow-overlay); padding: var(--space-20); display: flex; flex-direction: column; gap: var(--space-12); }
+.dialog .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); margin-top: var(--space-8); }
