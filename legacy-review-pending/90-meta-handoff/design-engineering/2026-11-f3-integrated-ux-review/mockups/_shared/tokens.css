@@ -1,0 +1,107 @@
+/* Ranikun Labs vNext-2 · preview mapping of tokens/*.tokens.json (hand-written, NOT generated).
+   Values must equal the DTCG files; tokens/README.md has the check. Resolution order:
+   foundation -> mode(light|dark) -> product(finance|carelog-a|carelog-b) x mode -> density(comfortable|compact). */
+@font-face { font-family: "Pretendard Variable"; src: url("PretendardVariable.subset.woff2") format("woff2"); font-weight: 45 920; }
+
+:root {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  /* spacing (foundation, limited scale) */
+  --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-20: 20px;
+  --space-24: 24px; --space-32: 32px; --space-40: 40px; --space-48: 48px;
+  /* radius (independent of density, D3 candidates) */
+  --radius-badge: 6px; --radius-control: 10px; --radius-inset: 12px; --radius-card: 16px; --radius-sheet: 24px; --radius-full: 999px;
+  --touch-min: 44px;
+  --rail-width: 3px;
+}
+
+/* ---------- mode: light (neutral + status, shared by all products) ---------- */
+[data-mode="light"] {
+  --color-bg-page: #f2f4f6;
+  --color-surface-card: #ffffff;
+  --color-surface-inset: #f2f4f6;
+  --color-surface-control: #e9ecef;
+  --color-surface-overlay: #ffffff;
+  --color-scrim: rgba(15, 17, 20, 0.52);
+  --color-text-strong: #191f28;
+  --color-text-body: #333d4b;
+  --color-text-secondary: #4e5968;
+  --color-text-tertiary: #5b6673;
+  --color-text-disabled: #8b95a1;
+  --color-line-divider: #e5e8eb;
+  --color-line-border: #d1d6db;
+  --color-line-control: #78838f;
+  --color-status-success-fg: #0a6b3b; --color-status-success-bg: #e5f4ec;
+  --color-status-warning-fg: #8a4a00; --color-status-warning-bg: #fff1d6;
+  --color-status-danger-fg: #c42336;  --color-status-danger-bg: #fdebed; --color-status-danger-solid: #c42336; --color-status-danger-on-solid: #ffffff;
+  --color-status-conflict-fg: #6b3fb4; --color-status-conflict-bg: #f0eafb;
+  --color-status-info-fg: #2a4f86;    --color-status-info-bg: #e9eff8;
+  --color-status-neutral-fg: #4e5968; --color-status-neutral-bg: #e9ecef;
+  --shadow-overlay: 0 8px 28px rgba(15, 17, 20, 0.16);
+  color-scheme: light;
+}
+/* ---------- mode: dark ---------- */
+[data-mode="dark"] {
+  --color-bg-page: #0f1114;
+  --color-surface-card: #1a1d21;
+  --color-surface-inset: #22262b;
+  --color-surface-control: #2a2f35;
+  --color-surface-overlay: #22262b;
+  --color-scrim: rgba(0, 0, 0, 0.64);
+  --color-text-strong: #f2f4f6;
+  --color-text-body: #d1d6db;
+  --color-text-secondary: #b4bcc5;
+  --color-text-tertiary: #98a2ad;
+  --color-text-disabled: #6b7580;
+  --color-line-divider: #2a2f35;
+  --color-line-border: #3a4048;
+  --color-line-control: #7f8995;
+  --color-status-success-fg: #5fd08f; --color-status-success-bg: #12301f;
+  --color-status-warning-fg: #f0b44c; --color-status-warning-bg: #33260c;
+  --color-status-danger-fg: #ff8a95;  --color-status-danger-bg: #3a1519; --color-status-danger-solid: #ff7a87; --color-status-danger-on-solid: #1a0508;
+  --color-status-conflict-fg: #b79cf0; --color-status-conflict-bg: #261a40;
+  --color-status-info-fg: #8fb2ea;    --color-status-info-bg: #172538;
+  --color-status-neutral-fg: #b4bcc5; --color-status-neutral-bg: #2a2f35;
+  --shadow-overlay: 0 8px 28px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* ---------- product brand x mode (4 tokens each; status never refers to these) ---------- */
+[data-product="finance"][data-mode="light"]   { --color-brand-strong: #1d64d8; --color-brand-deep: #174fb0; --color-brand-subtle: #e8f0fd; --color-brand-on-strong: #ffffff; }
+[data-product="finance"][data-mode="dark"]    { --color-brand-strong: #4f95ff; --color-brand-deep: #9cc2ff; --color-brand-subtle: #172a4d; --color-brand-on-strong: #0b1220; }
+[data-product="carelog-a"][data-mode="light"] { --color-brand-strong: #1c719a; --color-brand-deep: #005d84; --color-brand-subtle: #dceefa; --color-brand-on-strong: #ffffff; }
+[data-product="carelog-a"][data-mode="dark"]  { --color-brand-strong: #4fa8d6; --color-brand-deep: #a6d3ee; --color-brand-subtle: #13283a; --color-brand-on-strong: #0b1220; }
+[data-product="carelog-b"][data-mode="light"] { --color-brand-strong: #007974; --color-brand-deep: #00605c; --color-brand-subtle: #d9f1ef; --color-brand-on-strong: #ffffff; }
+[data-product="carelog-b"][data-mode="dark"]  { --color-brand-strong: #3cb7ab; --color-brand-deep: #8fe0d6; --color-brand-subtle: #0f2e2c; --color-brand-on-strong: #0b1220; }
+[data-product] { --color-focus: var(--color-brand-strong); }
+
+/* ---------- density (information amount & spacing; NOT responsive, NOT radius) ---------- */
+[data-density="comfortable"] {
+  --type-page-title-weight: 700; --type-page-title-tracking: -0.48px; --type-section-title-weight: 700; --type-section-title-tracking: -0.18px; --type-content-title-weight: 600; --type-content-title-tracking: 0px; --type-key-value-weight: 700; --type-key-value-tracking: -0.22px; --type-body-weight: 400; --type-body-tracking: 0px; --type-reading-weight: 400; --type-reading-tracking: 0px; --type-supporting-weight: 400; --type-supporting-tracking: 0px; --type-meta-weight: 400; --type-meta-tracking: 0px; --type-label-weight: 600; --type-label-tracking: 0px;
+  --type-page-title-size: 24px; --type-page-title-line: 32px;
+  --type-section-title-size: 18px; --type-section-title-line: 26px;
+  --type-content-title-size: 16px; --type-content-title-line: 24px;
+  --type-key-value-size: 22px; --type-key-value-line: 30px;
+  --type-body-size: 15px; --type-body-line: 24px;
+  --type-reading-size: 16px; --type-reading-line: 27px;
+  --type-supporting-size: 14px; --type-supporting-line: 20px;
+  --type-meta-size: 13px; --type-meta-line: 18px;
+  --type-label-size: 13px; --type-label-line: 18px;
+  --layout-page-gutter: 16px; --layout-section-gap: 40px; --layout-title-gap: 12px;
+  --layout-card-padding: 20px; --layout-group-gap: 20px; --layout-item-gap: 8px;
+  --control-height: 48px; --control-height-small: 36px; --list-row-min: 56px;
+}
+[data-density="compact"] {
+  --type-page-title-weight: 700; --type-page-title-tracking: -0.44px; --type-section-title-weight: 700; --type-section-title-tracking: -0.18px; --type-content-title-weight: 600; --type-content-title-tracking: 0px; --type-key-value-weight: 700; --type-key-value-tracking: -0.2px; --type-body-weight: 400; --type-body-tracking: 0px; --type-reading-weight: 400; --type-reading-tracking: 0px; --type-supporting-weight: 400; --type-supporting-tracking: 0px; --type-meta-weight: 400; --type-meta-tracking: 0px; --type-label-weight: 600; --type-label-tracking: 0px;
+  --type-page-title-size: 22px; --type-page-title-line: 30px;
+  --type-section-title-size: 18px; --type-section-title-line: 26px;
+  --type-content-title-size: 15px; --type-content-title-line: 22px;
+  --type-key-value-size: 20px; --type-key-value-line: 28px;
+  --type-body-size: 14px; --type-body-line: 21px;
+  --type-reading-size: 15px; --type-reading-line: 24px;
+  --type-supporting-size: 13px; --type-supporting-line: 19px;
+  --type-meta-size: 12px; --type-meta-line: 17px;
+  --type-label-size: 12px; --type-label-line: 17px;
+  --layout-page-gutter: 16px; --layout-section-gap: 32px; --layout-title-gap: 8px;
+  --layout-card-padding: 16px; --layout-group-gap: 16px; --layout-item-gap: 8px;
+  --control-height: 44px; --control-height-small: 36px; --list-row-min: 52px;
+}

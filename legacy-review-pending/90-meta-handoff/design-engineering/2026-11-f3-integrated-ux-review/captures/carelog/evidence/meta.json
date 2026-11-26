@@ -1,0 +1,38 @@
+[
+ {
+  "file": "focus-strong-button-light.png",
+  "product": "carelog",
+  "head": "9c3a028",
+  "state": "focus-strong-button-light",
+  "data": "fixture",
+  "innerWidth": 390,
+  "innerHeight": 844,
+  "orientation": "landscape-primary",
+  "scrollY": 0,
+  "docH": 844,
+  "docW": 390,
+  "theme": "light",
+  "lang": "ko",
+  "url": "/app/events/followup-patient-1",
+  "note": "키보드 Tab으로 \"기록 완료\"(Strong)에 포커스",
+  "fullPage": false
+ },
+ {
+  "file": "focus-strong-button-dark.png",
+  "product": "carelog",
+  "head": "9c3a028",
+  "state": "focus-strong-button-dark",
+  "data": "fixture",
+  "innerWidth": 390,
+  "innerHeight": 844,
+  "orientation": "landscape-primary",
+  "scrollY": 0,
+  "docH": 844,
+  "docW": 390,
+  "theme": "dark",
+  "lang": "ko",
+  "url": "/app/events/followup-patient-1",
+  "note": "키보드 Tab으로 \"기록 완료\"(Strong)에 포커스",
+  "fullPage": false
+ }
+]

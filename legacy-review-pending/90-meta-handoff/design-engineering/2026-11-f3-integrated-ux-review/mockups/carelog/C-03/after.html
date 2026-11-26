@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=390, initial-scale=1">
+<title>C-03 일정 화면</title>
+<link rel="stylesheet" href="../../_shared/tokens.css"><link rel="stylesheet" href="../../_shared/ds.css"><link rel="stylesheet" href="../../_shared/f3.css">
+</head>
+<body class="ds carelog-app" data-product="carelog-b" data-mode="light" data-density="compact">
+<div class="phone">
+  <p class="proposal-note">제안 시안 · 계약 아님 (F3 C-03)</p>
+  <div class="sticky-head">
+    <div class="top"><h1 class="t-content-title">8월</h1><button class="btn btn--subtle btn--small">+ 일정</button></div>
+    <div class="week">
+      <div class="day"><span class="t-meta">월</span><span class="t-content-title">10</span><i class="dot"></i></div>
+      <div class="day sel"><span class="t-meta">화</span><span class="t-content-title">11</span><i class="dot on"></i></div>
+      <div class="day"><span class="t-meta">수</span><span class="t-content-title">12</span><i class="dot on"></i></div>
+      <div class="day"><span class="t-meta">목</span><span class="t-content-title">13</span><i class="dot"></i></div>
+      <div class="day"><span class="t-meta">금</span><span class="t-content-title">14</span><i class="dot"></i></div>
+      <div class="day"><span class="t-meta">토</span><span class="t-content-title">15</span><i class="dot on"></i></div>
+      <div class="day"><span class="t-meta">일</span><span class="t-content-title">16</span><i class="dot"></i></div>
+    </div>
+    <a class="notice-bar"><span>정리 필요한 일정 1개</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a>
+  </div>
+  <main class="body-flow">
+    <section class="section">
+      <div class="date-head"><h2 class="t-section-title">8월 11일 (화)</h2><span class="t-meta brand-text">오늘</span></div>
+      <div class="card flush">
+        <div class="list-row rail" style="--rail-color:var(--color-status-warning-fg)" ><span class="t-content-title time-col">09:30</span><div class="grow"><p class="t-content-title">다음 방문 일정 확인 연락</p><p class="t-supporting">예정 시각 지남</p><p class="cust">최내원</p></div><span class="status warning end">정리 필요</span></div>
+        <div class="list-row rail" style="--rail-color:var(--color-line-control)" ><span class="t-content-title time-col">10:45</span><div class="grow"><p class="t-content-title">계약 갱신 상담</p><p class="t-supporting">계약 조건을 다시 확인했습니다.</p><p class="cust">박세입</p></div><span class="status plain end">기록됨</span></div>
+        <div class="list-row rail" style="--rail-color:var(--color-line-control)" ><span class="t-content-title time-col">13:00</span><div class="grow"><p class="t-content-title">내원 확인 기록</p><p class="cust">최내원</p></div><span class="status plain end">기록됨</span></div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="date-head"><h2 class="t-section-title">8월 12일 (수)</h2></div>
+      <div class="card flush">
+        <div class="list-row rail" style="--rail-color:var(--color-line-control)" ><span class="t-content-title time-col">13:30</span><div class="grow"><p class="t-content-title">현장 확인 일정</p><p class="t-supporting">고객 요청으로 일정을 취소했습니다.</p><p class="cust">박세입</p></div><span class="status end">취소됨</span></div>
+      </div>
+    </section>
+  </main>
+  <nav class="tabbar cols-3">
+    <a class="tab on">일정</a>
+    <a class="tab">고객</a>
+    <a class="tab">계정</a>
+  </nav>
+</div>
+</body></html>

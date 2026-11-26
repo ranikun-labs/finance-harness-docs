@@ -1,0 +1,175 @@
+/* Ranikun Labs vNext-2 · component & pattern styles for preview (candidate C system).
+   Rule: every color, font size, gap and radius reads a token from tokens.css. Literal values are allowed
+   only from the exception list in docs/04-guidelines.md §5 (1px lines, 2px focus/timeline, icon boxes,
+   app bar 56, tab 52/12/16, input 16/24 and textarea 112, preview frame and layout widths 393/852/1360/860/220/360/720,
+   env() 0px fallbacks). verification/literal-values.md lists every occurrence. */
+.ds, .ds * { box-sizing: border-box; }
+.ds { font-family: var(--font-sans); color: var(--color-text-body); background: var(--color-bg-page);
+  font-size: var(--type-body-size); line-height: var(--type-body-line); -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums; word-break: keep-all; overflow-wrap: anywhere; }
+.ds h1, .ds h2, .ds h3, .ds p, .ds ul, .ds ol { margin: 0; padding: 0; }
+.ds ul { list-style: none; }
+/* rc2 (Fable M1 / Sol MAJOR-01): zero-specificity reset so component typography (.btn, .select-chip, .checkbox) wins. */
+:where(.ds) :where(button) { font: inherit; }
+.ds :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.ds svg { display: block; flex: none; }
+
+/* ---- typography roles (size + weight + color + line height decided together) ---- */
+.t-page-title    { font-size: var(--type-page-title-size); line-height: var(--type-page-title-line); font-weight: var(--type-page-title-weight); letter-spacing: var(--type-page-title-tracking); color: var(--color-text-strong); }
+.t-section-title { font-size: var(--type-section-title-size); line-height: var(--type-section-title-line); font-weight: var(--type-section-title-weight); letter-spacing: var(--type-section-title-tracking); color: var(--color-text-strong); }
+.t-content-title { font-size: var(--type-content-title-size); line-height: var(--type-content-title-line); font-weight: var(--type-content-title-weight); letter-spacing: var(--type-content-title-tracking); color: var(--color-text-strong); }
+.t-key-value     { font-size: var(--type-key-value-size); line-height: var(--type-key-value-line); font-weight: var(--type-key-value-weight); letter-spacing: var(--type-key-value-tracking); color: var(--color-text-strong); }
+.t-body          { font-size: var(--type-body-size); line-height: var(--type-body-line); font-weight: var(--type-body-weight); letter-spacing: var(--type-body-tracking); color: var(--color-text-body); }
+.t-reading       { font-size: var(--type-reading-size); line-height: var(--type-reading-line); font-weight: var(--type-reading-weight); letter-spacing: var(--type-reading-tracking); color: var(--color-text-strong); }
+.t-supporting    { font-size: var(--type-supporting-size); line-height: var(--type-supporting-line); font-weight: var(--type-supporting-weight); letter-spacing: var(--type-supporting-tracking); color: var(--color-text-secondary); }
+.t-meta          { font-size: var(--type-meta-size); line-height: var(--type-meta-line); font-weight: var(--type-meta-weight); letter-spacing: var(--type-meta-tracking); color: var(--color-text-tertiary); }
+.t-label         { font-size: var(--type-label-size); line-height: var(--type-label-line); font-weight: var(--type-label-weight); letter-spacing: var(--type-label-tracking); color: var(--color-text-secondary); }
+.t-strong { font-weight: 600; color: var(--color-text-strong); }
+
+/* ---- frames ---- */
+.phone { width: 393px; max-width: 100%; min-height: 852px; margin: 0; display: flex; flex-direction: column; background: var(--color-bg-page); position: relative; }
+.appbar { display: flex; align-items: center; gap: var(--space-4); min-height: 56px; padding: 0 var(--space-8) 0 var(--space-4); }
+.appbar .spacer { flex: 1; }
+.appbar .appbar-title { flex: 1; min-width: 0; font-size: var(--type-content-title-size); line-height: var(--type-content-title-line); font-weight: 600; color: var(--color-text-strong); }
+.page { flex: 1; padding: var(--space-8) var(--layout-page-gutter) var(--space-48); display: flex; flex-direction: column; gap: var(--layout-section-gap); min-width: 0; }
+.page-header { display: flex; flex-direction: column; gap: var(--space-8); padding: 0 var(--space-4); }
+.page-header .head-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-12); }
+
+/* ---- surface / layer ---- */
+.section { display: flex; flex-direction: column; gap: var(--layout-title-gap); min-width: 0; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-12); padding: 0 var(--space-4); }
+.card { background: var(--color-surface-card); border-radius: var(--radius-card); padding: var(--layout-card-padding); display: flex; flex-direction: column; gap: var(--layout-group-gap); min-width: 0; }
+.card.tight { gap: var(--space-12); }
+.card.flush { padding-top: var(--space-4); padding-bottom: var(--space-4); gap: 0; }
+.inset { background: var(--color-surface-inset); border-radius: var(--radius-inset); padding: var(--space-12) var(--space-16); display: flex; flex-direction: column; gap: var(--space-4); }
+.divider { height: 1px; background: var(--color-line-divider); border: 0; margin: 0; }
+.stack { display: flex; flex-direction: column; gap: var(--layout-item-gap); min-width: 0; }
+.stack-4 { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.stack-12 { display: flex; flex-direction: column; gap: var(--space-12); min-width: 0; }
+.inline { display: flex; align-items: baseline; gap: var(--space-8); flex-wrap: wrap; min-width: 0; }
+.between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); min-width: 0; }
+
+/* ---- label-value ---- */
+.kv { display: flex; flex-direction: column; }
+.kv-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-16); padding: var(--space-8) 0; }
+.kv-row .k { color: var(--color-text-secondary); font-size: var(--type-body-size); line-height: var(--type-body-line); flex: none; }
+.kv-row .v { color: var(--color-text-strong); font-size: var(--type-body-size); line-height: var(--type-body-line); font-weight: 600; text-align: right; min-width: 0; }
+.kv-stack .kv-row { flex-direction: column; align-items: stretch; gap: var(--space-4); }
+.kv-stack .kv-row .v { text-align: left; font-weight: 400; color: var(--color-text-body); }
+
+/* ---- list ---- */
+.list-row { display: flex; align-items: center; gap: var(--space-12); min-height: var(--list-row-min); padding: var(--space-12) 0; color: inherit; text-decoration: none; position: relative; }
+.list-row + .list-row { border-top: 1px solid var(--color-line-divider); }
+.list-row .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.list-row .chev { color: var(--color-text-tertiary); }
+.list-row.rail { padding-left: var(--space-16); }
+.list-row.rail::before { content: ""; position: absolute; left: 0; top: var(--space-12); bottom: var(--space-12); width: var(--rail-width); border-radius: 2px; background: var(--rail-color, var(--color-line-control)); }
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); min-height: var(--list-row-min); padding: 0 var(--space-4); color: var(--color-text-strong); }
+
+/* ---- status label (text first; color only supports) ---- */
+.status { display: inline-flex; align-items: center; gap: var(--space-4); font-size: var(--type-meta-size); line-height: var(--type-meta-line); font-weight: 600; padding: 2px var(--space-8); border-radius: var(--radius-badge); white-space: nowrap; background: var(--color-status-neutral-bg); color: var(--color-status-neutral-fg); }
+.status.success { background: var(--color-status-success-bg); color: var(--color-status-success-fg); }
+.status.warning { background: var(--color-status-warning-bg); color: var(--color-status-warning-fg); }
+.status.danger  { background: var(--color-status-danger-bg);  color: var(--color-status-danger-fg); }
+.status.info    { background: var(--color-status-info-bg);    color: var(--color-status-info-fg); }
+.status.conflict{ background: var(--color-status-conflict-bg);color: var(--color-status-conflict-fg); }
+.status.plain { background: transparent; padding: 0; color: var(--color-text-tertiary); font-weight: 500; }
+.rail-planned { --rail-color: var(--color-status-info-fg); }
+.rail-overdue { --rail-color: var(--color-status-warning-fg); }
+.rail-done    { --rail-color: var(--color-line-control); }
+
+/* ---- actions: meaning (primary/secondary/destructive) is separate from emphasis (strong/subtle/neutral/text) ---- */
+.btn { appearance: none; border: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-8);
+  min-height: var(--control-height); padding: 0 var(--space-20); border-radius: var(--radius-control);
+  font-size: var(--type-content-title-size); line-height: var(--type-content-title-line); font-weight: var(--type-content-title-weight); text-align: center; max-width: 100%; text-decoration: none; }
+.btn--strong  { background: var(--color-brand-strong); color: var(--color-brand-on-strong); }
+.btn--subtle  { background: var(--color-brand-subtle); color: var(--color-brand-deep); }
+.btn--neutral { background: var(--color-surface-control); color: var(--color-text-body); }
+.btn--text    { background: transparent; color: var(--color-brand-deep); padding: 0 var(--space-8); min-height: var(--touch-min); }
+.btn--text-neutral { background: transparent; color: var(--color-text-secondary); padding: 0 var(--space-8); min-height: var(--touch-min); }
+.btn--danger-strong { background: var(--color-status-danger-solid); color: var(--color-status-danger-on-solid); }
+.btn--danger-text { background: transparent; color: var(--color-status-danger-fg); padding: 0 var(--space-8); min-height: var(--touch-min); }
+.btn--small { min-height: var(--control-height-small); padding: 0 var(--space-12); font-size: var(--type-supporting-size); line-height: var(--type-supporting-line); position: relative; }
+/* rc2: visual 36 stays; transparent vertical extension makes the hit area 44 (project rule; WCAG 2.5.8 minimum is 24). Horizontal edges are not extended, so side-by-side buttons never overlap. */
+.btn--small::after { content: ""; position: absolute; inset: -4px 0; }
+.btn--small, .btn--text, .btn--text-neutral, .btn--danger-text, .select-chip { min-width: var(--touch-min); } /* rc2: 44 wide as well as 44 tall */
+.btn--block { display: flex; width: 100%; }
+.btn[disabled] { background: var(--color-surface-control); color: var(--color-text-disabled); cursor: not-allowed; }
+.actions { display: flex; flex-direction: column; gap: var(--space-8); }
+.actions .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+.footer-action { position: sticky; bottom: 0; padding: var(--space-12) var(--layout-page-gutter) calc(var(--space-12) + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--color-bg-page) 70%, transparent); }
+
+/* ---- timeline (record history: original -> retrospectives) ---- */
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: grid; grid-template-columns: 20px minmax(0, 1fr); column-gap: var(--space-12); position: relative; padding-bottom: var(--layout-group-gap); }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before { content: ""; position: absolute; left: 9px; top: 18px; bottom: -2px; width: 2px; background: var(--color-line-divider); }
+.tl-item:last-child::before { display: none; }
+.tl-node { width: 10px; height: 10px; border-radius: 50%; margin: 6px 0 0 5px; background: var(--color-surface-card); box-shadow: inset 0 0 0 2px var(--color-line-control); }
+.tl-node.now { box-shadow: inset 0 0 0 5px var(--color-brand-strong); }
+.tl-body { display: flex; flex-direction: column; gap: var(--space-8); min-width: 0; }
+
+/* ---- bullets & checks ---- */
+.qlist { display: flex; flex-direction: column; gap: var(--space-8); }
+.qlist li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: var(--space-8); }
+.qlist li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-tertiary); margin: calc(var(--type-body-line) / 2 - 2px) 0 0 5px; }
+.check { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: var(--space-8); align-items: start; }
+.check .mark { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.check .mark.on { background: var(--color-status-neutral-bg); color: var(--color-text-strong); }
+.check .mark.off { box-shadow: inset 0 0 0 1.5px var(--color-line-control); }
+
+/* ---- navigation ---- */
+.tabbar { position: sticky; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; background: var(--color-surface-card); border-top: 1px solid var(--color-line-divider); padding: var(--space-4) var(--space-8) calc(var(--space-4) + env(safe-area-inset-bottom, 0px)); }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 52px; justify-content: center; font-size: 12px; line-height: 16px; font-weight: 600; color: var(--color-text-tertiary); }
+.tab.on { color: var(--color-text-strong); }
+.iconbtn { appearance: none; border: 0; background: transparent; width: var(--touch-min); height: var(--touch-min); border-radius: var(--radius-control); display: inline-flex; align-items: center; justify-content: center; color: var(--color-text-strong); cursor: pointer; }
+
+/* ---- field ---- */
+.field { display: flex; flex-direction: column; gap: var(--space-8); }
+.input { min-height: var(--control-height); border-radius: var(--radius-control); background: var(--color-surface-card); box-shadow: inset 0 0 0 1px var(--color-line-control); padding: var(--space-12) var(--space-16); color: var(--color-text-strong); font-size: 16px; line-height: 24px; }
+.input.area { min-height: 112px; }
+
+/* ---- desktop frame ---- */
+.desktop { width: 1360px; min-height: 860px; display: grid; grid-template-columns: 220px minmax(0, 1fr); background: var(--color-bg-page); }
+.sidenav { padding: var(--space-24) var(--space-12); display: flex; flex-direction: column; gap: var(--space-4); }
+.sidenav .brandmark { font-size: var(--type-content-title-size); font-weight: 700; color: var(--color-text-strong); padding: var(--space-8) var(--space-12) var(--space-20); }
+.navitem { display: flex; align-items: center; gap: var(--space-12); min-height: var(--touch-min); padding: 0 var(--space-12); border-radius: var(--radius-control); font-weight: 600; color: var(--color-text-secondary); }
+.navitem.on { background: var(--color-surface-card); color: var(--color-text-strong); }
+.dmain { padding: var(--space-40) var(--space-48); display: flex; flex-direction: column; gap: var(--layout-section-gap); min-width: 0; }
+.split { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: var(--space-24); align-items: start; }
+.split.main-aside { grid-template-columns: minmax(0, 1fr) 360px; }
+.readable { max-width: 720px; }
+
+/* ---- vNext-2 Delta: three different "check" meanings (Finding 3) ---- */
+/* 1) Status display (completed review, read-only): .check .mark.on/.off above. Not focusable, no role. */
+/* 2) Checkbox (interactive, review in progress / include context): a real control. */
+.checkbox { appearance: none; border: 0; background: transparent; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: var(--space-12); align-items: start; width: 100%; min-height: var(--touch-min); padding: var(--space-8) 0; text-align: left; cursor: pointer; color: var(--color-text-body); font-size: var(--type-body-size); line-height: var(--type-body-line); }
+.checkbox .box { width: 22px; height: 22px; margin-top: 1px; border-radius: var(--radius-badge); box-shadow: inset 0 0 0 1.5px var(--color-line-control); display: flex; align-items: center; justify-content: center; color: transparent; }
+.checkbox[aria-checked="true"] .box { background: var(--color-brand-strong); box-shadow: none; color: var(--color-brand-on-strong); }
+/* 3) Select chip (choose what to include in the record): toggle button, label never changes ("함께 남기기").
+      State = aria-pressed + check icon + subtle face. Label text is fixed so it never reads as "saved". */
+.select-chip { appearance: none; border: 0; cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-4); min-height: var(--control-height-small); padding: 0 var(--space-12); border-radius: var(--radius-full);
+  font-size: var(--type-supporting-size); line-height: var(--type-supporting-line); font-weight: var(--type-label-weight); background: var(--color-surface-control); color: var(--color-text-body); white-space: nowrap; position: relative; flex-shrink: 0; }
+.select-chip::after { content: ""; position: absolute; inset: -4px 0; } /* 36 visual + 4px transparent extension each side = 44 touch */
+.select-chip .tick { display: none; }
+.select-chip[aria-pressed="true"] { background: var(--color-brand-subtle); color: var(--color-brand-deep); }
+.select-chip[aria-pressed="true"] .tick { display: block; }
+.select-chip[aria-disabled="true"] { background: var(--color-surface-control); color: var(--color-text-disabled); cursor: not-allowed; }
+/* quiet variant for long lists (4+ items): off state drops to text strength, on state keeps the subtle face */
+.select-chip--quiet { background: transparent; color: var(--color-text-secondary); padding: 0 var(--space-8); }
+.select-chip--quiet[aria-disabled="true"] { background: transparent; }
+
+/* ---- adopted from production feedback ---- */
+.chips { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+.list-row.sel { background: var(--color-brand-subtle); margin: 0 calc(var(--space-12) * -1); padding-left: var(--space-12); padding-right: var(--space-12); border-radius: var(--radius-inset); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* key block: the one emphasized area of a calm screen (C emphasis inside B composition) */
+.key-block { display: flex; flex-direction: column; gap: var(--space-8); }
+.kv > .kv-row:first-child { padding-top: 0; } .kv > .kv-row:last-child { padding-bottom: 0; }
+/* WCAG 2.4.11: keep focused items clear of the sticky footer (footer = 12 + control 48 + 12 + gradient ≈ 96). Exception listed in docs/04 §5. */
+html:has(.footer-action) { scroll-padding-bottom: 96px; }
+
+/* rc2 (Fable 후속 / Sol MINOR-02): review annotations are NOT product UI. Never implement .anno content in FE. */
+.anno { display: inline-flex; align-items: center; gap: var(--space-4); font-size: 12px; line-height: 16px; color: var(--color-text-tertiary); border: 1px dashed var(--color-line-control); border-radius: var(--radius-badge); padding: 2px var(--space-8); }
+.anno::before { content: "검수 메모"; font-weight: 600; }
